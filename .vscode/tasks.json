@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Pland Dev Server",
+			"type": "shell",
+			"command": "cd package && corepack pnpm dev",
+			"isBackground": true
+		}
+	]
+}

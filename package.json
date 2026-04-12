@@ -1,0 +1,10 @@
+{
+  "name": "pland-root",
+  "private": true,
+  "scripts": {
+    "dev": "cd package && corepack pnpm dev",
+    "build": "cd package && corepack pnpm build",
+    "start": "cd package && corepack pnpm start",
+    "lint": "cd package && corepack pnpm lint"
+  }
+}
