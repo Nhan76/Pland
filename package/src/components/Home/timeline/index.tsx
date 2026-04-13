@@ -17,10 +17,10 @@ const TimeLine = () => {
             transition={{ duration: 0.6 }}>
             <div className='flex flex-col gap-4'>
               <p className='text-white font-medium'>
-                From concept to <span className='text-primary'>launch</span>
+                From signal to <span className='text-primary'>decision</span>
               </p>
               <h2 className='text-white sm:text-5xl text-3xl font-medium lg:w-80% mx-auto mb-20'>
-                A clear workflow to ship a stronger trading landing page faster
+                A disciplined workflow for evaluating the whole portfolio
               </h2>
             </div>
           </motion.div>
@@ -40,9 +40,9 @@ const TimeLine = () => {
               </div>
               <div className='absolute lg::top-40 top-36 lg:left-0 -left-20 w-72 flex items-center gap-6'>
                 <div className='text-right'>
-                  <h3 className='text-muted text-2xl mb-3'>Planning</h3>
+                  <h3 className='text-muted text-2xl mb-3'>Sync and snapshot</h3>
                   <p className='text-lg text-muted/60'>
-                    Map the funnel, product claims, and customer journey
+                    Lock holdings and price context into one consistent review state
                   </p>
                 </div>
                 <div className='bg-primary/15 backdrop-blur-xs px-6 py-2 h-fit rounded-full'>
@@ -59,29 +59,29 @@ const TimeLine = () => {
                 <div className='bg-primary/15 backdrop-blur-xs p-6 h-fit rounded-full'>
                   <Image
                     src='/images/solution/solution-icon-2.svg'
-                    alt='Refinement'
+                    alt='Analyze context'
                     width={44}
                     height={44}
                   />
                 </div>
                 <div className='text-left'>
-                  <h3 className='text-muted text-2xl mb-3'>Refinement</h3>
+                  <h3 className='text-muted text-2xl mb-3'>Analyze context</h3>
                   <p className='text-lg text-muted/60'>
-                    Refine positioning, visuals, and conversion paths
+                    Combine technical, sentiment, and portfolio structure signals
                   </p>
                 </div>
               </div>
               <div className='absolute lg:bottom-48 bottom-36 lg:left-0 -left-20 w-72 flex items-center gap-6'>
                 <div className='text-right'>
-                  <h3 className='text-muted text-2xl mb-3'>Prototype</h3>
+                  <h3 className='text-muted text-2xl mb-3'>Debate the trade</h3>
                   <p className='text-lg text-muted/60'>
-                    Build the first production-ready landing flow
+                    Bull and bear agents challenge the case before a manager responds
                   </p>
                 </div>
                 <div className='bg-primary/15 backdrop-blur-xs px-6 py-2 h-fit rounded-full'>
                   <Image
                     src='/images/solution/solution-icon-3.svg'
-                    alt='Prototype'
+                    alt='Debate the trade'
                     width={44}
                     height={44}
                     className='w-16 h-16 '
@@ -92,7 +92,7 @@ const TimeLine = () => {
                 <div className='bg-primary/15 backdrop-blur-xs px-6 py-2 h-fit rounded-full'>
                   <Image
                     src='/images/solution/solution-icon-4.svg'
-                    alt='Scale and support'
+                    alt='Apply guardrails'
                     width={44}
                     height={44}
                     className='w-16 h-16'
@@ -100,10 +100,10 @@ const TimeLine = () => {
                 </div>
                 <div className='text-left'>
                   <h3 className='text-muted text-nowrap text-2xl mb-3'>
-                    Support
+                    Apply guardrails
                   </h3>
                   <p className='text-lg text-muted/60'>
-                    Launch with a maintainable structure and clear next steps
+                    Risk rules test exposure, cash, and concentration before any action
                   </p>
                 </div>
               </div>

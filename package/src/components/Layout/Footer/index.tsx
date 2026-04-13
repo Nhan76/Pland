@@ -2,7 +2,6 @@ import React, { FC } from "react";
 import Link from "next/link";
 import { headerData } from "../Header/Navigation/menuData";
 import { footerlabels } from "@/app/api/data";
-import Image from "next/image";
 import { Icon } from "@iconify/react";
 import Logo from "../Header/Logo";
 
@@ -14,8 +13,8 @@ const Footer: FC = () => {
           <div className="lg:col-span-4 md:col-span-6 col-span-6 flex flex-col gap-6">
             <Logo />
             <p className="text-white/60">
-              Launch a sharper crypto product narrative with Pland, a focused
-              landing page for modern spot trading teams.
+              PLAND gives crypto investors a clearer portfolio story with
+              explainable AI, market context, and disciplined risk checks.
             </p>
             <div className="flex gap-6 items-center relative z-1">
               <Link href="https://www.facebook.com/" className="group">
@@ -60,7 +59,7 @@ const Footer: FC = () => {
             </ul>
           </div>
           <div className="lg:col-span-2 md:col-span-3 col-span-6">
-            <h4 className="text-white mb-4 font-medium text-24">Resources</h4>
+            <h4 className="text-white mb-4 font-medium text-24">Explore</h4>
             <ul>
               {footerlabels.map((item, index) => (
                 <li key={index} className="pb-4">
@@ -76,24 +75,20 @@ const Footer: FC = () => {
           </div>
           <div className="lg:col-span-3 md:col-span-4 col-span-6">
             <h3 className="text-white text-24 font-medium mb-4">
-              Get the app
+              Start with PLAND
             </h3>
             <div className="flex flex-col gap-4">
-              <Link href={"https://www.google.com/"}>
-                <Image
-                  src={"/images/footer/app-store-bedge.svg"}
-                  alt="play-store-bedge"
-                  width={126}
-                  height={23}
-                />
+              <Link
+                href="/#development"
+                className="inline-flex items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white transition-colors hover:bg-white/10"
+              >
+                Explore workflow
               </Link>
-              <Link href={"https://www.apple.com/"}>
-                <Image
-                  src={"/images/footer/app-store.svg"}
-                  alt="play-store-bedge"
-                  width={126}
-                  height={23}
-                />
+              <Link
+                href="/#portfolio"
+                className="inline-flex items-center justify-center rounded-lg border border-primary/25 bg-primary/10 px-4 py-3 text-primary transition-colors hover:bg-primary/15"
+              >
+                Review capabilities
               </Link>
             </div>
           </div>

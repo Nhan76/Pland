@@ -9,10 +9,10 @@ const Perks = () => {
         <div className="text-center">
           <div className="flex flex-col gap-4">
             <p className="text-muted text-base relative">
-              Always By <span className="text-primary">your side</span>
+              Always in <span className="text-primary">context</span>
             </p>
             <h2 className="text-white sm:text-5xl text-3xl font-medium">
-              Be the first to use our Cryogo!
+              Support the investor, not the impulse
             </h2>
           </div>
           <div className="mt-16 border border-border grid lg:grid-cols-3 sm:grid-cols-2 py-16 gap-10 px-20 rounded-3xl sm:bg-perk bg-dark_grey/35 lg:bg-bottom bg-center bg-no-repeat">

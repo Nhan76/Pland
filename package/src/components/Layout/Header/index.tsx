@@ -64,14 +64,14 @@ const Header: React.FC = () => {
                 render={<Link href="/#portfolio" />}
                 className="bg-transparent border border-primary! text-primary px-4 py-2 rounded-lg hover:bg-primary! hover:text-white h-full transition-all duration-300"
               >
-                View Services
+                View Capabilities
               </Button>
               <Button
                 size="lg"
                 render={<Link href="/#upgrade" />}
                 className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-transparent hover:text-primary h-full transition-all duration-300 font-medium hover:border hover:border-primary"
               >
-                Book Demo
+                See Guardrails
               </Button>
             </div>
 
@@ -118,7 +118,7 @@ const Header: React.FC = () => {
                       onClick={() => setNavbarOpen(false)}
                       className="w-full bg-transparent border border-primary! text-primary rounded-lg hover:bg-primary! hover:text-white"
                     >
-                      View Services
+                      View Capabilities
                     </Button>
 
                     <Button
@@ -127,7 +127,7 @@ const Header: React.FC = () => {
                       onClick={() => setNavbarOpen(false)}
                       className="w-full bg-primary text-white rounded-lg hover:bg-transparent hover:text-primary border border-primary font-medium"
                     >
-                      Book Demo
+                      See Guardrails
                     </Button>
                   </div>
                 </nav>

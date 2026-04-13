@@ -11,33 +11,33 @@ import { PlusIcon } from "lucide-react";
 
 const faqData = [
   {
-    question: "What is Pland?",
+    question: "What is PLAND?",
     answer:
-      "Pland is a focused landing page for crypto spot trading products, designed to present pricing, services, and trust signals clearly.",
+      "PLAND is an AI-driven portfolio command center for crypto investors who want clearer analysis, disciplined execution, and transparent reasoning.",
   },
   {
-    question: "Who is Pland built for?",
-    answer: "Pland fits exchanges, brokers, wallets, and fintech teams that need a polished go-to-market page.",
+    question: "Who is PLAND built for?",
+    answer: "PLAND is built for retail investors, active portfolio operators, and small teams that need a structured way to evaluate multiple assets together.",
   },
   {
-    question: "Can I adapt Pland to my own brand?",
+    question: "How does the multi-agent workflow help?",
     answer:
-      "Yes. Colors, copy, section order, and imagery can be tailored to match your product and campaign goals.",
+      "It separates analysis into specialized roles, lets bullish and bearish cases challenge each other, and then applies a final risk review before any action is suggested.",
   },
   {
-    question: "Does Pland work well on mobile devices?",
+    question: "Why is explainability important in PLAND?",
     answer:
-      "Yes. The layout is responsive and designed to keep key conversion paths clear on smaller screens.",
+      "Every recommendation keeps an audit trail, so the investor can inspect what data mattered, how the debate changed, and why the final answer was produced.",
   },
   {
-    question: "How quickly can I launch with Pland?",
+    question: "Does PLAND replace investor judgment?",
     answer:
-      "Most teams can publish a branded version quickly because the page structure and core sections are already in place.",
+      "No. PLAND is designed to support disciplined decisions, not hide them behind a black box. The final call stays with the user.",
   },
   {
-    question: "Can Pland support ongoing growth experiments?",
+    question: "What risk controls does PLAND support?",
     answer:
-      "Yes. You can iterate on headlines, CTAs, service blocks, and trust sections without rebuilding the entire page.",
+      "PLAND is designed around cash awareness, concentration checks, weak-trend exposure review, and other portfolio-level guardrails that keep actions inside defined limits.",
   },
 ];
 
@@ -51,10 +51,10 @@ const Faq = () => {
               Popular questions
             </p>
             <h2 className="text-3xl md:text-4xl font-semibold mt-2">
-              Learn more about Pland
+              Learn more about PLAND
             </h2>
             <p className="text-gray-400 mt-2">
-              A focused landing system for crypto spot trading teams
+              Clear answers on how PLAND evaluates portfolios and risk
             </p>
           </div>
           <Accordion className="space-y-4">

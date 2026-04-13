@@ -1,26 +1,22 @@
 export const GlobalReachData = [
     {
         id: 1,
-        count: 6,
-        postfix:"M+",
-        title: "Active users"
+        title: "Unified portfolio view",
+        text: "Review holdings from one clean snapshot instead of juggling fragmented tabs and sheets.",
     },
     {
         id: 2,
-        count: 247,
-        title: "Users support"
+        title: "Dynamic market context",
+        text: "Track market structure, momentum, and narrative shifts before they distort the portfolio.",
     },
     {
         id: 3,
-        count: 160,
-        postfix:"+",
-        title: "Countries"
+        title: "Explainable AI trail",
+        text: "See how each agent argued, what changed the decision, and why the final action was chosen.",
     },
     {
         id: 4,
-        count: 22,
-        prefix: "$",
-        postfix:"B+",
-        title: "Trade volume"
+        title: "Risk guardrails",
+        text: "Keep exposure, concentration, and cash discipline inside rules you can actually defend.",
     },
 ]

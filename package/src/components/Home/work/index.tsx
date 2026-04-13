@@ -22,15 +22,15 @@ const Work = () => {
   const services = [
     {
       icon: '/images/chooseus/chooseus-icon-1.svg',
-      text: 'Sections built for pricing, liquidity, and trust signals',
+      text: 'Bring positions, prices, and portfolio state into one consistent snapshot.',
     },
     {
       icon: '/images/chooseus/chooseus-icon-2.svg',
-      text: 'A cleaner acquisition flow for product-led growth campaigns',
+      text: 'Blend technical, sentiment, and structural signals before making a move.',
     },
     {
       icon: '/images/chooseus/chooseus-icon-3.svg',
-      text: 'Reusable content blocks that speed up launch cycles',
+      text: 'Understand the reasoning behind every recommendation before you act.',
     },
   ]
 
@@ -43,10 +43,10 @@ const Work = () => {
             className='lg:col-span-7 col-span-12'>
             <div className='flex flex-col gap-3'>
               <p className="text-white font-medium">
-                Why choose <span className='text-primary'>Pland</span>
+                Why choose <span className='text-primary'>PLAND</span>
               </p>
               <h2 className='sm:text-5xl text-3xl text-white lg:w-full md:w-70% font-medium'>
-                A landing system built for crypto spot products
+                A portfolio workspace that turns market noise into disciplined action
               </h2>
             </div>
             <div className='grid md:grid-cols-2 gap-7 mt-11'>

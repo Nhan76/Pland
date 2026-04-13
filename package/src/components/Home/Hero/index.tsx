@@ -3,7 +3,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import CardSlider from "./slider";
-import BrandLogo from "../BrandLogo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -36,15 +35,15 @@ const Hero = () => {
                   variant="outline"
                   className="text-base py-1.5 px-4 bg-primary/10 rounded-full border border-white/10 text-primary font-medium h-9"
                 >
-                  Pland for crypto spot teams
+                  AI portfolio command center
                 </Badge>
               </div>
               <h1 className="font-medium xl:text-[72px] md:text-6xl sm:text-5xl text-4xl text-white">
-                A sharper landing page for modern trading products
+                Manage crypto portfolios with discipline, not emotion
               </h1>
               <p className="text-white">
-                Showcase pricing, services, trust signals, and product value in
-                one focused experience built to convert.
+                PLAND turns fragmented signals into explainable actions with
+                multi-agent analysis, market context, and risk guardrails.
               </p>
             </div>
             <div className="flex items-center md:justify-start justify-center gap-8">
@@ -52,7 +51,7 @@ const Hero = () => {
                 render={<Link href="/#work" />}
                 className="text-base bg-primary hover:bg-primary/80 flex items-center gap-2 border border-primary rounded-lg font-semibold text-background py-6 px-7 cursor-pointer h-12"
               >
-                Explore Workflow
+                See Why PLAND
                 <Image
                   src={"/images/icons/icon-arrow.svg"}
                   alt="arrow-icon"
@@ -65,7 +64,7 @@ const Hero = () => {
                 render={<Link href="/#portfolio" />}
                 className="text-base border border-white/10 bg-white/5 px-7 py-6 font-semibold text-white hover:bg-white/10 h-12"
               >
-                View Services
+                Explore Capabilities
               </Button>
             </div>
           </motion.div>
@@ -81,7 +80,6 @@ const Hero = () => {
             </div>
           </motion.div>
         </div>
-        <BrandLogo />
         <CardSlider />
       </div>
     </section>

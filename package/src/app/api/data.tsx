@@ -1,8 +1,8 @@
 export const footerlabels: { label: string; herf: string }[] = [
   { label: "Overview", herf: "/#main-banner" },
   { label: "Workflow", herf: "/#development" },
-  { label: "Services", herf: "/#portfolio" },
-  { label: "Support", herf: "/#faq" },
+  { label: "Guardrails", herf: "/#upgrade" },
+  { label: "FAQ", herf: "/#faq" },
 ];
 
 export const pricedata: {
@@ -87,27 +87,27 @@ export const pricedata: {
 export const portfolioData: { image: string; title: string }[] = [
   {
     image: "/images/portfolio/portfolio-icon-1.svg",
-    title: "Manage your portfolio",
+    title: "Unified portfolio syncing",
   },
   {
     image: "/images/portfolio/portfolio-icon-2.svg",
-    title: "Vault protection",
+    title: "Multi-agent market review",
   },
   {
     image: "/images/portfolio/portfolio-icon-3.svg",
-    title: "Mobile apps",
+    title: "Explainable action trace",
   },
 ];
 
 export const upgradeData: { title: string }[] = [
-  { title: "100% Secure" },
-  { title: "Design system included" },
-  { title: "Lower launch cost" },
-  { title: "Fast performance" },
-  { title: "Modular sections" },
-  { title: "Built for spot trading" },
-  { title: "Easy onboarding" },
-  { title: "Ready for production" },
+  { title: "Cash ratio awareness" },
+  { title: "Concentration limits" },
+  { title: "Weak trend exposure checks" },
+  { title: "Bull and bear regime detection" },
+  { title: "Snapshot-based decisions" },
+  { title: "Transparent audit trail" },
+  { title: "Actionable risk alerts" },
+  { title: "Consistent portfolio reviews" },
 ];
 
 export const perksData: {
@@ -118,20 +118,20 @@ export const perksData: {
 }[] = [
   {
     icon: "/images/perks/peak-icon-1.svg",
-    title: "24/7 Support",
-    text: "Need help? Get your requests solved quickly via support team.",
+    title: "Clear recommendations",
+    text: "Every proposed action is paired with rationale, confidence, and portfolio impact.",
     space: "lg:mt-8",
   },
   {
     icon: "/images/perks/peak-icon-2.svg",
-    title: "Community",
-    text: "Build trust with a clear voice across every customer touchpoint.",
+    title: "Shared decision language",
+    text: "Teams and communities can review the same evidence before acting on a market move.",
     space: "lg:mt-14",
   },
   {
     icon: "/images/perks/peak-icon-3.svg",
-    title: "Academy",
-    text: "Explain your product, market, and edge with clarity.",
+    title: "Continuous learning",
+    text: "Trace logs turn each review into a repeatable feedback loop for better portfolio discipline.",
     space: "lg:mt-4",
   },
 ];
@@ -144,26 +144,26 @@ export const timelineData: {
 }[] = [
   {
     icon: "/images/timeline/icon-planning.svg",
-    title: "Planning",
-    text: "Map the launch funnel, product claims, and audience journey.",
+    title: "Sync and snapshot",
+    text: "Lock holdings and price context into one consistent review state.",
     position: "md:top-0 md:left-0",
   },
   {
     icon: "/images/timeline/icon-refinement.svg",
-    title: "Refinement",
-    text: "Refine positioning, visuals, and conversion paths.",
+    title: "Analyze context",
+    text: "Combine technical, sentiment, and portfolio structure signals.",
     position: "md:top-0 md:right-0",
   },
   {
     icon: "/images/timeline/icon-prototype.svg",
-    title: "Prototype",
-    text: "Build the first production-ready version of your landing flow.",
+    title: "Debate the trade",
+    text: "Bull and bear agents challenge the case before a manager responds.",
     position: "md:bottom-0 md:left-0",
   },
   {
     icon: "/images/timeline/icon-support.svg",
-    title: "Support",
-    text: "Launch confidently with a maintainable marketing foundation.",
+    title: "Apply guardrails",
+    text: "Risk rules test exposure, cash, and concentration before any action.",
     position: "md:bottom-0 md:right-0",
   },
 ];

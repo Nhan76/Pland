@@ -9,14 +9,14 @@ const Upgrade = () => {
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <div>
             <p className="text-white font-medium">
-              Why <span className="text-primary">Pland</span>
+              Risk-first <span className="text-primary">design</span>
             </p>
             <h2 className="text-white sm:text-5xl text-3xl  font-medium mb-5">
-              Upgrade how your trading product is presented
+              Guardrails that keep decisions inside your rules
             </h2>
             <p className="text-muted/60 text-lg mb-7">
-              Deliver a clearer message, stronger trust signals, and a smoother
-              path from first visit to qualified interest.
+              Define exposure limits, concentration thresholds, and portfolio
+              constraints before the next wave of volatility hits.
             </p>
             <div className="grid sm:grid-cols-2  text-nowrap gap-5">
               {upgradeData.map((item, index) => (
