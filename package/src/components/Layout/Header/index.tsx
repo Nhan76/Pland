@@ -62,14 +62,14 @@ const Header: React.FC = () => {
                 size="lg"
                 variant="outline"
                 render={<Link href="/#portfolio" />}
-                className="bg-transparent border border-primary! text-primary px-4 py-2 rounded-lg hover:bg-primary! hover:text-white h-full transition-all duration-300"
+                className="bg-transparent border border-primary! text-primary px-4 py-2 rounded-lg hover:bg-primary! hover:text-primary-foreground h-full transition-all duration-300"
               >
                 View Capabilities
               </Button>
               <Button
                 size="lg"
                 render={<Link href="/#upgrade" />}
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-transparent hover:text-primary h-full transition-all duration-300 font-medium hover:border hover:border-primary"
+                className="bg-primary text-primary-foreground px-4 py-2 rounded-lg hover:bg-transparent hover:text-primary h-full transition-all duration-300 font-medium hover:border hover:border-primary"
               >
                 See Guardrails
               </Button>
@@ -116,7 +116,7 @@ const Header: React.FC = () => {
                       size="lg"
                       render={<Link href="/#portfolio" />}
                       onClick={() => setNavbarOpen(false)}
-                      className="w-full bg-transparent border border-primary! text-primary rounded-lg hover:bg-primary! hover:text-white"
+                      className="w-full bg-transparent border border-primary! text-primary rounded-lg hover:bg-primary! hover:text-primary-foreground"
                     >
                       View Capabilities
                     </Button>
@@ -125,7 +125,7 @@ const Header: React.FC = () => {
                       size="lg"
                       render={<Link href="/#upgrade" />}
                       onClick={() => setNavbarOpen(false)}
-                      className="w-full bg-primary text-white rounded-lg hover:bg-transparent hover:text-primary border border-primary font-medium"
+                      className="w-full bg-primary text-primary-foreground rounded-lg hover:bg-transparent hover:text-primary border border-primary font-medium"
                     >
                       See Guardrails
                     </Button>
