@@ -3,7 +3,7 @@
 import LaserFlow from "./LaserFlow";
 
 const HERO_LASER_FLOW_WRAPPER_CLASS =
-  "absolute inset-x-0 top-[-16%] h-[136%] opacity-90 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
+  "absolute left-1/2 -translate-x-1/2 w-full max-w-7xl top-[-16%] h-[136%] opacity-90 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
 
 const HERO_LASER_FLOW_PROPS = {
   className: "mix-blend-screen",
@@ -11,18 +11,18 @@ const HERO_LASER_FLOW_PROPS = {
   flowSpeed: 0.28,
   flowStrength: 0.4,
   fogFallSpeed: 0.52,
-  fogIntensity: 0.2,
-  fogScale: 0.28,
+  fogIntensity: 0.12,
+  fogScale: 0.15,
   horizontalBeamOffset: 0,
-  horizontalSizing: 0.36,
+  horizontalSizing: 1.3,
   mouseSmoothTime: 0.18,
   mouseTiltStrength: 0.035,
-  verticalBeamOffset: -0.23,
-  verticalSizing: 8.2,
+  verticalBeamOffset: 0.11,
+  verticalSizing: 0.8,
   wispDensity: 1.15,
   wispIntensity: 5.6,
   wispSpeed: 13,
-  decay: 1.22,
+  decay: 1.05,
   falloffStart: 1.15,
 } as const;
 

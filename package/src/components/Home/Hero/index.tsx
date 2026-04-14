@@ -26,45 +26,31 @@ const Hero = () => {
       <div className="container relative z-10">
         <motion.div
           {...leftAnimation}
-          className="mx-auto flex max-w-4xl flex-col items-center gap-10 text-center"
+          className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center"
         >
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center justify-center">
-                <Badge
-                  variant="outline"
-                  className="text-base py-1.5 px-4 bg-primary/10 rounded-full border border-white/10 text-primary font-medium h-9"
-                >
-                  AI portfolio command center
-                </Badge>
-            </div>
+          <div className="flex flex-col items-center gap-8">
             <h1 className="font-medium xl:text-[72px] md:text-6xl sm:text-5xl text-4xl text-white">
-              <span className="block sm:whitespace-nowrap">Trade smarter</span>
+              <span className="block sm:whitespace-nowrap">AI-Powered Trading</span>
               <span className="block sm:whitespace-nowrap">
-                Manage your crypto portfolio
+                Master Your Portfolio
               </span>
             </h1>
             <p className="max-w-2xl text-white">
-              PLAND turns fragmented signals into explainable actions with
-              multi-agent analysis, market context, and risk guardrails.
+              PLAND turns fragmented signals into explainable actions <br className="hidden sm:block" />
+              with multi-agent analysis, market context, and risk guardrails.
             </p>
           </div>
-          <div className="flex items-center justify-center gap-3 sm:gap-4">
+          <div className="flex flex-col w-full px-4 sm:px-0 sm:w-auto sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <Button
                 render={<Link href="/#work" />}
-                className="flex h-12 items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-6 text-sm font-semibold whitespace-nowrap text-background hover:bg-primary/80 sm:px-7 sm:text-base"
+                className="flex w-full sm:w-[220px] justify-center h-12 items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-6 text-sm font-semibold whitespace-nowrap text-background hover:bg-primary/80 sm:px-7 sm:text-base"
               >
-                See Why PLAND
-                <Image
-                  src={"/images/icons/icon-arrow.svg"}
-                  alt="arrow-icon"
-                  width={20}
-                  height={20}
-                />
+                Go to app
               </Button>
               <Button
                 variant="outline"
                 render={<Link href="/#portfolio" />}
-                className="h-12 rounded-lg border border-white/10 bg-white/5 px-4 py-6 text-sm font-semibold whitespace-nowrap text-white hover:bg-white/10 sm:px-7 sm:text-base"
+                className="flex w-full sm:w-[220px] justify-center h-12 items-center rounded-lg border border-white/10 bg-white/5 px-4 py-6 text-sm font-semibold whitespace-nowrap text-white hover:bg-white/10 sm:px-7 sm:text-base"
               >
                 Explore Capabilities
               </Button>

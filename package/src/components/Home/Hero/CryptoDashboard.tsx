@@ -37,7 +37,7 @@ const CryptoDashboard = () => {
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-      className="relative z-20 w-full max-w-6xl mx-auto mt-4 md:mt-10 mb-16 px-4"
+      className="relative z-20 w-full max-w-6xl mx-auto mt-12 md:mt-24 mb-16 px-4"
     >
       {/* Laser glow overlay from flow hitting top of dashboard */}
       <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[60%] h-32 bg-[#16c784]/20 blur-[80px] rounded-[100%] pointer-events-none mix-blend-screen" />
@@ -45,32 +45,11 @@ const CryptoDashboard = () => {
 
       {/* The Dashboard Container */}
       <div
-        className="relative bg-[#11141A]/90 backdrop-blur-xl border border-white/5 rounded-3xl shadow-2xl p-4 md:p-6 flex flex-col gap-6"
+        className="relative bg-[#11141A] border border-white/5 border-t-[#16c784]/50 rounded-3xl shadow-2xl p-4 md:p-6 flex flex-col gap-6 overflow-hidden"
         style={{
           boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset",
         }}
       >
-        {/* Laser Impact Core */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[10%] max-w-[120px] h-[3px] bg-[#fff] shadow-[0_0_30px_6px_#16c784] z-20 rounded-full" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[30%] max-w-[300px] h-[2px] bg-[#16c784] shadow-[0_0_15px_3px_#16c784] z-20 rounded-full" />
-        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#16c784] to-transparent opacity-50" />
-
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <h2 className="text-xl font-bold text-white tracking-tight">Main Portfolio</h2>
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2">
-              <span className="text-white/70 text-xs font-medium">Show charts</span>
-              <div className="w-8 h-4 bg-[#16c784] rounded-full p-0.5 cursor-pointer flex items-center shadow-inner">
-                <div className="w-3 h-3 bg-[#11141A] rounded-full translate-x-4 shadow-sm"></div>
-              </div>
-            </div>
-            <button className="bg-[#16c784] hover:bg-[#12a96f] text-black font-semibold py-1.5 px-4 rounded-lg transition-colors text-xs flex items-center gap-1.5 shadow-lg shadow-[#16c784]/20">
-              <span className="text-base leading-none">+</span> Create portfolio
-            </button>
-          </div>
-        </div>
-
         {/* Total Value & Metrics Row */}
         <div className="flex flex-col gap-4">
           <div className="flex flex-col">

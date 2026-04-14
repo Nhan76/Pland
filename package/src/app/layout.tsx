@@ -1,11 +1,11 @@
-import { DM_Sans } from 'next/font/google'
+import { Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Layout/Header'
 import Footer from '@/components/Layout/Footer'
 import { ThemeProvider } from 'next-themes'
 import ScrollToTop from '@/components/ScrollToTop'
 import Aoscompo from '@/utils/aos'
-const font = DM_Sans({ subsets: ['latin'] })
+const font = Plus_Jakarta_Sans({ subsets: ['latin'] })
 
 export default function RootLayout({
   children,
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning className="scroll-smooth">
       <body className={`${font.className}`}>
         <ThemeProvider
           attribute='class'
