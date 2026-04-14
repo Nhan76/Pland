@@ -1,36 +1,24 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import CrossModuleIntelligenceIllustration from "./CrossModuleIntelligenceIllustration";
 
 const Platform = () => {
   return (
     <section className="md:pt-44 sm:pt-24 pt-12 relative z-1">
       <div className="container px-4">
-        <div className="bg-section/10 px-16 py-14 rounded-3xl border-2 border-white/10 grid grid-cols-12 items-center before:content-[''] before:absolute relative before:w-96 before:h-64 before:bg-start before:bg-no-repeat before:-bottom-6 overflow-hidden lg:before:right-0 before:-z-1 before:opacity-10 ">
-          <div className="lg:col-span-8 col-span-12">
-            <h2 className="text-white sm:text-[40px] text-3xl mb-6">
-              Transparent AI for real portfolio decisions
+        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="max-w-2xl">
+            <p className="text-white font-medium">
+              AI <span className="text-primary">feature</span>
+            </p>
+            <h2 className="mt-4 text-white sm:text-[40px] text-3xl">
+              Cross-module intelligence for every portfolio review
             </h2>
-            <p className="text-muted/60 text-lg">
-              Each recommendation keeps its reasoning visible, so the investor
-              sees the path from market context to final action.
+            <p className="mt-6 text-lg text-muted/60">
+              PLAND connects positions, signals, and history into one
+              explainable AI view for consistent portfolio decisions.
             </p>
           </div>
-          <div className="lg:col-span-4 col-span-12">
-            <div className="flex lg:justify-end lg:mt-0 mt-7 justify-center">
-              <Button
-                render={<Link href="/#portfolio" />}
-                className="flex items-center gap-2.5 text-background bg-primary hover:bg-primary/80 border border-primary py-6 px-5 rounded-lg sm:text-21 text-lg font-medium h-14"
-              >
-                View capabilities
-                <Image
-                  src={"/images/icons/icon-arrow.svg"}
-                  alt="icon"
-                  width={20}
-                  height={20}
-                />
-              </Button>
-            </div>
+          <div className="flex justify-center lg:justify-end">
+            <CrossModuleIntelligenceIllustration />
           </div>
         </div>
       </div>

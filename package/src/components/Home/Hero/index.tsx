@@ -6,6 +6,7 @@ import CardSlider from "./slider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import HeroBackground from "./HeroBackground";
+import CryptoDashboard from "./CryptoDashboard";
 
 const Hero = () => {
   const leftAnimation = {
@@ -69,6 +70,9 @@ const Hero = () => {
               </Button>
           </div>
         </motion.div>
+        
+        <CryptoDashboard />
+
         <CardSlider />
       </div>
     </section>

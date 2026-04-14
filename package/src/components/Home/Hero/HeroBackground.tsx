@@ -3,7 +3,7 @@
 import LaserFlow from "./LaserFlow";
 
 const HERO_LASER_FLOW_WRAPPER_CLASS =
-  "absolute inset-x-[-12%] top-[-24%] h-[168%] opacity-92 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
+  "absolute inset-x-0 top-[-16%] h-[136%] opacity-90 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
 
 const HERO_LASER_FLOW_PROPS = {
   className: "mix-blend-screen",
@@ -14,10 +14,10 @@ const HERO_LASER_FLOW_PROPS = {
   fogIntensity: 0.2,
   fogScale: 0.28,
   horizontalBeamOffset: 0,
-  horizontalSizing: 1.55,
+  horizontalSizing: 0.36,
   mouseSmoothTime: 0.18,
   mouseTiltStrength: 0.035,
-  verticalBeamOffset: -0.04,
+  verticalBeamOffset: -0.23,
   verticalSizing: 8.2,
   wispDensity: 1.15,
   wispIntensity: 5.6,
@@ -28,7 +28,7 @@ const HERO_LASER_FLOW_PROPS = {
 
 const HeroBackground = () => {
   return (
-    <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+    <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className={HERO_LASER_FLOW_WRAPPER_CLASS}>
         <LaserFlow {...HERO_LASER_FLOW_PROPS} />
       </div>
