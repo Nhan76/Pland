@@ -1,6 +1,7 @@
 
 import { Metadata } from 'next'
 import Hero from '@/components/Home/Hero'
+import Mission from '@/components/Home/Mission'
 import Work from '@/components/Home/work'
 import TimeLine from '@/components/Home/timeline'
 import Platform from '@/components/Home/platform'
@@ -20,6 +21,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      <Mission />
       <Work />
       <GlobalReach/>
       <TimeLine />
