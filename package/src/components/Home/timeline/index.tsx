@@ -1,12 +1,9 @@
 'use client'
 import Image from 'next/image'
 import { timelineData } from '@/app/api/data'
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
 
 const TimeLine = () => {
-  const ref = useRef(null)
-  useInView(ref)
   return (
     <section className='md:pt-40 pt-9' id='development'>
       <div className='container lg:px-16 px-4'>
@@ -24,10 +21,7 @@ const TimeLine = () => {
               </h2>
             </div>
           </motion.div>
-          <motion.div
-            whileInView={{ scale: 1, opacity: 1 }}
-            initial={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.6 }}>
+          <div>
             <div className='md:block hidden relative'>
               <div>
                 <Image
@@ -126,7 +120,7 @@ const TimeLine = () => {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

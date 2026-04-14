@@ -1,44 +1,8 @@
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import { pricedata } from "@/app/api/data";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 
 const CardSlider = () => {
-
-  const settings = {
-    autoplay: true,
-    dots: false,
-    arrows: false,
-    infinite: true,
-    autoplaySpeed: 1500,
-    speed: 300,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    cssEase: "ease-in-out",
-    responsive: [
-      {
-        breakpoint: 479,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-      {
-        breakpoint: 992,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-        },
-      },
-    ],
-  };
-
   return (
     <div className="pt-14 flex flex-col gap-10">
       <div className="flex flex-col gap-3 items-center justify-center text-center">
@@ -50,9 +14,9 @@ const CardSlider = () => {
         </h2>
       </div>
 
-      <Slider {...settings}>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         {pricedata.map((item, index) => (
-          <div key={index} className="pr-6">
+          <div key={index}>
             <Card className="bg-white/5 border-none shadow-none rounded-xl p-0">
               <CardContent className="px-5 py-6">
                 <div className="flex flex-col items-center gap-5">
@@ -82,7 +46,7 @@ const CardSlider = () => {
             </Card>
           </div>
         ))}
-      </Slider>
+      </div>
     </div>
   );
 };

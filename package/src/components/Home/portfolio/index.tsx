@@ -8,18 +8,14 @@ const Portfolio = () => {
     <section className='pt-12' id='portfolio'>
       <div className='container px-4 sm:px-6'>
         <div className='grid lg:grid-cols-2 items-center gap-20'>
-          <motion.div
-            whileInView={{ y: 0, opacity: 1 }}
-            initial={{ y: '-100%', opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className='lg:-ml-32'>
+          <div className='lg:-ml-32'>
             <Image
               src='/images/portfolio/img-portfolio.png'
               alt='Crypto Portfolio'
               width={780}
               height={700}
             />
-          </motion.div>
+          </div>
 
           <motion.div
             whileInView={{ y: 0, opacity: 1 }}
