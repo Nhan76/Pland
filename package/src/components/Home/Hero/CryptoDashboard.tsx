@@ -1,6 +1,6 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
   AreaChart,
   Area,
@@ -23,6 +23,16 @@ const mockPerformanceData = [
   { time: "1:14 AM", value: 243623 },
 ];
 
+const mockRiskData = [
+  { time: "7:00 AM", value: 11000 },
+  { time: "10:00 AM", value: 11500 },
+  { time: "1:00 PM", value: 10500 },
+  { time: "4:00 PM", value: 12200 },
+  { time: "7:00 PM", value: 11800 },
+  { time: "10:00 PM", value: 12400 },
+  { time: "1:14 AM", value: 12980 },
+];
+
 const allocationData = [
   { name: "BTC", value: 73.9, color: "#16c784" },
   { name: "BNB", value: 9.1, color: "#627eea" },
@@ -31,7 +41,472 @@ const allocationData = [
   { name: "USDT", value: 3.5, color: "#26a17b" },
 ];
 
+const riskAllocationData = [
+  { name: "BTC Risk", value: 52.4, color: "#ea3943" },
+  { name: "Altcoins", value: 28.1, color: "#f3ba2f" },
+  { name: "ETH Risk", value: 15.3, color: "#627eea" },
+  { name: "Stables", value: 4.2, color: "#16c784" },
+];
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
+};
+
+const itemVariantsLeft: Variants = {
+  hidden: { opacity: 0, x: -20 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeInOut" } },
+  exit: { opacity: 0, x: 20, transition: { duration: 0.3, ease: "easeInOut" } },
+};
+
+const itemVariantsRight: Variants = {
+  hidden: { opacity: 0, x: 20 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeInOut" } },
+  exit: { opacity: 0, x: -20, transition: { duration: 0.3, ease: "easeInOut" } },
+};
+
+const PortfolioView = () => (
+  <motion.div
+    key="portfolio"
+    variants={containerVariants}
+    initial="hidden"
+    animate="show"
+    exit="exit"
+    className="flex flex-col gap-6"
+  >
+    {/* Total Value & Metrics Row */}
+    <motion.div variants={itemVariantsLeft} className="flex flex-col gap-4">
+      <div className="flex flex-col">
+        <span className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Total Portfolio Value</span>
+        <div className="flex items-baseline gap-2">
+          <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">$243,623.12</span>
+          <span className="text-[#ea3943] font-medium text-xs flex items-center">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
+              <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+            2.78%
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        {/* Metric 1 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
+          <span className="text-white/60 text-[11px] font-medium mb-1">All-time Profit</span>
+          <span className="text-[#ea3943] font-bold text-base leading-none">-$6,955.83</span>
+          <div className="mt-auto pt-2">
+            <div className="bg-[#ea3943]/20 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
+                <path d="M12 5v14M19 12l-7 7-7-7" />
+              </svg>
+              2.78%
+            </div>
+          </div>
+        </div>
+        {/* Metric 2 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
+          <span className="text-white/60 text-[11px] font-medium mb-1">Cost Basis</span>
+          <span className="text-white font-bold text-base leading-none">$250,578.95</span>
+        </div>
+        {/* Metric 3 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 col-span-2 md:col-span-1">
+          <span className="text-white/60 text-[11px] font-medium mb-2">24h Performance</span>
+          <div className="flex flex-col gap-1.5 mt-auto">
+            <div className="flex justify-between items-center text-[11px] leading-none">
+              <span className="text-white/50">Best <span className="text-white/80">BNB</span></span>
+              <span className="text-[#16c784] font-medium">+2.19%</span>
+            </div>
+            <div className="flex justify-between items-center text-[11px] leading-none">
+              <span className="text-white/50">Worst <span className="text-white/80">QTUM</span></span>
+              <span className="text-white/80 font-medium">+0.00%</span>
+            </div>
+          </div>
+        </div>
+        {/* Metric 4 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
+          <span className="text-white/60 text-[11px] font-medium mb-1">Sharpe Ratio</span>
+          <span className="text-[#16c784] font-bold text-base leading-none">4.19</span>
+          <div className="mt-auto pt-2">
+            <span className="bg-[#16c784]/20 text-[#16c784] text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Excellent</span>
+          </div>
+        </div>
+        {/* Metric 5 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
+          <span className="text-white/60 text-[11px] font-medium mb-1">Max Drawdown</span>
+          <span className="text-[#ea3943] font-bold text-base leading-none">-15.76%</span>
+          <div className="mt-auto pt-2">
+            <span className="text-[#f3ba2f] text-[9px] flex items-center gap-1 font-medium">
+              <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              Not recovered
+            </span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Bottom Grid: Allocation & Charts */}
+    <motion.div variants={itemVariantsLeft} className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+      
+      {/* Allocation Card */}
+      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-1">
+        <div className="mb-3">
+          <div className="text-white font-bold text-sm">Allocation</div>
+        </div>
+        
+        <div className="h-[100px] w-full relative mb-4">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={allocationData}
+                innerRadius={35}
+                outerRadius={50}
+                paddingAngle={3}
+                dataKey="value"
+                stroke="none"
+                cornerRadius={2}
+              >
+                {allocationData.map((entry, index) => (
+                  <Cell key={index} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1A1F26', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                itemStyle={{ color: '#fff', fontSize: '11px' }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="flex flex-col gap-1.5 flex-1 pr-1">
+          {allocationData.map((asset, i) => (
+            <div key={i} className="flex justify-between items-center text-[11px] font-medium">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: asset.color }} />
+                <span className="text-white/90">{asset.name}</span>
+              </div>
+              <span className="text-white/60">{asset.value}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Performance Chart Card */}
+      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
+          <div>
+            <div className="text-white font-bold text-sm mb-0.5">Portfolio Performance</div>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-lg font-bold text-white leading-none">$243.6K</span>
+              <span className="text-[#16c784] text-[10px] font-bold bg-[#16c784]/10 px-1.5 py-0.5 rounded-md">+2.20% (+$5.2K)</span>
+            </div>
+          </div>
+          <div className="flex bg-[#11141A] rounded-md p-1 border border-white/5">
+            {["24H", "7D", "30D", "90D", "ALL"].map((span) => (
+              <button
+                key={span}
+                className={`text-[10px] px-2.5 py-1 rounded-md font-semibold transition-all ${
+                  span === "1D" || span === "24H"
+                    ? "bg-white/10 text-white shadow-sm"
+                    : "text-white/40 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {span}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex-1 w-full relative min-h-[160px] md:min-h-[180px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={mockPerformanceData} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="cmcGradientPerf" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#16c784" stopOpacity={0.2} />
+                  <stop offset="100%" stopColor="#16c784" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1A1F26",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "6px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                  padding: "8px"
+                }}
+                itemStyle={{ color: "#fff", fontWeight: "600", fontSize: "11px" }}
+                labelStyle={{ color: "rgba(255,255,255,0.5)", marginBottom: "2px", fontSize: "9px" }}
+              />
+              <XAxis
+                dataKey="time"
+                stroke="rgba(255,255,255,0.05)"
+                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
+                tickLine={false}
+                axisLine={false}
+                minTickGap={20}
+                dy={5}
+              />
+              <YAxis
+                domain={['auto', 'auto']}
+                orientation="right"
+                stroke="rgba(255,255,255,0.05)"
+                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(val) => `$${val.toLocaleString()}`}
+                dx={5}
+                width={50}
+              />
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#16c784"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#cmcGradientPerf)"
+                activeDot={{ r: 4, strokeWidth: 0, fill: "#16c784" }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+      
+    </motion.div>
+  </motion.div>
+);
+
+const RiskView = () => (
+  <motion.div
+    key="risk"
+    variants={containerVariants}
+    initial="hidden"
+    animate="show"
+    exit="exit"
+    className="flex flex-col gap-6"
+  >
+    {/* Total Risk Row */}
+    <motion.div variants={itemVariantsRight} className="flex flex-col gap-4">
+      <div className="flex flex-col">
+        <span className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Value at Risk (95% Confidence)</span>
+        <div className="flex items-baseline gap-2">
+          <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">$12,980.00</span>
+          <span className="text-[#ea3943] font-medium text-xs flex items-center">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
+              <path d="M12 19V5M5 12l7-7 7 7" />
+            </svg>
+            5.11%
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        {/* Metric 1 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
+          <span className="text-white/60 text-[11px] font-medium mb-1">30-Day Volatility</span>
+          <span className="text-[#ea3943] font-bold text-base leading-none">42.5%</span>
+          <div className="mt-auto pt-2">
+            <div className="bg-[#ea3943]/20 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
+              Target &lt; 35%
+            </div>
+          </div>
+        </div>
+        {/* Metric 2 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
+          <span className="text-white/60 text-[11px] font-medium mb-1">Portfolio Beta</span>
+          <span className="text-white font-bold text-base leading-none">1.15</span>
+        </div>
+        {/* Metric 3 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 col-span-2 md:col-span-1">
+          <span className="text-white/60 text-[11px] font-medium mb-2">Stress Test (BTC -20%)</span>
+          <div className="flex flex-col gap-1.5 mt-auto">
+            <div className="flex justify-between items-center text-[11px] leading-none">
+              <span className="text-white/50">Est. Impact</span>
+              <span className="text-[#ea3943] font-medium">-$26,500</span>
+            </div>
+            <div className="flex justify-between items-center text-[11px] leading-none">
+              <span className="text-white/50">Liquidation Risk</span>
+              <span className="text-[#16c784] font-medium">Safe</span>
+            </div>
+          </div>
+        </div>
+        {/* Metric 4 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
+          <span className="text-white/60 text-[11px] font-medium mb-1">Concentration Risk</span>
+          <span className="text-[#f3ba2f] font-bold text-base leading-none">73.9% BTC</span>
+          <div className="mt-auto pt-2">
+            <span className="bg-[#f3ba2f]/20 text-[#f3ba2f] text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Warning</span>
+          </div>
+        </div>
+        {/* Metric 5 */}
+        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
+          <span className="text-white/60 text-[11px] font-medium mb-1">Sharpe Ratio</span>
+          <span className="text-[#16c784] font-bold text-base leading-none">4.19</span>
+          <div className="mt-auto pt-2">
+            <span className="bg-[#16c784]/20 text-[#16c784] text-[9px] flex items-center gap-1 font-medium px-1.5 py-0.5 rounded-sm">
+              Excellent
+            </span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+
+    {/* Bottom Grid: Allocation & Charts */}
+    <motion.div variants={itemVariantsRight} className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+      
+      {/* Allocation Card */}
+      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-1">
+        <div className="mb-3">
+          <div className="text-white font-bold text-sm">Risk Contribution</div>
+        </div>
+        
+        <div className="h-[100px] w-full relative mb-4">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={riskAllocationData}
+                innerRadius={35}
+                outerRadius={50}
+                paddingAngle={3}
+                dataKey="value"
+                stroke="none"
+                cornerRadius={2}
+              >
+                {riskAllocationData.map((entry, index) => (
+                  <Cell key={index} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1A1F26', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
+                itemStyle={{ color: '#fff', fontSize: '11px' }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="flex flex-col gap-1.5 flex-1 pr-1">
+          {riskAllocationData.map((asset, i) => (
+            <div key={i} className="flex justify-between items-center text-[11px] font-medium">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: asset.color }} />
+                <span className="text-white/90">{asset.name}</span>
+              </div>
+              <span className="text-white/60">{asset.value}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Performance Chart Card */}
+      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-3">
+        <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
+          <div>
+            <div className="text-white font-bold text-sm mb-0.5">Risk Exposure (VaR)</div>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-lg font-bold text-white leading-none">$12.9K</span>
+              <span className="text-[#ea3943] text-[10px] font-bold bg-[#ea3943]/10 px-1.5 py-0.5 rounded-md">+5.11% (+$600)</span>
+            </div>
+          </div>
+          <div className="flex bg-[#11141A] rounded-md p-1 border border-white/5">
+            {["24H", "7D", "30D", "90D", "ALL"].map((span) => (
+              <button
+                key={span}
+                className={`text-[10px] px-2.5 py-1 rounded-md font-semibold transition-all ${
+                  span === "1D" || span === "24H"
+                    ? "bg-white/10 text-white shadow-sm"
+                    : "text-white/40 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                {span}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex-1 w-full relative min-h-[160px] md:min-h-[180px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={mockRiskData} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="cmcGradientRisk" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#ea3943" stopOpacity={0.2} />
+                  <stop offset="100%" stopColor="#ea3943" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "#1A1F26",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "6px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                  padding: "8px"
+                }}
+                itemStyle={{ color: "#fff", fontWeight: "600", fontSize: "11px" }}
+                labelStyle={{ color: "rgba(255,255,255,0.5)", marginBottom: "2px", fontSize: "9px" }}
+              />
+              <XAxis
+                dataKey="time"
+                stroke="rgba(255,255,255,0.05)"
+                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
+                tickLine={false}
+                axisLine={false}
+                minTickGap={20}
+                dy={5}
+              />
+              <YAxis
+                domain={['auto', 'auto']}
+                orientation="right"
+                stroke="rgba(255,255,255,0.05)"
+                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
+                tickLine={false}
+                axisLine={false}
+                tickFormatter={(val) => `$${val.toLocaleString()}`}
+                dx={5}
+                width={50}
+              />
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="#ea3943"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#cmcGradientRisk)"
+                activeDot={{ r: 4, strokeWidth: 0, fill: "#ea3943" }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+      
+    </motion.div>
+  </motion.div>
+);
+
 const CryptoDashboard = () => {
+  const [view, setView] = useState<"portfolio" | "risk">("portfolio");
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    if (isHovered) return;
+    
+    const interval = setInterval(() => {
+      setView((prev) => (prev === "portfolio" ? "risk" : "portfolio"));
+    }, 6000);
+    
+    return () => clearInterval(interval);
+  }, [isHovered]);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -45,210 +520,16 @@ const CryptoDashboard = () => {
 
       {/* The Dashboard Container */}
       <div
-        className="relative bg-[#11141A] border border-white/5 border-t-[#16c784]/50 rounded-3xl shadow-2xl p-4 md:p-6 flex flex-col gap-6 overflow-hidden"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="relative bg-[#11141A] border border-white/5 border-t-[#16c784]/50 rounded-3xl shadow-2xl p-4 md:p-6 flex flex-col gap-6 overflow-hidden min-h-[460px] md:min-h-[400px]"
         style={{
           boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset",
         }}
       >
-        {/* Total Value & Metrics Row */}
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col">
-            <span className="text-white/50 text-[10px] font-bold uppercase tracking-widest mb-1">Total Portfolio Value</span>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl md:text-4xl font-bold text-white tracking-tight">$243,623.12</span>
-              <span className="text-[#ea3943] font-medium text-xs flex items-center">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
-                  <path d="M12 5v14M19 12l-7 7-7-7" />
-                </svg>
-                2.78%
-              </span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {/* Metric 1 */}
-            <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
-              <span className="text-white/60 text-[11px] font-medium mb-1">All-time Profit</span>
-              <span className="text-[#ea3943] font-bold text-base leading-none">-$6,955.83</span>
-              <div className="mt-auto pt-2">
-                <div className="bg-[#ea3943]/20 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
-                    <path d="M12 5v14M19 12l-7 7-7-7" />
-                  </svg>
-                  2.78%
-                </div>
-              </div>
-            </div>
-            {/* Metric 2 */}
-            <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
-              <span className="text-white/60 text-[11px] font-medium mb-1">Cost Basis</span>
-              <span className="text-white font-bold text-base leading-none">$250,578.95</span>
-            </div>
-            {/* Metric 3 */}
-            <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 col-span-2 md:col-span-1">
-              <span className="text-white/60 text-[11px] font-medium mb-2">24h Performance</span>
-              <div className="flex flex-col gap-1.5 mt-auto">
-                <div className="flex justify-between items-center text-[11px] leading-none">
-                  <span className="text-white/50">Best <span className="text-white/80">BNB</span></span>
-                  <span className="text-[#16c784] font-medium">+2.19%</span>
-                </div>
-                <div className="flex justify-between items-center text-[11px] leading-none">
-                  <span className="text-white/50">Worst <span className="text-white/80">QTUM</span></span>
-                  <span className="text-white/80 font-medium">+0.00%</span>
-                </div>
-              </div>
-            </div>
-            {/* Metric 4 */}
-            <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
-              <span className="text-white/60 text-[11px] font-medium mb-1">Sharpe Ratio</span>
-              <span className="text-[#16c784] font-bold text-base leading-none">4.19</span>
-              <div className="mt-auto pt-2">
-                <span className="bg-[#16c784]/20 text-[#16c784] text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Excellent</span>
-              </div>
-            </div>
-            {/* Metric 5 */}
-            <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
-              <span className="text-white/60 text-[11px] font-medium mb-1">Max Drawdown</span>
-              <span className="text-[#ea3943] font-bold text-base leading-none">-15.76%</span>
-              <div className="mt-auto pt-2">
-                <span className="text-[#f3ba2f] text-[9px] flex items-center gap-1 font-medium">
-                  <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                  </svg>
-                  Not recovered
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Grid: Allocation & Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-          
-          {/* Allocation Card */}
-          <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-1">
-            <div className="mb-3">
-              <div className="text-white font-bold text-sm">Allocation</div>
-            </div>
-            
-            <div className="h-[100px] w-full relative mb-4">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={allocationData}
-                    innerRadius={35}
-                    outerRadius={50}
-                    paddingAngle={3}
-                    dataKey="value"
-                    stroke="none"
-                    cornerRadius={2}
-                  >
-                    {allocationData.map((entry, index) => (
-                      <Cell key={index} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#1A1F26', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                    itemStyle={{ color: '#fff', fontSize: '11px' }}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-
-            <div className="flex flex-col gap-1.5 flex-1 pr-1">
-              {allocationData.map((asset, i) => (
-                <div key={i} className="flex justify-between items-center text-[11px] font-medium">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: asset.color }} />
-                    <span className="text-white/90">{asset.name}</span>
-                  </div>
-                  <span className="text-white/60">{asset.value}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Performance Chart Card */}
-          <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-3">
-            <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
-              <div>
-                <div className="text-white font-bold text-sm mb-0.5">Portfolio Performance</div>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-lg font-bold text-white leading-none">$243.6K</span>
-                  <span className="text-[#16c784] text-[10px] font-bold bg-[#16c784]/10 px-1.5 py-0.5 rounded-md">+2.20% (+$5.2K)</span>
-                </div>
-              </div>
-              <div className="flex bg-[#11141A] rounded-md p-1 border border-white/5">
-                {["24H", "7D", "30D", "90D", "ALL"].map((span) => (
-                  <button
-                    key={span}
-                    className={`text-[10px] px-2.5 py-1 rounded-md font-semibold transition-all ${
-                      span === "1D" || span === "24H"
-                        ? "bg-white/10 text-white shadow-sm"
-                        : "text-white/40 hover:text-white hover:bg-white/5"
-                    }`}
-                  >
-                    {span}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex-1 w-full relative min-h-[160px] md:min-h-[180px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={mockPerformanceData} margin={{ top: 5, right: 0, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="cmcGradientPerf" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#16c784" stopOpacity={0.2} />
-                      <stop offset="100%" stopColor="#16c784" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1A1F26",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: "6px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-                      padding: "8px"
-                    }}
-                    itemStyle={{ color: "#fff", fontWeight: "600", fontSize: "11px" }}
-                    labelStyle={{ color: "rgba(255,255,255,0.5)", marginBottom: "2px", fontSize: "9px" }}
-                  />
-                  <XAxis
-                    dataKey="time"
-                    stroke="rgba(255,255,255,0.05)"
-                    tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
-                    tickLine={false}
-                    axisLine={false}
-                    minTickGap={20}
-                    dy={5}
-                  />
-                  <YAxis
-                    domain={['auto', 'auto']}
-                    orientation="right"
-                    stroke="rgba(255,255,255,0.05)"
-                    tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
-                    tickLine={false}
-                    axisLine={false}
-                    tickFormatter={(val) => `$${val.toLocaleString()}`}
-                    dx={5}
-                    width={50}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="value"
-                    stroke="#16c784"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#cmcGradientPerf)"
-                    activeDot={{ r: 4, strokeWidth: 0, fill: "#16c784" }}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          
-        </div>
+        <AnimatePresence mode="wait">
+          {view === "portfolio" ? <PortfolioView key="portfolio" /> : <RiskView key="risk" />}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
