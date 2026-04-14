@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import CardSlider from "./slider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import HeroBackground from "./HeroBackground";
 
 const Hero = () => {
   const leftAnimation = {
@@ -16,10 +17,12 @@ const Hero = () => {
 
   return (
     <section
-      className="relative py-24 pt-48 overflow-hidden z-1"
+      className="relative z-1 overflow-hidden py-24 pt-48 isolate"
       id="main-banner"
     >
-      <div className="container">
+      <HeroBackground />
+
+      <div className="container relative z-10">
         <motion.div
           {...leftAnimation}
           className="mx-auto flex max-w-4xl flex-col items-center gap-10 text-center"

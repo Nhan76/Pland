@@ -30,7 +30,8 @@
     "react-slick": "^0.30.3",
     "shadcn": "^3.8.2",
     "slick-carousel": "^1.8.1",
-    "tailwind-merge": "^3.4.0"
+    "tailwind-merge": "^3.4.0",
+    "three": "^0.183.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
