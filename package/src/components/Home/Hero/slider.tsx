@@ -10,7 +10,7 @@ const marqueeStyle = {
 
 const PriceCard = ({ item }: { item: (typeof pricedata)[number] }) => {
   return (
-    <Card className="w-72 shrink-0 bg-white/5 border-none shadow-none rounded-xl p-0">
+    <Card className="w-72 shrink-0 bg-bento-card border-none shadow-none rounded-xl p-0">
       <CardContent className="px-5 py-6">
         <div className="flex flex-col items-center gap-5">
           <div className={`${item.background} ${item.padding} rounded-full`}>
@@ -53,7 +53,7 @@ const CardSlider = () => {
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-linear-to-l from-background to-transparent sm:w-20" />
 
         <div
-          className="flex w-max animate-market-marquee will-change-transform motion-reduce:animate-none hover:[animation-play-state:paused]"
+          className="flex w-max animate-market-marquee will-change-transform motion-reduce:animate-none hover:paused"
           style={marqueeStyle}
         >
           {[0, 1].map((groupIndex) => (

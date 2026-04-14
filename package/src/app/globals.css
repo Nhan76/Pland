@@ -91,6 +91,7 @@
   /* custom */
   --color-tealGreen: var(--tealGreen);
   --color-charcoalGray: var(--charcoalGray);
+  --color-bento-card: var(--bento-card);
 }
 
 /*
@@ -134,6 +135,7 @@
   /* custom */
   --tealGreen: #16c784;
   --charcoalGray: #666c78;
+  --bento-card: #11141a;
 }
 
 /*
@@ -175,6 +177,7 @@
   /* custom */
   --tealGreen: #16c784;
   --charcoalGray: #666c78;
+  --bento-card: #11141a;
 }
 
 /*

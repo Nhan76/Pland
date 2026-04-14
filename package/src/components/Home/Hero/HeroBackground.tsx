@@ -1,6 +1,7 @@
 "use client";
 
 import LaserFlow from "./LaserFlow";
+import { usePageIntro } from "@/components/Layout/PageIntroProvider";
 
 const HERO_LASER_FLOW_WRAPPER_CLASS =
   "absolute left-1/2 -translate-x-1/2 w-full max-w-7xl top-[-16%] h-[136%] opacity-90 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
@@ -27,10 +28,12 @@ const HERO_LASER_FLOW_PROPS = {
 } as const;
 
 const HeroBackground = () => {
+  const { showLaserFlow } = usePageIntro();
+
   return (
     <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className={HERO_LASER_FLOW_WRAPPER_CLASS}>
-        <LaserFlow {...HERO_LASER_FLOW_PROPS} />
+        {showLaserFlow ? <LaserFlow {...HERO_LASER_FLOW_PROPS} /> : null}
       </div>
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(22,199,132,0.14),transparent_32%),linear-gradient(180deg,rgba(5,16,26,0.08)_0%,rgba(5,16,26,0.4)_58%,var(--background)_100%)]" />

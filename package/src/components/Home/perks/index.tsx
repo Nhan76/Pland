@@ -1,10 +1,12 @@
+"use client"
+
 import { perksData } from "@/app/api/data";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 
 const Perks = () => {
   return (
-    <section className="pb-28 relative">
+    <section className="py-16 md:py-24 relative">
       <div className="container px-4 relative z-2">
         <div className="text-center">
           <div className="flex flex-col gap-4">

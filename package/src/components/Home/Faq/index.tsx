@@ -43,7 +43,7 @@ const faqData = [
 
 const Faq = () => {
   return (
-    <section id="faq" className=" py-16 text-white">
+    <section className="py-16 md:py-24 text-white">
       <div className="container">
         <div className=" mx-auto px-4">
           <div className="text-center mb-10">

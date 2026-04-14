@@ -1,8 +1,10 @@
+"use client"
+
 import CrossModuleIntelligenceIllustration from "./CrossModuleIntelligenceIllustration";
 
 const Platform = () => {
   return (
-    <section className="md:pt-44 sm:pt-24 pt-12 relative z-1">
+    <section className="pt-16 pb-0 md:pt-24 md:pb-0 relative z-1">
       <div className="container px-4">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="max-w-2xl">
