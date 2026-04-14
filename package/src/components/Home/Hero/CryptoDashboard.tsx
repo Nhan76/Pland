@@ -48,6 +48,62 @@ const riskAllocationData = [
   { name: "Stables", value: 4.2, color: "#16c784" },
 ];
 
+const chartTimeRanges = ["24H", "7D", "30D", "90D", "ALL"] as const;
+
+const chartTooltipContentStyle = {
+  backgroundColor: "#1A1F26",
+  border: "1px solid rgba(255,255,255,0.1)",
+  borderRadius: "6px",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+  padding: "8px",
+};
+
+const chartTooltipItemStyle = {
+  color: "#fff",
+  fontWeight: "600",
+  fontSize: "11px",
+};
+
+const chartTooltipLabelStyle = {
+  color: "rgba(255,255,255,0.5)",
+  marginBottom: "2px",
+  fontSize: "9px",
+};
+
+const chartXAxisProps = {
+  dataKey: "time",
+  stroke: "rgba(255,255,255,0.05)",
+  tick: { fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 },
+  tickLine: false,
+  axisLine: false,
+  minTickGap: 20,
+  dy: 10,
+  padding: { left: 10, right: 10 },
+} as const;
+
+const chartYAxisProps = {
+  domain: ["auto", "auto"] as const,
+  orientation: "right" as const,
+  stroke: "rgba(255,255,255,0.05)",
+  tick: { fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 },
+  tickLine: false,
+  axisLine: false,
+  dx: 10,
+  width: 55,
+};
+
+type ChartPoint = {
+  time: string;
+  value: number;
+};
+
+type DashboardAreaChartProps = {
+  chartKey: string;
+  data: ChartPoint[];
+  gradientId: string;
+  strokeColor: string;
+};
+
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
@@ -75,6 +131,80 @@ const itemVariantsRight: Variants = {
   hidden: { opacity: 0, x: 20 },
   show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeInOut" } },
   exit: { opacity: 0, x: -20, transition: { duration: 0.3, ease: "easeInOut" } },
+};
+
+const DashboardAreaChart = ({
+  chartKey,
+  data,
+  gradientId,
+  strokeColor,
+}: DashboardAreaChartProps) => {
+  const [animationInstance, setAnimationInstance] = useState(0);
+  const [isChartReady, setIsChartReady] = useState(false);
+
+  useEffect(() => {
+    setIsChartReady(false);
+
+    let firstFrame = 0;
+    let secondFrame = 0;
+
+    firstFrame = requestAnimationFrame(() => {
+      secondFrame = requestAnimationFrame(() => {
+        setAnimationInstance((current) => current + 1);
+        setIsChartReady(true);
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(firstFrame);
+      cancelAnimationFrame(secondFrame);
+    };
+  }, [chartKey]);
+
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart
+        key={`${chartKey}-${animationInstance}`}
+        data={data}
+        margin={{ top: 5, right: 0, left: 0, bottom: 10 }}
+      >
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={strokeColor} stopOpacity={0.2} />
+            <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
+          </linearGradient>
+        </defs>
+        <Tooltip
+          contentStyle={chartTooltipContentStyle}
+          itemStyle={chartTooltipItemStyle}
+          labelStyle={chartTooltipLabelStyle}
+        />
+        <XAxis {...chartXAxisProps} />
+        <YAxis
+          {...chartYAxisProps}
+          tickFormatter={(value: number | string) =>
+            typeof value === "number" ? `$${value.toLocaleString()}` : String(value)
+          }
+        />
+        {isChartReady ? (
+          <Area
+            key={`${chartKey}-area-${animationInstance}`}
+            type="monotone"
+            dataKey="value"
+            stroke={strokeColor}
+            strokeWidth={2}
+            fillOpacity={1}
+            fill={`url(#${gradientId})`}
+            activeDot={{ r: 4, strokeWidth: 0, fill: strokeColor }}
+            isAnimationActive
+            animationBegin={0}
+            animationDuration={700}
+            animationEasing="ease-out"
+          />
+        ) : null}
+      </AreaChart>
+    </ResponsiveContainer>
+  );
 };
 
 const PortfolioView = () => (
@@ -106,7 +236,7 @@ const PortfolioView = () => (
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
           <span className="text-white/60 text-[11px] font-medium mb-1">All-time Profit</span>
           <span className="text-[#ea3943] font-bold text-base leading-none">-$6,955.83</span>
-          <div className="mt-2 pt-1 border-t border-white/5">
+          <div className="mt-2 pt-1">
             <div className="bg-[#ea3943]/20 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
                 <path d="M12 5v14M19 12l-7 7-7-7" />
@@ -123,7 +253,7 @@ const PortfolioView = () => (
         {/* Metric 3 */}
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 col-span-2 md:col-span-1">
           <span className="text-white/60 text-[11px] font-medium mb-2">24h Performance</span>
-          <div className="flex flex-col gap-1.5 mt-2 pt-1 border-t border-white/5">
+          <div className="flex flex-col gap-1.5 mt-2 pt-1">
             <div className="flex justify-between items-center text-[11px] leading-none">
               <span className="text-white/50">Best <span className="text-white/80">BNB</span></span>
               <span className="text-[#16c784] font-medium">+2.19%</span>
@@ -138,7 +268,7 @@ const PortfolioView = () => (
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
           <span className="text-white/60 text-[11px] font-medium mb-1">Sharpe Ratio</span>
           <span className="text-[#16c784] font-bold text-base leading-none">4.19</span>
-          <div className="mt-2 pt-1 border-t border-white/5">
+          <div className="mt-2 pt-1">
             <span className="bg-[#16c784]/20 text-[#16c784] text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Excellent</span>
           </div>
         </div>
@@ -146,7 +276,7 @@ const PortfolioView = () => (
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
           <span className="text-white/60 text-[11px] font-medium mb-1">Max Drawdown</span>
           <span className="text-[#ea3943] font-bold text-base leading-none">-15.76%</span>
-          <div className="mt-2 pt-1 border-t border-white/5">
+          <div className="mt-2 pt-1">
             <span className="text-[#f3ba2f] text-[9px] flex items-center gap-1 font-medium">
               <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
@@ -211,11 +341,11 @@ const PortfolioView = () => (
             <div className="text-white font-bold text-sm mb-0.5">Portfolio Performance</div>
           </div>
           <div className="flex bg-[#11141A] rounded-md p-1 border border-white/5">
-            {["24H", "7D", "30D", "90D", "ALL"].map((span) => (
+            {chartTimeRanges.map((span) => (
               <button
                 key={span}
                 className={`text-[10px] px-2.5 py-1 rounded-md font-semibold transition-all ${
-                  span === "1D" || span === "24H"
+                  span === "24H"
                     ? "bg-white/10 text-white shadow-sm"
                     : "text-white/40 hover:text-white hover:bg-white/5"
                 }`}
@@ -227,57 +357,12 @@ const PortfolioView = () => (
         </div>
 
         <div className="flex-1 w-full relative min-h-[220px] md:min-h-[260px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={mockPerformanceData} margin={{ top: 5, right: 0, left: 0, bottom: 10 }}>
-              <defs>
-                <linearGradient id="cmcGradientPerf" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#16c784" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#16c784" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1A1F26",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "6px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-                  padding: "8px"
-                }}
-                itemStyle={{ color: "#fff", fontWeight: "600", fontSize: "11px" }}
-                labelStyle={{ color: "rgba(255,255,255,0.5)", marginBottom: "2px", fontSize: "9px" }}
-              />
-              <XAxis
-                dataKey="time"
-                stroke="rgba(255,255,255,0.05)"
-                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
-                tickLine={false}
-                axisLine={false}
-                minTickGap={20}
-                dy={10}
-                padding={{ left: 10, right: 10 }}
-              />
-              <YAxis
-                domain={['auto', 'auto']}
-                orientation="right"
-                stroke="rgba(255,255,255,0.05)"
-                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(val) => `$${val.toLocaleString()}`}
-                dx={10}
-                width={55}
-              />
-              <Area
-                type="monotone"
-                dataKey="value"
-                stroke="#16c784"
-                strokeWidth={2}
-                fillOpacity={1}
-                fill="url(#cmcGradientPerf)"
-                activeDot={{ r: 4, strokeWidth: 0, fill: "#16c784" }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <DashboardAreaChart
+            chartKey="portfolio-performance"
+            data={mockPerformanceData}
+            gradientId="cmcGradientPerf"
+            strokeColor="#16c784"
+          />
         </div>
       </div>
       
@@ -314,7 +399,7 @@ const RiskView = () => (
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
           <span className="text-white/60 text-[11px] font-medium mb-1">30-Day Volatility</span>
           <span className="text-[#ea3943] font-bold text-base leading-none">42.5%</span>
-          <div className="mt-2 pt-1 border-t border-white/5">
+          <div className="mt-2 pt-1">
             <div className="bg-[#ea3943]/20 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
               Target &lt; 35%
             </div>
@@ -328,7 +413,7 @@ const RiskView = () => (
         {/* Metric 3 */}
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 col-span-2 md:col-span-1">
           <span className="text-white/60 text-[11px] font-medium mb-2">Stress Test (BTC -20%)</span>
-          <div className="flex flex-col gap-1.5 mt-2 pt-1 border-t border-white/5">
+          <div className="flex flex-col gap-1.5 mt-2 pt-1">
             <div className="flex justify-between items-center text-[11px] leading-none">
               <span className="text-white/50">Est. Impact</span>
               <span className="text-[#ea3943] font-medium">-$26,500</span>
@@ -343,7 +428,7 @@ const RiskView = () => (
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
           <span className="text-white/60 text-[11px] font-medium mb-1">Concentration Risk</span>
           <span className="text-[#f3ba2f] font-bold text-base leading-none">73.9% BTC</span>
-          <div className="mt-2 pt-1 border-t border-white/5">
+          <div className="mt-2 pt-1">
             <span className="bg-[#f3ba2f]/20 text-[#f3ba2f] text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Warning</span>
           </div>
         </div>
@@ -351,7 +436,7 @@ const RiskView = () => (
         <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
           <span className="text-white/60 text-[11px] font-medium mb-1">Sharpe Ratio</span>
           <span className="text-[#16c784] font-bold text-base leading-none">4.19</span>
-          <div className="mt-2 pt-1 border-t border-white/5">
+          <div className="mt-2 pt-1">
             <span className="bg-[#16c784]/20 text-[#16c784] text-[9px] flex items-center gap-1 font-medium px-1.5 py-0.5 rounded-sm">
               Excellent
             </span>
@@ -421,11 +506,11 @@ const RiskView = () => (
             <div className="text-white font-bold text-sm mb-0.5">Risk Exposure (VaR)</div>
           </div>
           <div className="flex bg-[#11141A] rounded-md p-1 border border-white/5">
-            {["24H", "7D", "30D", "90D", "ALL"].map((span) => (
+            {chartTimeRanges.map((span) => (
               <button
                 key={span}
                 className={`text-[10px] px-2.5 py-1 rounded-md font-semibold transition-all ${
-                  span === "1D" || span === "24H"
+                  span === "24H"
                     ? "bg-white/10 text-white shadow-sm"
                     : "text-white/40 hover:text-white hover:bg-white/5"
                 }`}
@@ -437,57 +522,12 @@ const RiskView = () => (
         </div>
 
         <div className="flex-1 w-full relative min-h-[220px] md:min-h-[260px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={mockRiskData} margin={{ top: 5, right: 0, left: 0, bottom: 10 }}>
-              <defs>
-                <linearGradient id="cmcGradientRisk" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ea3943" stopOpacity={0.2} />
-                  <stop offset="100%" stopColor="#ea3943" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "#1A1F26",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  borderRadius: "6px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
-                  padding: "8px"
-                }}
-                itemStyle={{ color: "#fff", fontWeight: "600", fontSize: "11px" }}
-                labelStyle={{ color: "rgba(255,255,255,0.5)", marginBottom: "2px", fontSize: "9px" }}
-              />
-              <XAxis
-                dataKey="time"
-                stroke="rgba(255,255,255,0.05)"
-                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
-                tickLine={false}
-                axisLine={false}
-                minTickGap={20}
-                dy={10}
-                padding={{ left: 10, right: 10 }}
-              />
-              <YAxis
-                domain={['auto', 'auto']}
-                orientation="right"
-                stroke="rgba(255,255,255,0.05)"
-                tick={{ fill: "rgba(255,255,255,0.4)", fontSize: 9, fontWeight: 500 }}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(val) => `$${val.toLocaleString()}`}
-                dx={10}
-                width={55}
-              />
-              <Area
-                type="monotone"
-                dataKey="value"
-                stroke="#ea3943"
-                strokeWidth={2}
-                fillOpacity={1}
-                fill="url(#cmcGradientRisk)"
-                activeDot={{ r: 4, strokeWidth: 0, fill: "#ea3943" }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <DashboardAreaChart
+            chartKey="risk-exposure"
+            data={mockRiskData}
+            gradientId="cmcGradientRisk"
+            strokeColor="#ea3943"
+          />
         </div>
       </div>
       
@@ -524,7 +564,7 @@ const CryptoDashboard = () => {
           boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset",
         }}
       >
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence initial={false} mode="wait">
           {view === "portfolio" ? <PortfolioView key="portfolio" /> : <RiskView key="risk" />}
         </AnimatePresence>
       </div>

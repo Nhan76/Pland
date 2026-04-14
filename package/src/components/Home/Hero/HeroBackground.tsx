@@ -4,7 +4,7 @@ import LaserFlow from "./LaserFlow";
 import { usePageIntro } from "@/components/Layout/PageIntroProvider";
 
 const HERO_LASER_FLOW_WRAPPER_CLASS =
-  "absolute left-1/2 -translate-x-1/2 w-full max-w-7xl top-[-16%] h-[136%] opacity-90 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
+  "absolute left-1/2 -translate-x-1/2 w-full max-w-7xl top-[-18%] h-[136%] opacity-90 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
 
 const HERO_LASER_FLOW_PROPS = {
   className: "mix-blend-screen",
