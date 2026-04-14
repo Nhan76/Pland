@@ -84,7 +84,7 @@ const PortfolioView = () => (
     initial="hidden"
     animate="show"
     exit="exit"
-    className="flex flex-col gap-6"
+    className="flex flex-col gap-6 col-start-1 row-start-1 w-full h-full"
   >
     {/* Total Value & Metrics Row */}
     <motion.div variants={itemVariantsLeft} className="flex flex-col gap-4">
@@ -295,7 +295,7 @@ const RiskView = () => (
     initial="hidden"
     animate="show"
     exit="exit"
-    className="flex flex-col gap-6"
+    className="flex flex-col gap-6 col-start-1 row-start-1 w-full h-full"
   >
     {/* Total Risk Row */}
     <motion.div variants={itemVariantsRight} className="flex flex-col gap-4">
@@ -522,12 +522,12 @@ const CryptoDashboard = () => {
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className="relative bg-[#11141A] border border-white/5 border-t-[#16c784]/50 rounded-3xl shadow-2xl p-4 md:p-6 flex flex-col gap-6 overflow-hidden min-h-[460px] md:min-h-[400px]"
+        className="relative bg-[#11141A] border border-white/5 border-t-[#16c784]/50 rounded-3xl shadow-2xl p-4 md:p-6 grid overflow-hidden min-h-[460px] md:min-h-[400px]"
         style={{
           boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset",
         }}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           {view === "portfolio" ? <PortfolioView key="portfolio" /> : <RiskView key="risk" />}
         </AnimatePresence>
       </div>

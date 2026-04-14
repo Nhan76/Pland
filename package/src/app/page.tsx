@@ -3,7 +3,6 @@ import { Metadata } from 'next'
 import Hero from '@/components/Home/Hero'
 import Mission from '@/components/Home/Mission'
 import Work from '@/components/Home/work'
-import TimeLine from '@/components/Home/timeline'
 import Platform from '@/components/Home/platform'
 import Portfolio from '@/components/Home/portfolio'
 import Upgrade from '@/components/Home/upgrade'
@@ -24,7 +23,6 @@ export default function Home() {
       <Mission />
       <Work />
       <GlobalReach/>
-      <TimeLine />
       <Platform />
       <Portfolio />
       <Upgrade />
