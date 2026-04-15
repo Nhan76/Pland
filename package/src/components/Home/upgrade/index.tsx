@@ -1,6 +1,6 @@
 import { upgradeData } from "@/app/api/data";
 import Image from "next/image";
-import { Icon } from "@iconify/react";
+import { CheckCircle2 } from "lucide-react";
 
 const Upgrade = () => {
   return (
@@ -22,10 +22,8 @@ const Upgrade = () => {
               {upgradeData.map((item, index) => (
                 <div key={index} className="flex gap-5">
                   <div>
-                    <Icon
-                      icon="la:check-circle-solid"
-                      width="24"
-                      height="24"
+                    <CheckCircle2
+                      size={24}
                       className="text-white group-hover:text-primary"
                     />
                   </div>

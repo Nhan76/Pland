@@ -1,10 +1,9 @@
 import type { NextConfig } from 'next'
-// Bundle analyzer temporarily disabled - run `pnpm install` to enable
-// import bundleAnalyzer from '@next/bundle-analyzer'
+import bundleAnalyzer from '@next/bundle-analyzer'
 
-// const withBundleAnalyzer = bundleAnalyzer({
-//   enabled: process.env.ANALYZE === 'true',
-// })
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+})
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -16,10 +15,16 @@ const nextConfig: NextConfig = {
   },
 
   experimental: {
-    optimizePackageImports: ['recharts', 'lucide-react', 'framer-motion'],
+    optimizePackageImports: ['recharts', 'lucide-react', 'framer-motion', 'three'],
   },
+
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
+  compress: true,
 }
 
-export default nextConfig
-// To enable bundle analyzer: uncomment above lines and run `pnpm install`
-// export default withBundleAnalyzer(nextConfig)
+export default withBundleAnalyzer(nextConfig)

@@ -1,7 +1,21 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
-import * as THREE from "three";
+import {
+  WebGLRenderer,
+  Scene,
+  OrthographicCamera,
+  BufferGeometry,
+  BufferAttribute,
+  Vector3,
+  Vector4,
+  Vector2,
+  RawShaderMaterial,
+  Mesh,
+  Clock,
+  SRGBColorSpace,
+  NormalBlending
+} from "three";
 
 type LaserFlowProps = {
   className?: string;
@@ -28,8 +42,8 @@ type LaserFlowProps = {
 
 type LaserFlowUniforms = {
   iTime: { value: number };
-  iResolution: { value: THREE.Vector3 };
-  iMouse: { value: THREE.Vector4 };
+  iResolution: { value: Vector3 };
+  iMouse: { value: Vector4 };
   uWispDensity: { value: number };
   uTiltScale: { value: number };
   uFlowTime: { value: number };
@@ -47,7 +61,7 @@ type LaserFlowUniforms = {
   uDecay: { value: number };
   uFalloffStart: { value: number };
   uFogFallSpeed: { value: number };
-  uColor: { value: THREE.Vector3 };
+  uColor: { value: Vector3 };
   uFade: { value: number };
 };
 
@@ -328,7 +342,7 @@ const LaserFlow = ({
   color = "#FF79C6",
 }: LaserFlowProps) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const rendererRef = useRef<WebGLRenderer | null>(null);
   const uniformsRef = useRef<LaserFlowUniforms | null>(null);
   const hasFadedRef = useRef(false);
   const rectRef = useRef<DOMRect | null>(null);
@@ -353,7 +367,7 @@ const LaserFlow = ({
       return;
     }
 
-    const renderer = new THREE.WebGLRenderer({
+    const renderer = new WebGLRenderer({
       antialias: false,
       alpha: true,
       depth: false,
@@ -371,7 +385,7 @@ const LaserFlow = ({
 
     renderer.setPixelRatio(currentDprRef.current);
     renderer.shadowMap.enabled = false;
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.outputColorSpace = SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
 
     const canvas = renderer.domElement;
@@ -380,12 +394,12 @@ const LaserFlow = ({
     canvas.style.display = "block";
     mountElement.appendChild(canvas);
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    const geometry = new THREE.BufferGeometry();
+    const scene = new Scene();
+    const camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const geometry = new BufferGeometry();
     geometry.setAttribute(
       "position",
-      new THREE.BufferAttribute(
+      new BufferAttribute(
         new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]),
         3
       )
@@ -393,8 +407,8 @@ const LaserFlow = ({
 
     const uniforms: LaserFlowUniforms = {
       iTime: { value: 0 },
-      iResolution: { value: new THREE.Vector3(1, 1, 1) },
-      iMouse: { value: new THREE.Vector4(0, 0, 0, 0) },
+      iResolution: { value: new Vector3(1, 1, 1) },
+      iMouse: { value: new Vector4(0, 0, 0, 0) },
       uWispDensity: { value: 1 },
       uTiltScale: { value: 0.01 },
       uFlowTime: { value: 0 },
@@ -412,29 +426,29 @@ const LaserFlow = ({
       uDecay: { value: 1.1 },
       uFalloffStart: { value: 1.2 },
       uFogFallSpeed: { value: 0.6 },
-      uColor: { value: new THREE.Vector3(1, 1, 1) },
+      uColor: { value: new Vector3(1, 1, 1) },
       uFade: { value: hasFadedRef.current ? 1 : 0 },
     };
 
     uniformsRef.current = uniforms;
 
-    const material = new THREE.RawShaderMaterial({
+    const material = new RawShaderMaterial({
       vertexShader: VERT,
       fragmentShader: FRAG,
       uniforms,
       transparent: true,
       depthTest: false,
       depthWrite: false,
-      blending: THREE.NormalBlending,
+      blending: NormalBlending,
     });
 
-    const mesh = new THREE.Mesh(geometry, material);
+    const mesh = new Mesh(geometry, material);
     mesh.frustumCulled = false;
     scene.add(mesh);
 
-    const clock = new THREE.Clock();
-    const mouseTarget = new THREE.Vector2(0, 0);
-    const mouseSmooth = new THREE.Vector2(0, 0);
+    const clock = new Clock();
+    const mouseTarget = new Vector2(0, 0);
+    const mouseSmooth = new Vector2(0, 0);
     let previousTime = 0;
     let fade = hasFadedRef.current ? 1 : 0;
     let resizeFrame = 0;

@@ -25,7 +25,15 @@ function BrandLogo() {
                                 {brandList.map((items, index) => (
                                     <Slider.Slide key={index}>
                                         <div className='mr-10 w-full h-full flex items-center'>
-                                            <Image src={items?.image} alt="logo" width={135} height={35} className='w-full h-full ' />
+                                            <Image
+                                                src={items?.image}
+                                                alt="logo"
+                                                width={135}
+                                                height={35}
+                                                className='w-full h-full'
+                                                sizes="(max-width: 640px) 120px, 135px"
+                                                loading="lazy"
+                                            />
                                         </div>
                                     </Slider.Slide>
                                 ))}

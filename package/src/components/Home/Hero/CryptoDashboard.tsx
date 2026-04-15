@@ -109,28 +109,28 @@ const containerVariants: Variants = {
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.05,
+      duration: 0.3,
     },
   },
   exit: {
     opacity: 0,
     transition: {
-      staggerChildren: 0.05,
-      staggerDirection: -1,
+      duration: 0.2,
     },
   },
 };
 
 const itemVariantsLeft: Variants = {
-  hidden: { opacity: 0, x: -20 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeInOut" } },
-  exit: { opacity: 0, x: 20, transition: { duration: 0.3, ease: "easeInOut" } },
+  hidden: { opacity: 0, x: -10 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
 const itemVariantsRight: Variants = {
-  hidden: { opacity: 0, x: 20 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.4, ease: "easeInOut" } },
-  exit: { opacity: 0, x: -20, transition: { duration: 0.3, ease: "easeInOut" } },
+  hidden: { opacity: 0, x: 10 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
 const DashboardAreaChart = memo(({
@@ -198,7 +198,7 @@ const DashboardAreaChart = memo(({
             activeDot={{ r: 4, strokeWidth: 0, fill: strokeColor }}
             isAnimationActive
             animationBegin={0}
-            animationDuration={700}
+            animationDuration={500}
             animationEasing="ease-out"
           />
         ) : null}
@@ -558,7 +558,7 @@ const CryptoDashboard = () => {
 
     const interval = setInterval(() => {
       setView((prev) => (prev === "portfolio" ? "risk" : "portfolio"));
-    }, 6000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [isHovered]);
@@ -579,7 +579,7 @@ const CryptoDashboard = () => {
         }}
       >
         <AnimatePresence initial={false} mode="wait">
-          {view === "portfolio" ? <PortfolioView key="portfolio" /> : <RiskView key="risk" />}
+          {view === "portfolio" ? <PortfolioView /> : <RiskView />}
         </AnimatePresence>
       </div>
     </div>

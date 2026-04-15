@@ -6,7 +6,10 @@ import { PageIntroProvider } from '@/components/Layout/PageIntroProvider'
 import { ThemeProvider } from 'next-themes'
 import ScrollToTop from '@/components/ScrollToTop'
 import Aoscompo from '@/utils/aos'
-const font = Plus_Jakarta_Sans({ subsets: ['latin'] })
+const font = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export default function RootLayout({
   children,

@@ -20,7 +20,7 @@ const HERO_LASER_FLOW_PROPS = {
   mouseTiltStrength: 0.035,
   verticalBeamOffset: 0.11,
   verticalSizing: 0.8,
-  wispDensity: 1.15,
+  wispDensity: 0.8,
   wispIntensity: 5.6,
   wispSpeed: 13,
   decay: 1.05,
