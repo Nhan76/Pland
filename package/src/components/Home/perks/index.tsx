@@ -1,4 +1,3 @@
-"use client"
 
 import { perksData } from "@/app/api/data";
 import Image from "next/image";

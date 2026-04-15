@@ -1,4 +1,3 @@
-"use client"
 
 import ScrollRevealQuote from './ScrollRevealQuote'
 import BentoGrid from '../BentoGrid'

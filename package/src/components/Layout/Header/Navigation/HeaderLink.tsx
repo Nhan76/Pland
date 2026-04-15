@@ -74,9 +74,7 @@ const HeaderLink: React.FC<{
       </Link>
       {submenuOpen && (
         <div
-          className={`absolute py-2 left-0 mt-0.5 w-60 bg-white dark:text-white shadow-lg rounded-lg `}
-          data-aos="fade-up"
-          data-aos-duration="500"
+          className={`absolute py-2 left-0 mt-0.5 w-60 bg-white dark:text-white shadow-lg rounded-lg animate-in fade-in duration-200 slide-in-from-top-2`}
         >
           {item.submenu?.map((subItem, index) => (
             <Link

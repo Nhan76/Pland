@@ -1,6 +1,14 @@
-"use client"
+import dynamic from 'next/dynamic';
 
-import CrossModuleIntelligenceIllustration from "./CrossModuleIntelligenceIllustration";
+const CrossModuleIntelligenceIllustration = dynamic(
+  () => import('./CrossModuleIntelligenceIllustration'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-[700px] h-[550px] bg-background/5 rounded-lg animate-pulse" />
+    ),
+  }
+);
 
 const Platform = () => {
   return (

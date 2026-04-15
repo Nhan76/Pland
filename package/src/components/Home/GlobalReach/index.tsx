@@ -1,4 +1,3 @@
-"use client";
 import { GlobalReachData } from "./data";
 import { Card, CardContent } from "@/components/ui/card";
 
