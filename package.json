@@ -7,5 +7,8 @@
     "build": "cd package && corepack pnpm build",
     "start": "cd package && corepack pnpm start",
     "lint": "cd package && corepack pnpm lint"
-  }
+  },
+  "workspaces": [
+    "package"
+  ]
 }

@@ -45,6 +45,7 @@ const Work = () => {
                       alt={`${service.text} icon`}
                       width={25}
                       height={25}
+                      loading="lazy"
                     />
                   </div>
                   <p className='text-white font-medium'>{service.text}</p>
@@ -56,10 +57,12 @@ const Work = () => {
             <div className='2xl:-mr-40 mt-9 flex justify-center'>
               <Image
                 src='/images/work/img-work-with-us.png'
-                alt='image'
+                alt='Work with us illustration'
                 width={600}
                 height={425}
                 className='lg:w-full'
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 600px"
               />
             </div>
           </div>

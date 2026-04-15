@@ -40,10 +40,12 @@ const Upgrade = () => {
             <div className="ml-0 lg:ml-7 justify-self-center">
               <Image
                 src="/images/upgrade/img-upgrade.png"
-                alt="image"
+                alt="Risk guardrails dashboard"
                 width={625}
                 height={580}
                 className="-mr-5"
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 625px"
               />
             </div>
           </div>

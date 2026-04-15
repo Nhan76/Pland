@@ -30,6 +30,7 @@ const Perks = () => {
                       alt={item.title}
                       width={44}
                       height={44}
+                      loading="lazy"
                     />
                   </div>
                   <h3 className={`text-white text-28 mb-4 ${item.space}`}>

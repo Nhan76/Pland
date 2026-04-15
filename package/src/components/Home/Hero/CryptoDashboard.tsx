@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo, useCallback } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import {
   AreaChart,
@@ -133,7 +133,7 @@ const itemVariantsRight: Variants = {
   exit: { opacity: 0, x: -20, transition: { duration: 0.3, ease: "easeInOut" } },
 };
 
-const DashboardAreaChart = ({
+const DashboardAreaChart = memo(({
   chartKey,
   data,
   gradientId,
@@ -205,9 +205,11 @@ const DashboardAreaChart = ({
       </AreaChart>
     </ResponsiveContainer>
   );
-};
+});
 
-const PortfolioView = () => (
+DashboardAreaChart.displayName = 'DashboardAreaChart';
+
+const PortfolioView = memo(() => (
   <motion.div
     key="portfolio"
     variants={containerVariants}
@@ -368,9 +370,11 @@ const PortfolioView = () => (
       
     </motion.div>
   </motion.div>
-);
+));
 
-const RiskView = () => (
+PortfolioView.displayName = 'PortfolioView';
+
+const RiskView = memo(() => (
   <motion.div
     key="risk"
     variants={containerVariants}
@@ -530,22 +534,32 @@ const RiskView = () => (
           />
         </div>
       </div>
-      
+
     </motion.div>
   </motion.div>
-);
+));
+
+RiskView.displayName = 'RiskView';
 
 const CryptoDashboard = () => {
   const [view, setView] = useState<"portfolio" | "risk">("portfolio");
   const [isHovered, setIsHovered] = useState(false);
 
+  const handleMouseEnter = useCallback(() => {
+    setIsHovered(true);
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setIsHovered(false);
+  }, []);
+
   useEffect(() => {
     if (isHovered) return;
-    
+
     const interval = setInterval(() => {
       setView((prev) => (prev === "portfolio" ? "risk" : "portfolio"));
     }, 6000);
-    
+
     return () => clearInterval(interval);
   }, [isHovered]);
 
@@ -557,8 +571,8 @@ const CryptoDashboard = () => {
 
       {/* The Dashboard Container */}
       <div
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         className="relative bg-[#11141A] border border-white/5 border-t-[#16c784]/50 rounded-3xl shadow-2xl p-4 md:p-6 grid overflow-hidden min-h-[460px] md:min-h-[400px]"
         style={{
           boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset",

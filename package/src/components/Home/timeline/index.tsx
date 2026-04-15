@@ -26,10 +26,12 @@ const TimeLine = () => {
               <div>
                 <Image
                   src='/images/timeline/img-timeline.png'
-                  alt='image'
+                  alt='Timeline workflow diagram'
                   width={1220}
                   height={1000}
                   className='w-80% mx-auto'
+                  loading="lazy"
+                  sizes="(max-width: 768px) 0vw, 80vw"
                 />
               </div>
               <div className='absolute lg::top-40 top-36 lg:left-0 -left-20 w-72 flex items-center gap-6'>
@@ -46,6 +48,7 @@ const TimeLine = () => {
                     width={44}
                     height={44}
                     className='w-16 h-16 '
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -56,6 +59,7 @@ const TimeLine = () => {
                     alt='Analyze context'
                     width={44}
                     height={44}
+                    loading="lazy"
                   />
                 </div>
                 <div className='text-left'>
@@ -79,6 +83,7 @@ const TimeLine = () => {
                     width={44}
                     height={44}
                     className='w-16 h-16 '
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -90,6 +95,7 @@ const TimeLine = () => {
                     width={44}
                     height={44}
                     className='w-16 h-16'
+                    loading="lazy"
                   />
                 </div>
                 <div className='text-left'>
@@ -111,6 +117,7 @@ const TimeLine = () => {
                       alt={item.title}
                       width={44}
                       height={44}
+                      loading="lazy"
                     />
                   </div>
                   <div className='text-start'>

@@ -19,6 +19,7 @@ const PriceCard = ({ item }: { item: (typeof pricedata)[number] }) => {
               alt={`${item.title} icon`}
               width={item.width}
               height={item.height}
+              priority
             />
           </div>
           <p className="text-white text-xs font-normal">

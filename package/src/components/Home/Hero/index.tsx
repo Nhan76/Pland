@@ -1,14 +1,27 @@
 "use client";
 
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { motion, type Variants } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { usePageIntro } from "@/components/Layout/PageIntroProvider";
 
-import CryptoDashboard from "./CryptoDashboard";
-import HeroBackground from "./HeroBackground";
 import CardSlider from "./slider";
+
+const CryptoDashboard = dynamic(() => import("./CryptoDashboard"), {
+  loading: () => (
+    <div className="relative z-20 w-full max-w-6xl mx-auto mt-12 md:mt-24 mb-16 px-4">
+      <div className="relative bg-[#11141A] border border-white/5 rounded-3xl shadow-2xl p-4 md:p-6 min-h-[460px] md:min-h-[400px] animate-pulse" />
+    </div>
+  ),
+  ssr: false,
+});
+
+const HeroBackground = dynamic(() => import("./HeroBackground"), {
+  loading: () => <div className="relative h-full w-full bg-transparent" />,
+  ssr: false,
+});
 
 const INTRO_EASE = [0.22, 1, 0.36, 1] as const;
 

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:pagespeed.web.dev)",
+      "Read(//c/Users/Thanh Nhan/Desktop/Project/pland/**)",
+      "Bash(find:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(npm remove:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm install:*)"
+    ]
+  }
+}
