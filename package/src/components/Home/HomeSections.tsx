@@ -8,6 +8,7 @@ const Mission = dynamic(() => import('@/components/Home/Mission'))
 const Platform = dynamic(() => import('@/components/Home/platform'))
 const Portfolio = dynamic(() => import('@/components/Home/portfolio'))
 const RiskManagement = dynamic(() => import('@/components/Home/RiskManagement'))
+const VIPDashboard = dynamic(() => import('@/components/Home/VIPDashboard'))
 const Perks = dynamic(() => import('@/components/Home/perks'))
 const Faq = dynamic(() => import('@/components/Home/Faq'))
 
@@ -39,6 +40,10 @@ const HomeSections = () => {
 
       <LazySection minHeight={520}>
         <RiskManagement />
+      </LazySection>
+
+      <LazySection minHeight={680}>
+        <VIPDashboard />
       </LazySection>
 
       <LazySection minHeight={620}>

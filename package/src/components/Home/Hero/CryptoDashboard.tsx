@@ -236,11 +236,11 @@ const PortfolioView = memo(() => (
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3">
         {/* Metric 1 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
-          <span className="text-white/60 text-[11px] font-medium mb-1">All-time Profit</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">All-time Profit</span>
           <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">-$6,955.83</span>
           <div className="mt-2 pt-1">
-            <div className="bg-[#ea3943]/20 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
+            <div className="bg-[#ea3943]/15 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
                 <path d="M12 5v14M19 12l-7 7-7-7" />
               </svg>
@@ -249,35 +249,35 @@ const PortfolioView = memo(() => (
           </div>
         </div>
         {/* Metric 2 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
-          <span className="text-white/60 text-[11px] font-medium mb-1">Cost Basis</span>
-          <span className="text-white font-bold text-sm md:text-base leading-none">$250,578.95</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Cost Basis</span>
+          <span className="text-white/80 font-bold text-sm md:text-base leading-none">$250,578.95</span>
         </div>
         {/* Metric 3 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 col-span-2 md:col-span-1">
-          <span className="text-white/60 text-[11px] font-medium mb-2">24h Performance</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] col-span-2 md:col-span-1">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-2">24h Performance</span>
           <div className="flex flex-col gap-1.5 mt-2 pt-1">
             <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/50">Best <span className="text-white/80">BNB</span></span>
+              <span className="text-white/40">Best <span className="text-white/70">BNB</span></span>
               <span className="text-[#16c784] font-medium">+2.19%</span>
             </div>
             <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/50">Worst <span className="text-white/80">QTUM</span></span>
-              <span className="text-white/80 font-medium">+0.00%</span>
+              <span className="text-white/40">Worst <span className="text-white/70">QTUM</span></span>
+              <span className="text-white/70 font-medium">+0.00%</span>
             </div>
           </div>
         </div>
         {/* Metric 4 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
-          <span className="text-white/60 text-[11px] font-medium mb-1">Sharpe Ratio</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Sharpe Ratio</span>
           <span className="text-[#16c784] font-bold text-sm md:text-base leading-none">4.19</span>
           <div className="mt-2 pt-1">
-            <span className="bg-[#16c784]/20 text-[#16c784] text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Excellent</span>
+            <span className="bg-[#16c784]/15 text-[#16c784] text-[9px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Excellent</span>
           </div>
         </div>
         {/* Metric 5 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
-          <span className="text-white/60 text-[11px] font-medium mb-1">Max Drawdown</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Max Drawdown</span>
           <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">-15.76%</span>
           <div className="mt-2 pt-1">
             <span className="text-[#f3ba2f] text-[9px] flex items-center gap-1 font-medium">
@@ -295,9 +295,9 @@ const PortfolioView = memo(() => (
     <motion.div variants={itemVariantsLeft} className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3">
       
       {/* Allocation Card */}
-      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-1 justify-between">
+      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-1 justify-between">
         <div className="mb-2">
-          <div className="text-white font-bold text-sm">Allocation</div>
+          <div className="text-white/90 font-bold text-sm tracking-wide">Allocation</div>
         </div>
         
         <div className="w-full relative h-[140px] md:h-[180px] my-auto">
@@ -338,19 +338,19 @@ const PortfolioView = memo(() => (
       </div>
 
       {/* Performance Chart Card */}
-      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-3">
+      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-3">
         <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
           <div>
-            <div className="text-white font-bold text-xs sm:text-sm mb-0.5">Portfolio Performance</div>
+            <div className="text-white/90 font-bold text-xs sm:text-sm mb-0.5 tracking-wide">Portfolio Performance</div>
           </div>
-          <div className="flex bg-[#11141A] rounded-md p-1 border border-white/5">
+          <div className="flex bg-white/[0.03] rounded-md p-1 ring-1 ring-white/[0.04]">
             {chartTimeRanges.map((span) => (
               <button
                 key={span}
                 className={`text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md font-semibold transition-all ${
                   span === "24H"
                     ? "bg-white/10 text-white shadow-sm"
-                    : "text-white/40 hover:text-white hover:bg-white/5"
+                    : "text-white/40 hover:text-white/80 hover:bg-white/5"
                 }`}
               >
                 {span}
@@ -401,48 +401,48 @@ const RiskView = memo(() => (
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3">
         {/* Metric 1 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
-          <span className="text-white/60 text-[11px] font-medium mb-1">30-Day Volatility</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">30-Day Volatility</span>
           <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">42.5%</span>
           <div className="mt-2 pt-1">
-            <div className="bg-[#ea3943]/20 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
+            <div className="bg-[#ea3943]/15 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
               Target &lt; 35%
             </div>
           </div>
         </div>
         {/* Metric 2 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5">
-          <span className="text-white/60 text-[11px] font-medium mb-1">Portfolio Beta</span>
-          <span className="text-white font-bold text-sm md:text-base leading-none">1.15</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Portfolio Beta</span>
+          <span className="text-white/80 font-bold text-sm md:text-base leading-none">1.15</span>
         </div>
         {/* Metric 3 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 col-span-2 md:col-span-1">
-          <span className="text-white/60 text-[11px] font-medium mb-2">Stress Test (BTC -20%)</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] col-span-2 md:col-span-1">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-2">Stress Test (BTC -20%)</span>
           <div className="flex flex-col gap-1.5 mt-2 pt-1">
             <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/50">Est. Impact</span>
+              <span className="text-white/40">Est. Impact</span>
               <span className="text-[#ea3943] font-medium">-$26,500</span>
             </div>
             <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/50">Liquidation Risk</span>
+              <span className="text-white/40">Liquidation Risk</span>
               <span className="text-[#16c784] font-medium">Safe</span>
             </div>
           </div>
         </div>
         {/* Metric 4 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
-          <span className="text-white/60 text-[11px] font-medium mb-1">Concentration Risk</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Concentration Risk</span>
           <span className="text-[#f3ba2f] font-bold text-sm md:text-base leading-none">73.9% BTC</span>
           <div className="mt-2 pt-1">
-            <span className="bg-[#f3ba2f]/20 text-[#f3ba2f] text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Warning</span>
+            <span className="bg-[#f3ba2f]/15 text-[#f3ba2f] text-[9px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Warning</span>
           </div>
         </div>
         {/* Metric 5 */}
-        <div className="bg-[#1A1F26] rounded-xl p-3 flex flex-col justify-start border border-white/5 hidden md:flex">
-          <span className="text-white/60 text-[11px] font-medium mb-1">Sharpe Ratio</span>
+        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
+          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Sharpe Ratio</span>
           <span className="text-[#16c784] font-bold text-sm md:text-base leading-none">4.19</span>
           <div className="mt-2 pt-1">
-            <span className="bg-[#16c784]/20 text-[#16c784] text-[9px] flex items-center gap-1 font-medium px-1.5 py-0.5 rounded-sm">
+            <span className="bg-[#16c784]/15 text-[#16c784] text-[9px] flex items-center gap-1 font-medium px-1.5 py-0.5 rounded-sm">
               Excellent
             </span>
           </div>
@@ -454,9 +454,9 @@ const RiskView = memo(() => (
     <motion.div variants={itemVariantsRight} className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3">
       
       {/* Risk Contribution Card */}
-      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-1 justify-between">
+      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-1 justify-between">
         <div className="mb-2">
-          <div className="text-white font-bold text-sm">Risk Contribution</div>
+          <div className="text-white/90 font-bold text-sm tracking-wide">Risk Contribution</div>
         </div>
         
         <div className="w-full relative h-[140px] md:h-[180px] my-auto">
@@ -504,20 +504,20 @@ const RiskView = memo(() => (
         </div>
       </div>
 
-      {/* Performance Chart Card */}
-      <div className="bg-[#1A1F26] rounded-xl p-4 flex flex-col border border-white/5 lg:col-span-3">
+      {/* Risk Exposure Chart Card */}
+      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-3">
         <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
           <div>
-            <div className="text-white font-bold text-xs sm:text-sm mb-0.5">Risk Exposure (VaR)</div>
+            <div className="text-white/90 font-bold text-xs sm:text-sm mb-0.5 tracking-wide">Risk Exposure (VaR)</div>
           </div>
-          <div className="flex bg-[#11141A] rounded-md p-1 border border-white/5">
+          <div className="flex bg-white/[0.03] rounded-md p-1 ring-1 ring-white/[0.04]">
             {chartTimeRanges.map((span) => (
               <button
                 key={span}
                 className={`text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md font-semibold transition-all ${
                   span === "24H"
                     ? "bg-white/10 text-white shadow-sm"
-                    : "text-white/40 hover:text-white hover:bg-white/5"
+                    : "text-white/40 hover:text-white/80 hover:bg-white/5"
                 }`}
               >
                 {span}
@@ -571,18 +571,53 @@ const CryptoDashboard = () => {
       <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[60%] h-32 bg-[#16c784]/20 blur-[80px] rounded-[100%] pointer-events-none mix-blend-screen" />
       <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-[25%] h-16 bg-[#16c784]/40 blur-[40px] rounded-[100%] pointer-events-none mix-blend-screen" />
 
-      {/* The Dashboard Container */}
-      <div
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        className="relative bg-[#11141A] border border-white/5 border-t-[#16c784]/50 rounded-3xl shadow-2xl p-3 md:p-6 grid overflow-hidden min-h-[460px] md:min-h-[400px]"
-        style={{
-          boxShadow: "0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) inset",
-        }}
-      >
-        <AnimatePresence initial={false} mode="wait">
-          {view === "portfolio" ? <PortfolioView /> : <RiskView />}
-        </AnimatePresence>
+      {/* The Dashboard Container with Skew */}
+      <div className="relative">
+        {/* Outer border with subtle highlight */}
+        <div
+          className="relative rounded-2xl border border-white/[0.08] hidden md:block"
+          style={{
+            transform: "rotateX(12deg) rotateY(-2deg) scale(0.98)",
+            transformOrigin: "center top",
+            maskImage:
+              "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
+            WebkitMaskImage:
+              "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
+          }}
+        />
+
+        {/* Main dashboard */}
+        <div
+          className="relative overflow-hidden rounded-2xl p-px md:[transform:rotateX(12deg)_rotateY(-2deg)_scale(0.98)] md:[transform-origin:center_top]"
+          style={{
+            background:
+              "linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 10%, rgba(255, 255, 255, 0.03) 30%, transparent 55%)",
+            maskImage:
+              "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
+            WebkitMaskImage:
+              "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
+          }}
+        >
+          <div
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className="relative rounded-[15px] p-3 md:p-6 grid overflow-hidden min-h-[460px] md:min-h-[400px]"
+            style={{ background: "#11141A" }}
+          >
+            {/* Top highlight glow */}
+            <div
+              className="pointer-events-none absolute top-0 left-0 size-80"
+              style={{
+                background:
+                  "radial-gradient(circle at 0% 0%, rgba(22, 199, 132, 0.12) 0%, rgba(22, 199, 132, 0.04) 40%, transparent 70%)",
+              }}
+            />
+
+            <AnimatePresence initial={false} mode="wait">
+              {view === "portfolio" ? <PortfolioView /> : <RiskView />}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
     </div>
   );
