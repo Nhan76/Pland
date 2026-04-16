@@ -5,7 +5,7 @@ const Portfolio = () => {
     <section className='pt-0 pb-0 md:pt-0 md:pb-0'>
       <div className='container px-4 sm:px-6'>
         <div className='grid lg:grid-cols-2 items-center gap-12 lg:gap-16'>
-          <div className='lg:-ml-20'>
+          <div className='lg:-ml-20 order-2 lg:order-1'>
             <Image
               src='/images/portfolio/img-portfolio.png'
               alt='Crypto Portfolio'
@@ -17,15 +17,15 @@ const Portfolio = () => {
           </div>
 
           <div
-            className='max-w-2xl'
+            className='max-w-2xl order-1 lg:order-2'
           >
             <p className='text-white font-medium'>
               Core <span className='text-primary'>capabilities</span>
             </p>
-            <h2 className='text-white sm:text-[40px] text-3xl mt-4 leading-tight'>
+            <h2 className='text-white text-2xl sm:text-3xl lg:text-[40px] mt-4 leading-tight'>
               Everything needed to evaluate the whole portfolio
             </h2>
-            <p className='text-muted/60 text-lg mt-6'>
+            <p className='text-muted/60 text-base md:text-lg mt-6'>
               PLAND brings position syncing, structured analysis, and
               explainable recommendations into one disciplined workspace.
             </p>

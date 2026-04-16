@@ -81,7 +81,7 @@ const Hero = () => {
               variants={HERO_REVEAL_VARIANTS}
               initial={introInitialState}
               animate={showDescription ? "visible" : "hidden"}
-              className="max-w-2xl text-white"
+              className="max-w-2xl text-white text-sm sm:text-base"
             >
               PLAND turns fragmented signals into explainable actions{" "}
               <br className="hidden sm:block" />

@@ -20,12 +20,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning className="scroll-smooth">
+    <html lang='en' suppressHydrationWarning className="scroll-smooth overflow-x-hidden">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
       </head>
-      <body className={`${font.className}`}>
+      <body className={`${font.className} overflow-x-hidden`}>
         <ThemeProvider
           attribute='class'
           enableSystem={true}

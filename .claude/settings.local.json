@@ -11,7 +11,8 @@
       "Bash(corepack pnpm install:*)",
       "Bash(git add:*)",
       "Bash(findstr:*)",
-      "Bash(corepack pnpm build:*)"
+      "Bash(corepack pnpm build:*)",
+      "Bash(cd:*)"
     ]
   }
 }

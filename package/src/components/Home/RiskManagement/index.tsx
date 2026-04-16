@@ -51,16 +51,16 @@ const RiskManagement = () => {
           }
         }
       `}</style>
-      <div className="container px-4">
+      <div className="container px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="max-w-2xl">
             <p className="text-white font-medium">
               Core <span className="text-primary">capabilities</span>
             </p>
-            <h2 className="mt-4 text-white sm:text-[40px] text-3xl">
+            <h2 className="mt-4 text-white text-2xl sm:text-3xl lg:text-[40px]">
               Proactive alerts mapped to your risk rules
             </h2>
-            <p className="mt-6 text-lg text-muted/60">
+            <p className="mt-6 text-base md:text-lg text-muted/60">
               PLAND triggers actionable alerts based on custom risk guardrails to protect your portfolio from compounding losses.
             </p>
           </div>

@@ -62,7 +62,7 @@ const ScrollRevealQuote = () => {
       <motion.blockquote
         style={{ rotate: reduceMotion ? 0 : rotate }}
         className='relative text-white'>
-        <p className='text-xl font-medium leading-tight sm:text-3xl lg:text-[3rem] lg:leading-[1.14]'>
+        <p className='text-lg font-medium leading-tight sm:text-2xl md:text-3xl lg:text-[3rem] lg:leading-[1.14]'>
           {words.map((word, index) => {
             const start = (index / words.length) * 0.72
             const end = Math.min(start + 0.22, 1)

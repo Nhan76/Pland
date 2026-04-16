@@ -43,7 +43,7 @@ const AIAnalysisGrid = () => {
     <SpotlightCard className="flex h-115 flex-col p-6 sm:p-8 md:col-span-1">
       <div className="z-10 max-w-sm">
         <div className="mb-2 flex items-center space-x-2 text-white">
-          <span className="text-xl font-semibold tracking-wider">AI Analytics</span>
+          <span className="text-lg sm:text-xl font-semibold tracking-wider">AI Analytics</span>
         </div>
         <p className="text-white/60 text-sm xl:text-base leading-relaxed">
           Ask questions. Get answers grounded in your data. Summarize risks, check rules...
@@ -175,9 +175,9 @@ const RiskAlertGrid = () => {
     <SpotlightCard className="flex h-115 flex-col p-6 sm:p-8 md:col-span-2">
       <div className="z-10">
         <div className="mb-2 flex items-center space-x-2 text-white">
-          <span className="text-xl font-semibold tracking-wider">Live Alerts</span>
+          <span className="text-lg sm:text-xl font-semibold tracking-wider">Live Alerts</span>
         </div>
-        <p className="text-white/60 text-base leading-relaxed">
+        <p className="text-white/60 text-sm sm:text-base leading-relaxed">
           Real-time monitoring of on-chain activities, volatility spikes, and portfolio parameter breaches.
         </p>
       </div>
@@ -250,7 +250,7 @@ const AIPredictionGrid = () => {
       <div className="z-10 mb-6 flex flex-col sm:flex-row justify-between items-start gap-4">
         <div>
           <div className="mb-2 flex items-center space-x-2 text-white">
-            <span className="text-xl font-semibold tracking-wider">AI Prediction</span>
+            <span className="text-lg sm:text-xl font-semibold tracking-wider">AI Prediction</span>
           </div>
           <p className="text-white/60 max-w-lg">
             Forecast asset performance using advanced cross-chain AI trend modeling.
