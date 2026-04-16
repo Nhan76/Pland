@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect, memo, useCallback } from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import React, { useState, useEffect, memo } from "react";
+import { motion, Variants } from "framer-motion";
 import {
   AreaChart,
   Area,
@@ -24,29 +23,12 @@ const mockPerformanceData = [
   { time: "1:14 AM", value: 243623 },
 ];
 
-const mockRiskData = [
-  { time: "7:00 AM", value: 11000 },
-  { time: "10:00 AM", value: 11500 },
-  { time: "1:00 PM", value: 10500 },
-  { time: "4:00 PM", value: 12200 },
-  { time: "7:00 PM", value: 11800 },
-  { time: "10:00 PM", value: 12400 },
-  { time: "1:14 AM", value: 12980 },
-];
-
 const allocationData = [
   { name: "BTC", value: 73.9, color: "#16c784" },
   { name: "BNB", value: 9.1, color: "#627eea" },
   { name: "ETH", value: 8.4, color: "#f3ba2f" },
   { name: "USDC", value: 4.1, color: "#2775ca" },
   { name: "USDT", value: 3.5, color: "#26a17b" },
-];
-
-const riskAllocationData = [
-  { name: "BTC Risk", value: 52.4, color: "#ea3943" },
-  { name: "Altcoins", value: 28.1, color: "#f3ba2f" },
-  { name: "ETH Risk", value: 15.3, color: "#627eea" },
-  { name: "Stables", value: 4.2, color: "#16c784" },
 ];
 
 const chartTimeRanges = ["24H", "7D", "30D", "90D", "ALL"] as const;
@@ -114,24 +96,11 @@ const containerVariants: Variants = {
       duration: 0.3,
     },
   },
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.2,
-    },
-  },
 };
 
 const itemVariantsLeft: Variants = {
   hidden: { opacity: 0, x: -10 },
   show: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
-};
-
-const itemVariantsRight: Variants = {
-  hidden: { opacity: 0, x: 10 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
 const DashboardAreaChart = memo(({
@@ -212,11 +181,9 @@ DashboardAreaChart.displayName = 'DashboardAreaChart';
 
 const PortfolioView = memo(() => (
   <motion.div
-    key="portfolio"
     variants={containerVariants}
     initial="hidden"
     animate="show"
-    exit="exit"
     className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
   >
     {/* Total Value & Metrics Row */}
@@ -375,196 +342,7 @@ const PortfolioView = memo(() => (
 
 PortfolioView.displayName = 'PortfolioView';
 
-const RiskView = memo(() => (
-  <motion.div
-    key="risk"
-    variants={containerVariants}
-    initial="hidden"
-    animate="show"
-    exit="exit"
-    className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
-  >
-    {/* Total Risk Row */}
-    <motion.div variants={itemVariantsRight} className="flex flex-col gap-4">
-      <div className="flex flex-col">
-        <span className="text-white/50 text-[9px] font-bold uppercase tracking-widest mb-1">Value at Risk (95% Confidence)</span>
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl md:text-4xl font-bold text-white tracking-tight">$12,980.00</span>
-          <span className="text-[#ea3943] font-medium text-xs flex items-center">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
-              <path d="M12 19V5M5 12l7-7 7 7" />
-            </svg>
-            5.11%
-          </span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3">
-        {/* Metric 1 */}
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">30-Day Volatility</span>
-          <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">42.5%</span>
-          <div className="mt-2 pt-1">
-            <div className="bg-[#ea3943]/15 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
-              Target &lt; 35%
-            </div>
-          </div>
-        </div>
-        {/* Metric 2 */}
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Portfolio Beta</span>
-          <span className="text-white/80 font-bold text-sm md:text-base leading-none">1.15</span>
-        </div>
-        {/* Metric 3 */}
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] col-span-2 md:col-span-1">
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-2">Stress Test (BTC -20%)</span>
-          <div className="flex flex-col gap-1.5 mt-2 pt-1">
-            <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/40">Est. Impact</span>
-              <span className="text-[#ea3943] font-medium">-$26,500</span>
-            </div>
-            <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/40">Liquidation Risk</span>
-              <span className="text-[#16c784] font-medium">Safe</span>
-            </div>
-          </div>
-        </div>
-        {/* Metric 4 */}
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Concentration Risk</span>
-          <span className="text-[#f3ba2f] font-bold text-sm md:text-base leading-none">73.9% BTC</span>
-          <div className="mt-2 pt-1">
-            <span className="bg-[#f3ba2f]/15 text-[#f3ba2f] text-[9px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Warning</span>
-          </div>
-        </div>
-        {/* Metric 5 */}
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Sharpe Ratio</span>
-          <span className="text-[#16c784] font-bold text-sm md:text-base leading-none">4.19</span>
-          <div className="mt-2 pt-1">
-            <span className="bg-[#16c784]/15 text-[#16c784] text-[9px] flex items-center gap-1 font-medium px-1.5 py-0.5 rounded-sm">
-              Excellent
-            </span>
-          </div>
-        </div>
-      </div>
-    </motion.div>
-
-    {/* Bottom Grid: Allocation & Charts */}
-    <motion.div variants={itemVariantsRight} className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3">
-      
-      {/* Risk Contribution Card */}
-      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-1 justify-between">
-        <div className="mb-2">
-          <div className="text-white/90 font-bold text-sm tracking-wide">Risk Contribution</div>
-        </div>
-        
-        <div className="w-full relative h-[140px] md:h-[180px] my-auto">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={riskAllocationData}
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={3}
-                dataKey="value"
-                stroke="none"
-                cornerRadius={2}
-              >
-                {riskAllocationData.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#1A1F26', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                itemStyle={{ color: '#fff', fontSize: '11px' }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="flex flex-col gap-2.5 pr-1 mb-2">
-          {/* Spacer to match the 5 items in PortfolioView and prevent layout shift */}
-          <div className="flex justify-between items-center text-[11px] font-medium invisible" aria-hidden="true">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full" />
-              <span>spacer</span>
-            </div>
-            <span>0%</span>
-          </div>
-          {riskAllocationData.map((asset, i) => (
-            <div key={i} className="flex justify-between items-center text-[11px] font-medium">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: asset.color }} />
-                <span className="text-white/90">{asset.name}</span>
-              </div>
-              <span className="text-white/60">{asset.value}%</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Risk Exposure Chart Card */}
-      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-3">
-        <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
-          <div>
-            <div className="text-white/90 font-bold text-xs sm:text-sm mb-0.5 tracking-wide">Risk Exposure (VaR)</div>
-          </div>
-          <div className="flex bg-white/[0.03] rounded-md p-1 ring-1 ring-white/[0.04]">
-            {chartTimeRanges.map((span) => (
-              <button
-                key={span}
-                className={`text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md font-semibold transition-all ${
-                  span === "24H"
-                    ? "bg-white/10 text-white shadow-sm"
-                    : "text-white/40 hover:text-white/80 hover:bg-white/5"
-                }`}
-              >
-                {span}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex-1 w-full relative min-h-[180px] md:min-h-[260px]">
-          <DashboardAreaChart
-            chartKey="risk-exposure"
-            data={mockRiskData}
-            gradientId="cmcGradientRisk"
-            strokeColor="#ea3943"
-          />
-        </div>
-      </div>
-
-    </motion.div>
-  </motion.div>
-));
-
-RiskView.displayName = 'RiskView';
-
 const CryptoDashboard = () => {
-  const [view, setView] = useState<"portfolio" | "risk">("portfolio");
-  const [isHovered, setIsHovered] = useState(false);
-  const isMobile = useMediaQuery("(max-width: 767px)");
-
-  const handleMouseEnter = useCallback(() => {
-    setIsHovered(true);
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    setIsHovered(false);
-  }, []);
-
-  useEffect(() => {
-    if (isHovered || isMobile) return;
-
-    const interval = setInterval(() => {
-      setView((prev) => (prev === "portfolio" ? "risk" : "portfolio"));
-    }, 8000);
-
-    return () => clearInterval(interval);
-  }, [isHovered, isMobile]);
-
   return (
     <div className="relative z-20 w-full max-w-6xl mx-auto mt-8 md:mt-24 mb-16 px-3 md:px-4">
       {/* Laser glow overlay from flow hitting top of dashboard */}
@@ -599,8 +377,6 @@ const CryptoDashboard = () => {
           }}
         >
           <div
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
             className="relative rounded-[15px] p-3 md:p-6 grid overflow-hidden min-h-[460px] md:min-h-[400px]"
             style={{ background: "#11141A" }}
           >
@@ -613,9 +389,7 @@ const CryptoDashboard = () => {
               }}
             />
 
-            <AnimatePresence initial={false} mode="wait">
-              {view === "portfolio" ? <PortfolioView /> : <RiskView />}
-            </AnimatePresence>
+            <PortfolioView />
           </div>
         </div>
       </div>

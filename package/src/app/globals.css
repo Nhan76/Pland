@@ -240,6 +240,14 @@
     animation: dramatic-float 5s ease-in-out infinite;
     animation-delay: 2.4s;
   }
+
+  .animate-panel-float-a {
+    animation: panel-float-a 5.4s ease-in-out infinite;
+  }
+
+  .animate-panel-float-b {
+    animation: panel-float-b 6s ease-in-out infinite;
+  }
 }
 
 @keyframes market-marquee {
@@ -270,6 +278,30 @@
   }
   66% {
     transform: translateZ(10px) translateY(-4px) rotateY(-1deg);
+  }
+}
+
+@keyframes panel-float-a {
+  0%, 100% {
+    transform: translateZ(0px) translateY(0px) rotateY(0deg);
+  }
+  28% {
+    transform: translateZ(26px) translateY(-10px) rotateY(1.2deg);
+  }
+  62% {
+    transform: translateZ(14px) translateY(-6px) rotateY(-0.8deg);
+  }
+}
+
+@keyframes panel-float-b {
+  0%, 100% {
+    transform: translateZ(0px) translateY(0px) rotateY(0deg);
+  }
+  36% {
+    transform: translateZ(30px) translateY(-12px) rotateY(-1.4deg);
+  }
+  72% {
+    transform: translateZ(16px) translateY(-7px) rotateY(0.9deg);
   }
 }
 

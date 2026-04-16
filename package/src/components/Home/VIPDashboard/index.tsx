@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, memo } from "react";
-import { motion, Variants } from "framer-motion";
+import React, { useState, useEffect, memo, type CSSProperties, type ReactNode } from "react";
+import { motion, type Variants } from "framer-motion";
 import {
   AreaChart,
   Area,
@@ -13,6 +13,8 @@ import {
   Cell,
   Tooltip
 } from "recharts";
+
+import { cn } from "@/lib/utils";
 
 const mockPerformanceData = [
   { time: "7:00 AM", value: 238100 },
@@ -93,6 +95,110 @@ const chartYAxisProps = {
   width: 55,
 };
 
+const DEFENDER_TILT = {
+  rotateX: 43,
+  rotateY: 7,
+  rotateZ: -16,
+  perspective: 1800,
+  scale: 1,
+  floatingCardDepth: 144,
+  floatingCardDepthStep: 18,
+} as const;
+
+const dashboardThemeStyle = {
+  "--vip-dashboard-surface": "rgb(30 30 30)",
+  "--vip-dashboard-card-surface":
+    "color-mix(in srgb, var(--vip-dashboard-surface) 97%, white 3%)",
+} as CSSProperties;
+
+const dashboardMaskImage =
+  "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)";
+
+const dashboardShellStyle: CSSProperties = {
+  transform: `rotateX(${DEFENDER_TILT.rotateX}deg) rotateY(${DEFENDER_TILT.rotateY}deg) rotateZ(${DEFENDER_TILT.rotateZ}deg) scale(${DEFENDER_TILT.scale})`,
+  transformOrigin: "center center",
+};
+
+const dashboardFrameStyle: CSSProperties = {
+  background:
+    "linear-gradient(145deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 10%, rgba(255, 255, 255, 0.04) 30%, transparent 55%)",
+};
+
+const dashboardChromeOverlayStyle: CSSProperties = {
+  background:
+    "linear-gradient(145deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 10%, rgba(255, 255, 255, 0.04) 30%, transparent 55%)",
+  maskImage: dashboardMaskImage,
+  WebkitMaskImage: dashboardMaskImage,
+};
+
+const dashboardSurfaceStyle: CSSProperties = {
+  background: "var(--vip-dashboard-surface)",
+  perspective: `${DEFENDER_TILT.perspective}px`,
+  perspectiveOrigin: "50% 50%",
+  transformStyle: "preserve-3d",
+};
+
+const dashboardTopHighlightStyle: CSSProperties = {
+  background:
+    "radial-gradient(circle at 0% 0%, rgba(22, 199, 132, 0.12) 0%, rgba(22, 199, 132, 0.04) 40%, transparent 70%)",
+};
+
+const dashboardBottomRightFadeStyle: CSSProperties = {
+  background:
+    "radial-gradient(24% 26% at 95% 93%, rgba(8, 11, 18, 0.96) 0%, rgba(8, 11, 18, 0.82) 24%, rgba(8, 11, 18, 0.44) 50%, rgba(8, 11, 18, 0.14) 68%, rgba(8, 11, 18, 0) 82%)",
+  maskImage: dashboardMaskImage,
+  WebkitMaskImage: dashboardMaskImage,
+};
+
+const floatingCardBaseStyle: CSSProperties = {
+  transformStyle: "preserve-3d",
+  willChange: "transform",
+  backfaceVisibility: "hidden",
+  transition: "box-shadow 0.3s ease-out",
+};
+
+const preserve3DStyle: CSSProperties = {
+  transformStyle: "preserve-3d",
+};
+
+const floatingCardSurfaceClassName =
+  "h-full w-full overflow-visible rounded-lg ring-1 ring-white/[0.08]";
+
+const floatingCardSurfaceStyle: CSSProperties = {
+  background: "var(--vip-dashboard-card-surface)",
+};
+
+const floatingCardFloatStyles = {
+  metricA: {
+    animationDuration: "4.8s",
+    animationDelay: "-0.8s",
+  },
+  metricB: {
+    animationDuration: "5.6s",
+    animationDelay: "0.45s",
+    animationDirection: "reverse",
+  },
+  metricC: {
+    animationDuration: "6.2s",
+    animationDelay: "-1.4s",
+  },
+  metricD: {
+    animationDuration: "5.1s",
+    animationDelay: "1.15s",
+    animationDirection: "alternate-reverse",
+  },
+  metricE: {
+    animationDuration: "6.7s",
+    animationDelay: "-2.1s",
+  },
+  panelA: {
+    animationDelay: "-0.9s",
+  },
+  panelB: {
+    animationDelay: "-2.4s",
+  },
+} satisfies Record<string, CSSProperties>;
+
 type ChartPoint = {
   time: string;
   value: number;
@@ -103,6 +209,16 @@ type DashboardAreaChartProps = {
   data: ChartPoint[];
   gradientId: string;
   strokeColor: string;
+};
+
+type FloatingDashboardCardProps = {
+  children: ReactNode;
+  custom: number;
+  shadow: string;
+  containerClassName?: string;
+  surfaceClassName?: string;
+  floatClassName?: string;
+  floatStyle?: CSSProperties;
 };
 
 const containerVariants: Variants = {
@@ -138,14 +254,18 @@ const floating3DVariants: Variants = {
   hidden: {
     opacity: 0,
     x: -10,
-    z: -50,
-    rotateY: -8
+    z: 0,
+    rotateY: -4,
+    rotateX: -2
   },
   show: (custom: number) => ({
     opacity: 1,
     x: 0,
-    z: custom * 35,
-    rotateY: custom * 1.5,
+    z:
+      DEFENDER_TILT.floatingCardDepth +
+      (custom % 3) * DEFENDER_TILT.floatingCardDepthStep,
+    rotateY: custom * 1.25,
+    rotateX: custom % 2 === 0 ? -1.5 : -0.5,
     transition: {
       duration: 0.5,
       ease: [0.25, 0.1, 0.25, 1],
@@ -155,25 +275,40 @@ const floating3DVariants: Variants = {
   }),
   exit: {
     opacity: 0,
-    z: -80,
+    z: 0,
     transition: { duration: 0.3 }
   }
 };
 
-const cardHoverVariant = {
-  hover: {
-    z: 150,
-    scale: 1.06,
-    rotateY: -3,
-    rotateX: -2,
-    boxShadow: "0 30px 80px rgba(0, 0, 0, 0.5)",
-    transition: {
-      type: "spring",
-      stiffness: 300,
-      damping: 20
-    }
-  }
-};
+const FloatingDashboardCard = memo(({
+  children,
+  custom,
+  shadow,
+  containerClassName,
+  surfaceClassName,
+  floatClassName,
+  floatStyle,
+}: FloatingDashboardCardProps) => (
+  <motion.div
+    custom={custom}
+    variants={floating3DVariants}
+    className={cn("w-full", containerClassName)}
+    style={{ ...floatingCardBaseStyle, boxShadow: shadow }}
+  >
+    <div
+      className={cn(
+        floatingCardSurfaceClassName,
+        surfaceClassName,
+        floatClassName
+      )}
+      style={{ ...floatingCardSurfaceStyle, ...floatStyle }}
+    >
+      {children}
+    </div>
+  </motion.div>
+));
+
+FloatingDashboardCard.displayName = "FloatingDashboardCard";
 
 const DashboardAreaChart = memo(({
   chartKey,
@@ -259,8 +394,13 @@ const PortfolioView = memo(() => (
     animate="show"
     exit="exit"
     className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
+    style={preserve3DStyle}
   >
-    <motion.div variants={itemVariantsLeft} className="flex flex-col gap-4">
+    <motion.div
+      variants={itemVariantsLeft}
+      className="flex flex-col gap-4"
+      style={preserve3DStyle}
+    >
       <div className="flex flex-col">
         <span className="text-white/50 text-[9px] font-bold uppercase tracking-widest mb-1">Total Portfolio Value</span>
         <div className="flex items-baseline gap-2">
@@ -274,20 +414,16 @@ const PortfolioView = memo(() => (
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3">
-        <motion.div
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3"
+        style={preserve3DStyle}
+      >
+        <FloatingDashboardCard
           custom={0}
-          variants={floating3DVariants}
-          whileHover="hover"
-          className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] animate-dramatic-float"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: "translateZ(0)",
-            willChange: "transform",
-            backfaceVisibility: "hidden",
-            boxShadow: "0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)",
-            transition: "box-shadow 0.3s ease-out"
-          }}
+          shadow="0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float"
+          floatStyle={floatingCardFloatStyles.metricA}
         >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">All-time Profit</span>
           <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">-$6,955.83</span>
@@ -299,37 +435,24 @@ const PortfolioView = memo(() => (
               2.78%
             </div>
           </div>
-        </motion.div>
-        <motion.div
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
           custom={1}
-          variants={floating3DVariants}
-          whileHover="hover"
-          className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] animate-dramatic-float-delayed"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: "translateZ(0)",
-            willChange: "transform",
-            backfaceVisibility: "hidden",
-            boxShadow: "0 14px 36px rgba(0, 0, 0, 0.25), 0 8px 18px rgba(0, 0, 0, 0.18)",
-            transition: "box-shadow 0.3s ease-out"
-          }}
+          shadow="0 14px 36px rgba(0, 0, 0, 0.25), 0 8px 18px rgba(0, 0, 0, 0.18)"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed"
+          floatStyle={floatingCardFloatStyles.metricB}
         >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Cost Basis</span>
           <span className="text-white/80 font-bold text-sm md:text-base leading-none">$250,578.95</span>
-        </motion.div>
-        <motion.div
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
           custom={2}
-          variants={floating3DVariants}
-          whileHover="hover"
-          className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] col-span-2 md:col-span-1 animate-dramatic-float-delayed-2"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: "translateZ(0)",
-            willChange: "transform",
-            backfaceVisibility: "hidden",
-            boxShadow: "0 17px 42px rgba(0, 0, 0, 0.3), 0 10px 21px rgba(0, 0, 0, 0.21)",
-            transition: "box-shadow 0.3s ease-out"
-          }}
+          shadow="0 17px 42px rgba(0, 0, 0, 0.3), 0 10px 21px rgba(0, 0, 0, 0.21)"
+          containerClassName="col-span-2 md:col-span-1"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed-2"
+          floatStyle={floatingCardFloatStyles.metricC}
         >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-2">24h Performance</span>
           <div className="flex flex-col gap-1.5 mt-2 pt-1">
@@ -342,40 +465,28 @@ const PortfolioView = memo(() => (
               <span className="text-white/70 font-medium">+0.00%</span>
             </div>
           </div>
-        </motion.div>
-        <motion.div
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
           custom={3}
-          variants={floating3DVariants}
-          whileHover="hover"
-          className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex animate-dramatic-float-delayed-3"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: "translateZ(0)",
-            willChange: "transform",
-            backfaceVisibility: "hidden",
-            boxShadow: "0 20px 48px rgba(0, 0, 0, 0.35), 0 12px 24px rgba(0, 0, 0, 0.24)",
-            transition: "box-shadow 0.3s ease-out"
-          }}
+          shadow="0 20px 48px rgba(0, 0, 0, 0.35), 0 12px 24px rgba(0, 0, 0, 0.24)"
+          containerClassName="hidden md:flex"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed-3"
+          floatStyle={floatingCardFloatStyles.metricD}
         >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Sharpe Ratio</span>
           <span className="text-[#16c784] font-bold text-sm md:text-base leading-none">4.19</span>
           <div className="mt-2 pt-1">
             <span className="bg-[#16c784]/15 text-[#16c784] text-[9px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Excellent</span>
           </div>
-        </motion.div>
-        <motion.div
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
           custom={4}
-          variants={floating3DVariants}
-          whileHover="hover"
-          className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex animate-dramatic-float-delayed-4"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: "translateZ(0)",
-            willChange: "transform",
-            backfaceVisibility: "hidden",
-            boxShadow: "0 23px 54px rgba(0, 0, 0, 0.4), 0 14px 27px rgba(0, 0, 0, 0.27)",
-            transition: "box-shadow 0.3s ease-out"
-          }}
+          shadow="0 23px 54px rgba(0, 0, 0, 0.4), 0 14px 27px rgba(0, 0, 0, 0.27)"
+          containerClassName="hidden md:flex"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed-4"
+          floatStyle={floatingCardFloatStyles.metricE}
         >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Max Drawdown</span>
           <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">-15.76%</span>
@@ -387,24 +498,22 @@ const PortfolioView = memo(() => (
               Not recovered
             </span>
           </div>
-        </motion.div>
+        </FloatingDashboardCard>
       </div>
     </motion.div>
 
-    <motion.div variants={itemVariantsLeft} className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3">
-      <motion.div
+    <motion.div
+      variants={itemVariantsLeft}
+      className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3"
+      style={preserve3DStyle}
+    >
+      <FloatingDashboardCard
         custom={5}
-        variants={floating3DVariants}
-        whileHover="hover"
-        className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-1 justify-between"
-        style={{
-          transformStyle: "preserve-3d",
-          transform: "translateZ(0)",
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-          boxShadow: "0 26px 60px rgba(0, 0, 0, 0.45), 0 16px 30px rgba(0, 0, 0, 0.3)",
-          transition: "box-shadow 0.3s ease-out"
-        }}
+        shadow="0 26px 60px rgba(0, 0, 0, 0.45), 0 16px 30px rgba(0, 0, 0, 0.3)"
+        containerClassName="lg:col-span-1"
+        surfaceClassName="p-4 flex h-full flex-col justify-between"
+        floatClassName="animate-panel-float-a"
+        floatStyle={floatingCardFloatStyles.panelA}
       >
         <div className="mb-2">
           <div className="text-white/90 font-bold text-sm tracking-wide">Allocation</div>
@@ -445,21 +554,15 @@ const PortfolioView = memo(() => (
             </div>
           ))}
         </div>
-      </motion.div>
+      </FloatingDashboardCard>
 
-      <motion.div
+      <FloatingDashboardCard
         custom={6}
-        variants={floating3DVariants}
-        whileHover="hover"
-        className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-3"
-        style={{
-          transformStyle: "preserve-3d",
-          transform: "translateZ(0)",
-          willChange: "transform",
-          backfaceVisibility: "hidden",
-          boxShadow: "0 29px 66px rgba(0, 0, 0, 0.5), 0 18px 33px rgba(0, 0, 0, 0.33)",
-          transition: "box-shadow 0.3s ease-out"
-        }}
+        shadow="0 29px 66px rgba(0, 0, 0, 0.5), 0 18px 33px rgba(0, 0, 0, 0.33)"
+        containerClassName="lg:col-span-3"
+        surfaceClassName="p-4 flex h-full flex-col"
+        floatClassName="animate-panel-float-b"
+        floatStyle={floatingCardFloatStyles.panelB}
       >
         <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
           <div>
@@ -489,7 +592,7 @@ const PortfolioView = memo(() => (
             strokeColor="#16c784"
           />
         </div>
-      </motion.div>
+      </FloatingDashboardCard>
     </motion.div>
   </motion.div>
 ));
@@ -504,8 +607,13 @@ const RiskView = memo(() => (
     animate="show"
     exit="exit"
     className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
+    style={preserve3DStyle}
   >
-    <motion.div variants={itemVariantsRight} className="flex flex-col gap-4">
+    <motion.div
+      variants={itemVariantsRight}
+      className="flex flex-col gap-4"
+      style={preserve3DStyle}
+    >
       <div className="flex flex-col">
         <span className="text-white/50 text-[9px] font-bold uppercase tracking-widest mb-1">Value at Risk (95% Confidence)</span>
         <div className="flex items-baseline gap-2">
@@ -519,8 +627,17 @@ const RiskView = memo(() => (
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3">
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
+      <div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3"
+        style={preserve3DStyle}
+      >
+        <FloatingDashboardCard
+          custom={0}
+          shadow="0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float"
+          floatStyle={floatingCardFloatStyles.metricA}
+        >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">30-Day Volatility</span>
           <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">42.5%</span>
           <div className="mt-2 pt-1">
@@ -528,12 +645,25 @@ const RiskView = memo(() => (
               Target &lt; 35%
             </div>
           </div>
-        </div>
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05]">
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
+          custom={1}
+          shadow="0 14px 36px rgba(0, 0, 0, 0.25), 0 8px 18px rgba(0, 0, 0, 0.18)"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed"
+          floatStyle={floatingCardFloatStyles.metricB}
+        >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Portfolio Beta</span>
           <span className="text-white/80 font-bold text-sm md:text-base leading-none">1.15</span>
-        </div>
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] col-span-2 md:col-span-1">
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
+          custom={2}
+          shadow="0 17px 42px rgba(0, 0, 0, 0.3), 0 10px 21px rgba(0, 0, 0, 0.21)"
+          containerClassName="col-span-2 md:col-span-1"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed-2"
+          floatStyle={floatingCardFloatStyles.metricC}
+        >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-2">Stress Test (BTC -20%)</span>
           <div className="flex flex-col gap-1.5 mt-2 pt-1">
             <div className="flex justify-between items-center text-[11px] leading-none">
@@ -545,15 +675,29 @@ const RiskView = memo(() => (
               <span className="text-[#16c784] font-medium">Safe</span>
             </div>
           </div>
-        </div>
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
+          custom={3}
+          shadow="0 20px 48px rgba(0, 0, 0, 0.35), 0 12px 24px rgba(0, 0, 0, 0.24)"
+          containerClassName="hidden md:flex"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed-3"
+          floatStyle={floatingCardFloatStyles.metricD}
+        >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Concentration Risk</span>
           <span className="text-[#f3ba2f] font-bold text-sm md:text-base leading-none">73.9% BTC</span>
           <div className="mt-2 pt-1">
             <span className="bg-[#f3ba2f]/15 text-[#f3ba2f] text-[9px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Warning</span>
           </div>
-        </div>
-        <div className="bg-white/[0.02] rounded-lg p-3 flex flex-col justify-start ring-1 ring-white/[0.05] hidden md:flex">
+        </FloatingDashboardCard>
+        <FloatingDashboardCard
+          custom={4}
+          shadow="0 23px 54px rgba(0, 0, 0, 0.4), 0 14px 27px rgba(0, 0, 0, 0.27)"
+          containerClassName="hidden md:flex"
+          surfaceClassName="p-3 flex flex-col justify-start"
+          floatClassName="animate-dramatic-float-delayed-4"
+          floatStyle={floatingCardFloatStyles.metricE}
+        >
           <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Sharpe Ratio</span>
           <span className="text-[#16c784] font-bold text-sm md:text-base leading-none">4.19</span>
           <div className="mt-2 pt-1">
@@ -561,12 +705,23 @@ const RiskView = memo(() => (
               Excellent
             </span>
           </div>
-        </div>
+        </FloatingDashboardCard>
       </div>
     </motion.div>
 
-    <motion.div variants={itemVariantsRight} className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3">
-      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-1 justify-between">
+    <motion.div
+      variants={itemVariantsRight}
+      className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3"
+      style={preserve3DStyle}
+    >
+      <FloatingDashboardCard
+        custom={5}
+        shadow="0 26px 60px rgba(0, 0, 0, 0.45), 0 16px 30px rgba(0, 0, 0, 0.3)"
+        containerClassName="lg:col-span-1"
+        surfaceClassName="p-4 flex h-full flex-col justify-between"
+        floatClassName="animate-panel-float-a"
+        floatStyle={floatingCardFloatStyles.panelA}
+      >
         <div className="mb-2">
           <div className="text-white/90 font-bold text-sm tracking-wide">Risk Contribution</div>
         </div>
@@ -613,9 +768,16 @@ const RiskView = memo(() => (
             </div>
           ))}
         </div>
-      </div>
+      </FloatingDashboardCard>
 
-      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-3">
+      <FloatingDashboardCard
+        custom={6}
+        shadow="0 29px 66px rgba(0, 0, 0, 0.5), 0 18px 33px rgba(0, 0, 0, 0.33)"
+        containerClassName="lg:col-span-3"
+        surfaceClassName="p-4 flex h-full flex-col"
+        floatClassName="animate-panel-float-b"
+        floatStyle={floatingCardFloatStyles.panelB}
+      >
         <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
           <div>
             <div className="text-white/90 font-bold text-xs sm:text-sm mb-0.5 tracking-wide">Risk Exposure (VaR)</div>
@@ -644,7 +806,7 @@ const RiskView = memo(() => (
             strokeColor="#ea3943"
           />
         </div>
-      </div>
+      </FloatingDashboardCard>
     </motion.div>
   </motion.div>
 ));
@@ -654,7 +816,10 @@ RiskView.displayName = 'RiskView';
 const VIPDashboard = () => {
 
   return (
-    <section className="pt-16 pb-16 md:pt-24 md:pb-24 relative z-1">
+    <section
+      className="pt-16 pb-16 md:pt-24 md:pb-24 relative z-1"
+      style={dashboardThemeStyle}
+    >
       <div className="container px-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
           {/* Section Header */}
@@ -674,48 +839,36 @@ const VIPDashboard = () => {
           <div className="relative">
             {/* Outer container with skew and mask */}
             <div
-              className="relative rounded-2xl border border-white/[0.08]"
-              style={{
-                transform: "rotateX(16deg) rotateY(-3deg) scale(0.96)",
-                transformOrigin: "center top",
-                maskImage:
-                  "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
-                WebkitMaskImage:
-                  "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
-              }}
+              className="relative rounded-2xl"
+              style={dashboardShellStyle}
             >
+              <div
+                className="pointer-events-none absolute inset-0 rounded-2xl border border-white/[0.08]"
+                style={dashboardChromeOverlayStyle}
+              />
               {/* Inner container with gradient border */}
               <div
-                className="relative overflow-hidden rounded-xl p-px"
-                style={{
-                  background:
-                    "linear-gradient(145deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 10%, rgba(255, 255, 255, 0.04) 30%, transparent 55%)",
-                  maskImage:
-                    "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
-                  WebkitMaskImage:
-                    "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
-                }}
+                className="relative overflow-visible rounded-xl p-px"
+                style={dashboardFrameStyle}
               >
                 <div
-                  className="relative rounded-[11px] p-4 sm:p-6 md:p-8 overflow-hidden grid min-h-[460px] md:min-h-[400px]"
-                  style={{
-                    background: "rgb(30, 30, 30)",
-                    perspective: "1200px",
-                    perspectiveOrigin: "50% 30%",
-                    transformStyle: "preserve-3d"
-                  }}
+                  className="relative grid min-h-[460px] overflow-visible rounded-[11px] p-4 sm:p-6 md:min-h-[400px] md:p-8"
+                  style={dashboardSurfaceStyle}
                 >
                   {/* Top highlight */}
                   <div
-                    className="pointer-events-none absolute top-0 left-0 size-80"
-                    style={{
-                      background:
-                        "radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.024) 40%, transparent 70%)",
-                    }}
+                    className="pointer-events-none absolute top-0 left-0 size-80 z-0"
+                    style={dashboardTopHighlightStyle}
                   />
 
-                  <PortfolioView />
+                  <div className="relative z-0">
+                    <PortfolioView />
+                  </div>
                 </div>
+                <div
+                  className="pointer-events-none absolute inset-px rounded-[11px] z-20"
+                  style={dashboardBottomRightFadeStyle}
+                />
               </div>
             </div>
           </div>
