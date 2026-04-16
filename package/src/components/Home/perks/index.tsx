@@ -8,15 +8,15 @@ const perksSectionStyle = {
     "color-mix(in srgb, var(--background) 82%, var(--primary) 18%)",
   "--perks-current-surface": "var(--background)",
   background: `linear-gradient(
-    180deg,
+    to bottom,
     var(--perks-previous-surface) 0%,
     color-mix(
       in srgb,
       var(--perks-previous-surface) 42%,
       var(--perks-current-surface) 58%
     )
-      26%,
-    var(--perks-current-surface) 72%
+      34%,
+    var(--perks-current-surface) 100%
   )`,
 } as CSSProperties;
 
