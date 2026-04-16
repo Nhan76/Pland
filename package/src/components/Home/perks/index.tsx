@@ -1,11 +1,28 @@
-
+import type { CSSProperties } from "react";
 import { perksData } from "@/app/api/data";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 
+const perksSectionStyle = {
+  "--perks-previous-surface":
+    "color-mix(in srgb, var(--background) 82%, var(--primary) 18%)",
+  "--perks-current-surface": "var(--background)",
+  background: `linear-gradient(
+    180deg,
+    var(--perks-previous-surface) 0%,
+    color-mix(
+      in srgb,
+      var(--perks-previous-surface) 42%,
+      var(--perks-current-surface) 58%
+    )
+      26%,
+    var(--perks-current-surface) 72%
+  )`,
+} as CSSProperties;
+
 const Perks = () => {
   return (
-    <section className="py-16 md:py-24 relative">
+    <section className="relative py-16 md:py-24" style={perksSectionStyle}>
       <div className="container px-4 relative z-2">
         <div className="text-center">
           <div className="flex flex-col gap-4">
