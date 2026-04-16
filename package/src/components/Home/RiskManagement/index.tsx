@@ -4,53 +4,6 @@ import React from "react";
 const RiskManagement = () => {
   return (
     <section className="pt-0 pb-16 md:pt-0 md:pb-24 relative z-1">
-      {/* Inline styles for continuous sliding animation */}
-      <style>{`
-        @keyframes slideContinuous {
-          0% {
-            top: 0px;
-            left: 0px;
-            right: 16px;
-            opacity: 0.2;
-            z-index: 10;
-          }
-          33.33% {
-            top: 48px;
-            left: 40px;
-            right: 8px;
-            opacity: 0.6;
-            z-index: 20;
-          }
-          66.66% {
-            top: 96px;
-            left: 80px;
-            right: 0px;
-            opacity: 1;
-            z-index: 30;
-          }
-          95% {
-            top: 144px;
-            left: 120px;
-            right: -8px;
-            opacity: 0;
-            z-index: 30;
-          }
-          95.1% {
-            top: -48px;
-            left: -40px;
-            right: 24px;
-            opacity: 0;
-            z-index: 10;
-          }
-          100% {
-            top: 0px;
-            left: 0px;
-            right: 16px;
-            opacity: 0.2;
-            z-index: 10;
-          }
-        }
-      `}</style>
       <div className="container px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="max-w-2xl">
@@ -77,10 +30,9 @@ const RiskManagement = () => {
             >
               {/* Card 1 */}
               <div
-                className="absolute rounded-xl p-px"
+                className="animate-risk-card-slide absolute rounded-xl p-px"
                 style={{
                   transform: "skewY(-8deg) skewX(-2deg)",
-                  animation: "slideContinuous 9s linear infinite",
                   animationDelay: "0s",
                   background:
                     "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
@@ -107,10 +59,9 @@ const RiskManagement = () => {
 
               {/* Card 2 */}
               <div
-                className="absolute rounded-xl p-px"
+                className="animate-risk-card-slide absolute rounded-xl p-px"
                 style={{
                   transform: "skewY(-8deg) skewX(-2deg)",
-                  animation: "slideContinuous 9s linear infinite",
                   animationDelay: "-3s",
                   background:
                     "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
@@ -137,10 +88,9 @@ const RiskManagement = () => {
 
               {/* Card 3 */}
               <div
-                className="absolute rounded-xl p-px"
+                className="animate-risk-card-slide absolute rounded-xl p-px"
                 style={{
                   transform: "skewY(-8deg) skewX(-2deg)",
-                  animation: "slideContinuous 9s linear infinite",
                   animationDelay: "-6s",
                   background:
                     "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",

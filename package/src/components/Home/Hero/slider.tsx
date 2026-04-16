@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { memo, type CSSProperties } from "react";
 
 import { pricedata } from "@/app/api/data";
 import Image from "next/image";
@@ -8,7 +8,12 @@ const marqueeStyle = {
   "--market-marquee-duration": `${pricedata.length * 5}s`,
 } as CSSProperties;
 
-const PriceCard = ({ item }: { item: (typeof pricedata)[number] }) => {
+type PriceCardProps = {
+  item: (typeof pricedata)[number];
+  shouldPrioritize?: boolean;
+};
+
+const PriceCard = memo(({ item, shouldPrioritize = false }: PriceCardProps) => {
   return (
     <Card className="w-72 shrink-0 bg-bento-card border-none shadow-none rounded-xl p-0">
       <CardContent className="px-5 py-6">
@@ -19,7 +24,9 @@ const PriceCard = ({ item }: { item: (typeof pricedata)[number] }) => {
               alt={`${item.title} icon`}
               width={item.width}
               height={item.height}
-              priority
+              loading={shouldPrioritize ? "eager" : "lazy"}
+              priority={shouldPrioritize}
+              sizes={`${item.width}px`}
             />
           </div>
           <p className="text-white text-xs font-normal">
@@ -35,9 +42,11 @@ const PriceCard = ({ item }: { item: (typeof pricedata)[number] }) => {
       </CardContent>
     </Card>
   );
-};
+});
 
-const CardSlider = () => {
+PriceCard.displayName = "PriceCard";
+
+const CardSlider = memo(() => {
   return (
     <div className="pt-14 flex flex-col gap-10">
       <div className="flex flex-col gap-3 items-center justify-center text-center">
@@ -63,10 +72,11 @@ const CardSlider = () => {
               aria-hidden={groupIndex === 1}
               className="flex shrink-0 gap-6 pr-6"
             >
-              {pricedata.map((item) => (
+              {pricedata.map((item, itemIndex) => (
                 <PriceCard
                   key={`${groupIndex}-${item.title}`}
                   item={item}
+                  shouldPrioritize={groupIndex === 0 && itemIndex < 4}
                 />
               ))}
             </div>
@@ -75,6 +85,8 @@ const CardSlider = () => {
       </div>
     </div>
   );
-};
+});
+
+CardSlider.displayName = "CardSlider";
 
 export default CardSlider;
