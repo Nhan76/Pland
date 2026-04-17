@@ -1,9 +1,19 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git config:*)",
+      "WebFetch(domain:pagespeed.web.dev)",
+      "Read(//c/Users/Thanh Nhan/Desktop/Project/pland/**)",
+      "Bash(find:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(npm remove:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm install:*)",
       "Bash(corepack pnpm install:*)",
-      "Bash(set CI=true)"
+      "Bash(git add:*)",
+      "Bash(findstr:*)",
+      "Bash(corepack pnpm build:*)",
+      "Bash(cd:*)",
+      "Bash(corepack pnpm lint:*)"
     ]
   }
 }

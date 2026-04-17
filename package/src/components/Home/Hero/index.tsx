@@ -1,71 +1,124 @@
 "use client";
+
 import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import CardSlider from "./slider";
-import { Badge } from "@/components/ui/badge";
+import dynamic from "next/dynamic";
+import { motion, type Variants } from "framer-motion";
+
 import { Button } from "@/components/ui/button";
+import { usePageIntro } from "@/components/Layout/PageIntroProvider";
+
+import CardSlider from "./slider";
+
+const CryptoDashboard = dynamic(() => import("./CryptoDashboard"), {
+  loading: () => (
+    <div className="relative z-20 w-full max-w-6xl mx-auto mt-12 md:mt-24 mb-16 px-4">
+      <div className="relative bg-[#11141A] border border-white/5 rounded-3xl shadow-2xl p-4 md:p-6 min-h-[460px] md:min-h-[400px] animate-pulse" />
+    </div>
+  ),
+  ssr: false,
+});
+
+const HeroBackground = dynamic(() => import("./HeroBackground"), {
+  loading: () => <div className="relative h-full w-full bg-transparent" />,
+  ssr: false,
+});
+
+const INTRO_EASE = [0.22, 1, 0.36, 1] as const;
+
+const HERO_REVEAL_VARIANTS: Variants = {
+  hidden: { opacity: 0, y: 36 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      ease: INTRO_EASE,
+    },
+  },
+};
+
+const DASHBOARD_REVEAL_VARIANTS: Variants = {
+  hidden: { opacity: 0, y: 52, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.65,
+      ease: INTRO_EASE,
+    },
+  },
+};
 
 const Hero = () => {
-  const leftAnimation = {
-    initial: { x: "-100%", opacity: 0 },
-    animate: { x: 0, opacity: 1 },
-    exit: { x: "-100%", opacity: 0 },
-    transition: { duration: 0.6 },
-  };
+  const { showTitle, showDescription, showCta, showDashboard, isComplete } =
+    usePageIntro();
+  const introInitialState = isComplete ? "visible" : "hidden";
 
   return (
     <section
-      className="relative py-24 pt-48 overflow-hidden z-1"
+      className="relative z-1 overflow-hidden py-24 pt-48 isolate"
       id="main-banner"
     >
-      <div className="container">
-        <motion.div
-          {...leftAnimation}
-          className="mx-auto flex max-w-4xl flex-col items-center gap-10 text-center"
-        >
-          <div className="flex flex-col items-center gap-4">
-            <div className="flex items-center justify-center">
-                <Badge
-                  variant="outline"
-                  className="text-base py-1.5 px-4 bg-primary/10 rounded-full border border-white/10 text-primary font-medium h-9"
-                >
-                  AI portfolio command center
-                </Badge>
-            </div>
-            <h1 className="font-medium xl:text-[72px] md:text-6xl sm:text-5xl text-4xl text-white">
-              <span className="block sm:whitespace-nowrap">Trade smarter</span>
+      <HeroBackground />
+
+      <div className="container relative z-10">
+        <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 text-center">
+          <div className="flex flex-col items-center gap-8">
+            <motion.h1
+              variants={HERO_REVEAL_VARIANTS}
+              initial={introInitialState}
+              animate={showTitle ? "visible" : "hidden"}
+              className="font-medium xl:text-[72px] md:text-6xl sm:text-5xl text-4xl text-white"
+            >
+              <span className="block sm:whitespace-nowrap">AI-Powered Trading</span>
               <span className="block sm:whitespace-nowrap">
-                Manage your crypto portfolio
+                Master Your Portfolio
               </span>
-            </h1>
-            <p className="max-w-2xl text-white">
-              PLAND turns fragmented signals into explainable actions with
-              multi-agent analysis, market context, and risk guardrails.
-            </p>
+            </motion.h1>
+
+            <motion.p
+              variants={HERO_REVEAL_VARIANTS}
+              initial={introInitialState}
+              animate={showDescription ? "visible" : "hidden"}
+              className="max-w-2xl text-white text-sm sm:text-base"
+            >
+              PLAND turns fragmented signals into explainable actions{" "}
+              <br className="hidden sm:block" />
+              with multi-agent analysis, market context, and risk guardrails.
+            </motion.p>
           </div>
-          <div className="flex items-center justify-center gap-3 sm:gap-4">
-              <Button
-                render={<Link href="/#work" />}
-                className="flex h-12 items-center gap-2 rounded-lg border border-primary bg-primary px-4 py-6 text-sm font-semibold whitespace-nowrap text-background hover:bg-primary/80 sm:px-7 sm:text-base"
-              >
-                See Why PLAND
-                <Image
-                  src={"/images/icons/icon-arrow.svg"}
-                  alt="arrow-icon"
-                  width={20}
-                  height={20}
-                />
-              </Button>
-              <Button
-                variant="outline"
-                render={<Link href="/#portfolio" />}
-                className="h-12 rounded-lg border border-white/10 bg-white/5 px-4 py-6 text-sm font-semibold whitespace-nowrap text-white hover:bg-white/10 sm:px-7 sm:text-base"
-              >
-                Explore Capabilities
-              </Button>
-          </div>
+
+          <motion.div
+            variants={HERO_REVEAL_VARIANTS}
+            initial={introInitialState}
+            animate={showCta ? "visible" : "hidden"}
+            className="flex w-full flex-col items-center justify-center gap-3 px-4 sm:w-auto sm:flex-row sm:gap-4 sm:px-0"
+          >
+            <Button
+              render={<Link href="/#work" />}
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-6 text-sm font-semibold whitespace-nowrap text-background hover:bg-primary/80 sm:w-55 sm:px-7 sm:text-base"
+            >
+              Go to app
+            </Button>
+            <Button
+              variant="outline"
+              render={<Link href="/#portfolio" />}
+              className="flex h-12 w-full items-center justify-center rounded-lg border border-white/10 bg-white/5 px-4 py-6 text-sm font-semibold whitespace-nowrap text-white hover:bg-white/10 sm:w-55 sm:px-7 sm:text-base"
+            >
+              Explore Capabilities
+            </Button>
+          </motion.div>
+        </div>
+
+        <motion.div
+          variants={DASHBOARD_REVEAL_VARIANTS}
+          initial={introInitialState}
+          animate={showDashboard ? "visible" : "hidden"}
+        >
+          <CryptoDashboard />
         </motion.div>
+
         <CardSlider />
       </div>
     </section>

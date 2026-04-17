@@ -1,7 +1,10 @@
-'use client';
-import Slider from 'react-infinite-logo-slider';
 import { brandList } from './data';
 import Image from 'next/image';
+import type { CSSProperties } from 'react';
+
+const marqueeStyle = {
+  '--brand-marquee-duration': `${brandList.length * 3}s`,
+} as CSSProperties;
 
 function BrandLogo() {
     return (
@@ -16,25 +19,45 @@ function BrandLogo() {
                         </div>
 
                         <div className="py-3 Xsm:py-7">
-                            <Slider
-                                width="200px"
-                                duration={20}
-                                pauseOnHover={true}
-                                blurBorders={false}
-                            >
-                                {brandList.map((items, index) => (
-                                    <Slider.Slide key={index}>
-                                        <div className='mr-10 w-full h-full flex items-center'>
-                                            <Image src={items?.image} alt="logo" width={135} height={35} className='w-full h-full ' />
+                            <div className="relative overflow-hidden">
+                                <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-linear-to-r from-background to-transparent sm:w-20" />
+                                <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-linear-to-l from-background to-transparent sm:w-20" />
+
+                                <div
+                                    className="flex w-max animate-market-marquee will-change-transform motion-reduce:animate-none hover:paused"
+                                    style={marqueeStyle}
+                                >
+                                    {[0, 1].map((groupIndex) => (
+                                        <div
+                                            key={groupIndex}
+                                            aria-hidden={groupIndex === 1}
+                                            className="flex shrink-0 gap-10 pr-10"
+                                        >
+                                            {brandList.map((item, index) => (
+                                                <div
+                                                    key={`${groupIndex}-${index}`}
+                                                    className="flex items-center w-[135px]"
+                                                >
+                                                    <Image
+                                                        src={item.image}
+                                                        alt="logo"
+                                                        width={135}
+                                                        height={35}
+                                                        className="w-full h-auto"
+                                                        sizes="(max-width: 640px) 120px, 135px"
+                                                        loading="lazy"
+                                                    />
+                                                </div>
+                                            ))}
                                         </div>
-                                    </Slider.Slide>
-                                ))}
-                            </Slider>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section >
+        </section>
     );
 }
 

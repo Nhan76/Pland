@@ -23,6 +23,12 @@ Start the development server:
 corepack pnpm dev
 ```
 
+If you explicitly want to try Turbopack again:
+
+```bash
+corepack pnpm dev:turbo
+```
+
 Run validation:
 
 ```bash
@@ -35,5 +41,6 @@ corepack pnpm build
 - App package name: `pland`
 - Root workspace package name: `pland-root`
 - Landing copy and branding have been aligned to `PLAND`
+- `dev` is pinned to `next dev --webpack` because Turbopack currently panics in this Windows nested-package setup with `Next.js package not found`.
 
 

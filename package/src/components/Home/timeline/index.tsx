@@ -1,12 +1,9 @@
 'use client'
 import Image from 'next/image'
 import { timelineData } from '@/app/api/data'
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
 
 const TimeLine = () => {
-  const ref = useRef(null)
-  useInView(ref)
   return (
     <section className='md:pt-40 pt-9' id='development'>
       <div className='container lg:px-16 px-4'>
@@ -24,18 +21,17 @@ const TimeLine = () => {
               </h2>
             </div>
           </motion.div>
-          <motion.div
-            whileInView={{ scale: 1, opacity: 1 }}
-            initial={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.6 }}>
+          <div>
             <div className='md:block hidden relative'>
               <div>
                 <Image
                   src='/images/timeline/img-timeline.png'
-                  alt='image'
+                  alt='Timeline workflow diagram'
                   width={1220}
                   height={1000}
                   className='w-80% mx-auto'
+                  loading="lazy"
+                  sizes="(max-width: 768px) 0vw, 80vw"
                 />
               </div>
               <div className='absolute lg::top-40 top-36 lg:left-0 -left-20 w-72 flex items-center gap-6'>
@@ -52,6 +48,7 @@ const TimeLine = () => {
                     width={44}
                     height={44}
                     className='w-16 h-16 '
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -62,6 +59,7 @@ const TimeLine = () => {
                     alt='Analyze context'
                     width={44}
                     height={44}
+                    loading="lazy"
                   />
                 </div>
                 <div className='text-left'>
@@ -85,6 +83,7 @@ const TimeLine = () => {
                     width={44}
                     height={44}
                     className='w-16 h-16 '
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -96,6 +95,7 @@ const TimeLine = () => {
                     width={44}
                     height={44}
                     className='w-16 h-16'
+                    loading="lazy"
                   />
                 </div>
                 <div className='text-left'>
@@ -117,6 +117,7 @@ const TimeLine = () => {
                       alt={item.title}
                       width={44}
                       height={44}
+                      loading="lazy"
                     />
                   </div>
                   <div className='text-start'>
@@ -126,7 +127,7 @@ const TimeLine = () => {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

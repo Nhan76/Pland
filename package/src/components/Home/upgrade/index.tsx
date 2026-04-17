@@ -1,10 +1,10 @@
 import { upgradeData } from "@/app/api/data";
 import Image from "next/image";
-import { Icon } from "@iconify/react";
+import { CheckCircle2 } from "lucide-react";
 
 const Upgrade = () => {
   return (
-    <section className="py-20" id="upgrade">
+    <section className="py-16 md:py-24" id="upgrade">
       <div className="container px-4">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <div>
@@ -22,10 +22,8 @@ const Upgrade = () => {
               {upgradeData.map((item, index) => (
                 <div key={index} className="flex gap-5">
                   <div>
-                    <Icon
-                      icon="la:check-circle-solid"
-                      width="24"
-                      height="24"
+                    <CheckCircle2
+                      size={24}
                       className="text-white group-hover:text-primary"
                     />
                   </div>
@@ -40,10 +38,12 @@ const Upgrade = () => {
             <div className="ml-0 lg:ml-7 justify-self-center">
               <Image
                 src="/images/upgrade/img-upgrade.png"
-                alt="image"
+                alt="Risk guardrails dashboard"
                 width={625}
                 height={580}
                 className="-mr-5"
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 625px"
               />
             </div>
           </div>

@@ -1,24 +1,8 @@
 'use client'
 import Image from 'next/image'
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { motion } from 'framer-motion'
 
 const Work = () => {
-  const ref = useRef(null)
-  const inView = useInView(ref)
-
-  const TopAnimation = {
-    initial: { y: '-100%', opacity: 0 },
-    animate: inView ? { y: 0, opacity: 1 } : { y: '-100%', opacity: 0 },
-    transition: { duration: 0.6, delay: 0.4 },
-  }
-
-  const bottomAnimation = {
-    initial: { y: '100%', opacity: 0 },
-    animate: inView ? { y: 0, opacity: 1 } : { y: '100%', opacity: 0 },
-    transition: { duration: 0.6, delay: 0.4 },
-  }
-
   const services = [
     {
       icon: '/images/chooseus/chooseus-icon-1.svg',
@@ -37,9 +21,12 @@ const Work = () => {
   return (
     <section className='' id='work'>
       <div className='container px-4 mx-auto lg:max-w-(--breakpoint-xl)'>
-        <div ref={ref} className='grid grid-cols-12 items-center'>
+        <div className='grid grid-cols-12 items-center'>
           <motion.div
-            {...bottomAnimation}
+            initial={{ y: '100%', opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            viewport={{ once: true, amount: 0.3 }}
             className='lg:col-span-7 col-span-12'>
             <div className='flex flex-col gap-3'>
               <p className="text-white font-medium">
@@ -58,6 +45,7 @@ const Work = () => {
                       alt={`${service.text} icon`}
                       width={25}
                       height={25}
+                      loading="lazy"
                     />
                   </div>
                   <p className='text-white font-medium'>{service.text}</p>
@@ -65,17 +53,19 @@ const Work = () => {
               ))}
             </div>
           </motion.div>
-          <motion.div {...TopAnimation} className='lg:col-span-5 col-span-12'>
+          <div className='lg:col-span-5 col-span-12'>
             <div className='2xl:-mr-40 mt-9 flex justify-center'>
               <Image
                 src='/images/work/img-work-with-us.png'
-                alt='image'
+                alt='Work with us illustration'
                 width={600}
                 height={425}
                 className='lg:w-full'
+                loading="lazy"
+                sizes="(max-width: 1024px) 100vw, 600px"
               />
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

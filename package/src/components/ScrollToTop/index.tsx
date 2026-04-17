@@ -1,8 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const SCROLL_THRESHOLD = 300;
 
 export default function ScrollToTop() {
   const [isVisible, setIsVisible] = useState(false);
+  const frameRef = useRef<number | null>(null);
+  const isVisibleRef = useRef(false);
 
   // Top: 0 takes us all the way back to the top of the page
   // Behavior: smooth keeps it smooth!
@@ -14,18 +18,36 @@ export default function ScrollToTop() {
   };
 
   useEffect(() => {
-    // Button is displayed after scrolling for 500 pixels
     const toggleVisibility = () => {
-      if (window.pageYOffset > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
+      const nextIsVisible = window.pageYOffset > SCROLL_THRESHOLD;
+
+      if (nextIsVisible !== isVisibleRef.current) {
+        isVisibleRef.current = nextIsVisible;
+        setIsVisible(nextIsVisible);
       }
     };
 
-    window.addEventListener("scroll", toggleVisibility);
+    const handleScroll = () => {
+      if (frameRef.current !== null) {
+        return;
+      }
 
-    return () => window.removeEventListener("scroll", toggleVisibility);
+      frameRef.current = window.requestAnimationFrame(() => {
+        frameRef.current = null;
+        toggleVisibility();
+      });
+    };
+
+    toggleVisibility();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    };
   }, []);
 
   return (

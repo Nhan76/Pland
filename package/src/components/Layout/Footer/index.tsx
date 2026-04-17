@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import Link from "next/link";
 import { headerData } from "../Header/Navigation/menuData";
 import { footerlabels } from "@/app/api/data";
-import { Icon } from "@iconify/react";
+import { Facebook, Instagram, Twitter } from "lucide-react";
 import Logo from "../Header/Logo";
 
 const Footer: FC = () => {
@@ -18,26 +18,20 @@ const Footer: FC = () => {
             </p>
             <div className="flex gap-6 items-center relative z-1">
               <Link href="https://www.facebook.com/" className="group">
-                <Icon
-                  icon="fa6-brands:facebook-f"
-                  width="24"
-                  height="24"
+                <Facebook
+                  size={24}
                   className="text-white group-hover:text-primary"
                 />
               </Link>
               <Link href="https://www.instagram.com/" className="group">
-                <Icon
-                  icon="fa6-brands:instagram"
-                  width="24"
-                  height="24"
+                <Instagram
+                  size={24}
                   className="text-white group-hover:text-primary"
                 />
               </Link>
               <Link href="https://www.twitter.com/" className="group">
-                <Icon
-                  icon="fa6-brands:x-twitter"
-                  width="24"
-                  height="24"
+                <Twitter
+                  size={24}
                   className="text-white group-hover:text-primary"
                 />
               </Link>
