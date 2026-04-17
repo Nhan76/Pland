@@ -8,7 +8,7 @@ const NotFound = () => {
       <div className='container px-4 mx-auto'>
         <div className='-mx-4 flex flex-wrap items-center'>
           <div className='w-full px-4 md:w-5/12 lg:w-6/12'>
-            <div className='relative mx-auto aspect-129/138 max-w-[357px] text-center'>
+            <div className='relative mx-auto aspect-129/138 max-w-89.25 text-center'>
               <Image
                 src='/images/404.svg'
                 alt='image'
@@ -60,7 +60,7 @@ const NotFound = () => {
               </p>
               <Link
                 href='/'
-                className='rounded-md px-7 py-3 text-base font-medium text-white transition hover:bg-blue-700 bg-primary'>
+                className='rounded-md bg-primary px-7 py-3 text-base font-medium text-primary-foreground transition hover:bg-primary/80'>
                 Go To Home
               </Link>
             </div>
