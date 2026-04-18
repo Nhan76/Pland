@@ -145,9 +145,7 @@ const dashboardTopHighlightStyle: CSSProperties = {
 
 const dashboardBottomRightFadeStyle: CSSProperties = {
   background:
-    "radial-gradient(24% 26% at 95% 93%, rgba(8, 11, 18, 0.96) 0%, rgba(8, 11, 18, 0.82) 24%, rgba(8, 11, 18, 0.44) 50%, rgba(8, 11, 18, 0.14) 68%, rgba(8, 11, 18, 0) 82%)",
-  maskImage: dashboardMaskImage,
-  WebkitMaskImage: dashboardMaskImage,
+    "radial-gradient(38% 42% at 102% 94%, hsl(222, 20%, 4%) 0%, hsl(222, 20%, 4%) 8%, hsl(222, 20%, 4%, 0.98) 16%, hsl(222, 20%, 4%, 0.92) 26%, hsl(222, 20%, 4%, 0.82) 38%, hsl(222, 20%, 4%, 0.65) 52%, hsl(222, 20%, 4%, 0.38) 68%, hsl(222, 20%, 4%, 0.12) 84%, transparent 100%)",
 };
 
 const floatingCardBaseStyle: CSSProperties = {
@@ -865,10 +863,6 @@ const VIPDashboard = () => {
                     <PortfolioView />
                   </div>
                 </div>
-                <div
-                  className="pointer-events-none absolute inset-px rounded-[11px] z-20"
-                  style={dashboardBottomRightFadeStyle}
-                />
               </div>
             </div>
           </div>

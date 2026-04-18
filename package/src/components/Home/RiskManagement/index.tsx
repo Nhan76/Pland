@@ -23,9 +23,9 @@ const RiskManagement = () => {
               className="relative mt-8 h-72 w-full max-w-md"
               style={{
                 maskImage:
-                  "radial-gradient(ellipse 130% 130% at 15% 20%, black 35%, transparent 65%)",
+                  "radial-gradient(120% 100% at 80% 75%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
                 WebkitMaskImage:
-                  "radial-gradient(ellipse 130% 130% at 15% 20%, black 35%, transparent 65%)",
+                  "radial-gradient(120% 100% at 80% 75%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
               }}
             >
               {/* Card 1 */}
@@ -36,11 +36,16 @@ const RiskManagement = () => {
                   animationDelay: "0s",
                   background:
                     "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
+                  filter: "drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4))",
                 }}
               >
                 <div
                   className="rounded-[11px] px-5 py-4"
-                  style={{ background: "#2a2a2a" }}
+                  style={{
+                    background: "#2a2a2a",
+                    boxShadow:
+                      "0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+                  }}
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="size-2 shrink-0 rounded-full bg-emerald-400"></span>
@@ -65,11 +70,16 @@ const RiskManagement = () => {
                   animationDelay: "-3s",
                   background:
                     "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
+                  filter: "drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4))",
                 }}
               >
                 <div
                   className="rounded-[11px] px-5 py-4"
-                  style={{ background: "#2a2a2a" }}
+                  style={{
+                    background: "#2a2a2a",
+                    boxShadow:
+                      "0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+                  }}
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="size-2 shrink-0 rounded-full bg-orange-400"></span>
@@ -94,11 +104,16 @@ const RiskManagement = () => {
                   animationDelay: "-6s",
                   background:
                     "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
+                  filter: "drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4))",
                 }}
               >
                 <div
                   className="rounded-[11px] px-5 py-4"
-                  style={{ background: "#2a2a2a" }}
+                  style={{
+                    background: "#2a2a2a",
+                    boxShadow:
+                      "0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+                  }}
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="size-2 shrink-0 rounded-full bg-red-500"></span>
