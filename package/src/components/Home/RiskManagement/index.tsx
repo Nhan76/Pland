@@ -23,9 +23,9 @@ const RiskManagement = () => {
               className="relative mt-8 h-72 w-full max-w-md"
               style={{
                 maskImage:
-                  "radial-gradient(120% 100% at 80% 75%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
+                  "radial-gradient(130% 130% at 15% 20%, black 35%, transparent 65%)",
                 WebkitMaskImage:
-                  "radial-gradient(120% 100% at 80% 75%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
+                  "radial-gradient(130% 130% at 15% 20%, black 35%, transparent 65%)",
               }}
             >
               {/* Card 1 */}
