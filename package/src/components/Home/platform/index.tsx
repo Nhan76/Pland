@@ -19,10 +19,10 @@ const Platform = () => {
             <p className="text-white font-medium">
               AI <span className="text-primary">feature</span>
             </p>
-            <h2 className="mt-4 text-white sm:text-[40px] text-3xl">
+            <h2 className="mt-4 text-white text-2xl sm:text-[40px]">
               Cross-module intelligence for every portfolio review
             </h2>
-            <p className="mt-6 text-lg text-muted/60">
+            <p className="mt-6 text-sm sm:text-lg text-muted/60">
               PLAND connects positions, signals, and history into one
               explainable AI view for consistent portfolio decisions.
             </p>

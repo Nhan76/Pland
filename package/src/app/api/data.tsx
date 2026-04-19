@@ -1,7 +1,7 @@
 export const footerlabels: { label: string; herf: string }[] = [
   { label: "Overview", herf: "/#main-banner" },
-  { label: "Workflow", herf: "/#development" },
-  { label: "Guardrails", herf: "/#upgrade" },
+  { label: "AI Platform", herf: "/#platform" },
+  { label: "Guardrails", herf: "/#guardrails" },
   { label: "FAQ", herf: "/#faq" },
 ];
 
@@ -84,32 +84,6 @@ export const pricedata: {
   },
 ];
 
-export const portfolioData: { image: string; title: string }[] = [
-  {
-    image: "/images/portfolio/portfolio-icon-1.svg",
-    title: "Unified portfolio syncing",
-  },
-  {
-    image: "/images/portfolio/portfolio-icon-2.svg",
-    title: "Multi-agent market review",
-  },
-  {
-    image: "/images/portfolio/portfolio-icon-3.svg",
-    title: "Explainable action trace",
-  },
-];
-
-export const upgradeData: { title: string }[] = [
-  { title: "Cash ratio awareness" },
-  { title: "Concentration limits" },
-  { title: "Weak trend exposure checks" },
-  { title: "Bull and bear regime detection" },
-  { title: "Snapshot-based decisions" },
-  { title: "Transparent audit trail" },
-  { title: "Actionable risk alerts" },
-  { title: "Consistent portfolio reviews" },
-];
-
 export const perksData: {
   icon: string;
   title: string;
@@ -134,43 +108,4 @@ export const perksData: {
     text: "Trace logs turn each review into a repeatable feedback loop for better portfolio discipline.",
     space: "lg:mt-4",
   },
-];
-
-export const timelineData: {
-  icon: string;
-  title: string;
-  text: string;
-  position: string;
-}[] = [
-  {
-    icon: "/images/timeline/icon-planning.svg",
-    title: "Sync and snapshot",
-    text: "Lock holdings and price context into one consistent review state.",
-    position: "md:top-0 md:left-0",
-  },
-  {
-    icon: "/images/timeline/icon-refinement.svg",
-    title: "Analyze context",
-    text: "Combine technical, sentiment, and portfolio structure signals.",
-    position: "md:top-0 md:right-0",
-  },
-  {
-    icon: "/images/timeline/icon-prototype.svg",
-    title: "Debate the trade",
-    text: "Bull and bear agents challenge the case before a manager responds.",
-    position: "md:bottom-0 md:left-0",
-  },
-  {
-    icon: "/images/timeline/icon-support.svg",
-    title: "Apply guardrails",
-    text: "Risk rules test exposure, cash, and concentration before any action.",
-    position: "md:bottom-0 md:right-0",
-  },
-];
-
-export const CryptoData: { name: string; price: number }[] = [
-  { name: "Bitcoin BTC/USD", price: 67646.84 },
-  { name: "Ethereum ETH/USD", price: 2515.93 },
-  { name: "Bitcoin Cash BTC/USD", price: 366.96 },
-  { name: "Litecoin LTC/USD", price: 61504.54 },
 ];
