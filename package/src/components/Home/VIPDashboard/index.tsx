@@ -106,7 +106,7 @@ const DEFENDER_TILT = {
 } as const;
 
 const dashboardThemeStyle = {
-  "--vip-dashboard-surface": "rgb(30 30 30)",
+  "--vip-dashboard-surface": "var(--background)",
   "--vip-dashboard-card-surface":
     "color-mix(in srgb, var(--vip-dashboard-surface) 97%, white 3%)",
 } as CSSProperties;
@@ -815,11 +815,189 @@ const VIPDashboard = () => {
 
   return (
     <section
+      id="guardrails"
       className="pt-16 pb-16 md:pt-24 md:pb-24 relative z-1"
       style={dashboardThemeStyle}
     >
       <div className="container px-4 sm:px-6">
         <div className="mx-auto max-w-7xl">
+          {/* Trading Journal Section Header */}
+          <div className="mb-28">
+            <div className="max-w-2xl">
+              <p className="text-white font-medium">
+                Performance <span className="text-primary">Tracking</span>
+              </p>
+              <h2 className="mt-4 text-white text-2xl sm:text-3xl lg:text-[40px]">
+                Trading Journal
+              </h2>
+              <p className="mt-6 text-base md:text-lg text-muted/60">
+                Track your portfolio performance, analyze win rates, and monitor stop-loss triggers with real-time insights.
+              </p>
+            </div>
+          </div>
+
+          {/* VIP Profile Dashboard */}
+          <div className="relative mx-auto max-w-[1240px] px-6 pb-10 sm:px-10 lg:px-16 mb-20">
+            <div className="origin-top scale-[0.78] -mb-[22%] sm:mb-0 sm:scale-100">
+              <div className="relative mx-auto w-full max-w-lg pb-12 md:[perspective:1200px]" style={{ top: "-2rem", marginBottom: "-2rem" } as CSSProperties}>
+
+                {/* Main VIP Card */}
+                <div
+                  className="relative overflow-hidden rounded-xl bg-white/[0.03] backdrop-blur-sm md:[transform:rotateX(4deg)_rotateY(-2deg)]"
+                  style={{ boxShadow: "rgba(0, 0, 0, 0.3) 0px 8px 30px" } as CSSProperties}
+                >
+                  {/* Gradient Background */}
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background: "radial-gradient(circle at 78% 12%, rgba(239, 68, 68, 0.12), transparent 34%), radial-gradient(circle at 22% 78%, rgba(248, 113, 113, 0.06), transparent 42%)"
+                    } as CSSProperties}
+                  />
+
+                  {/* Header */}
+                  <div className="relative flex items-center justify-between px-5 py-3">
+                    <div className="flex items-center gap-2.5">
+                      <span className="inline-block size-2 rounded-full bg-primary" />
+                      <span className="text-sm font-semibold text-white/80">Portfolio Distribution</span>
+                    </div>
+                    <span className="text-xs font-medium text-white/40">Total: $243.6K</span>
+                  </div>
+
+                  {/* Card Content - Pie Chart */}
+                  <div className="relative p-5">
+                    <div className="flex items-center justify-center">
+                      <div className="w-full max-w-[240px]">
+                        <ResponsiveContainer width="100%" height={240}>
+                          <PieChart>
+                            <Pie
+                              data={allocationData}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={95}
+                              paddingAngle={3}
+                              cornerRadius={8}
+                              dataKey="value"
+                              stroke="none"
+                            >
+                              {allocationData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} opacity={0.9} stroke="none" />
+                              ))}
+                            </Pie>
+                            <Tooltip
+                              contentStyle={{
+                                background: "rgba(26, 26, 26, 0.95)",
+                                border: "1px solid rgba(255, 255, 255, 0.1)",
+                                borderRadius: "8px",
+                                fontSize: "14px",
+                              }}
+                              itemStyle={{ color: "#fff" }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* Asset Legend */}
+                    <div className="mt-5 space-y-2.5">
+                      {allocationData.map((asset, index) => (
+                        <div key={index} className="flex items-center justify-between gap-3">
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <span
+                              className="size-2.5 shrink-0 rounded-full"
+                              style={{ background: asset.color } as CSSProperties}
+                            />
+                            <span className="text-sm text-white/70 font-medium">{asset.name}</span>
+                          </div>
+                          <span className="text-sm font-semibold text-white/90 tabular-nums">{asset.value}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Bottom Fade Layer */}
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
+                    style={{
+                      background: "linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 30%, transparent 100%)"
+                    } as CSSProperties}
+                  />
+                </div>
+
+                {/* Floating Card 1 - Stop Loss (Right) */}
+                <div
+                  className="vip-float-layer pointer-events-none absolute -top-4 -right-4 z-20 hidden md:block md:w-52 md:-right-28 lg:-right-40"
+                  style={{
+                    animation: "8.4s ease-in-out -1.8s infinite normal none running vip-float",
+                    willChange: "transform",
+                    "--vip-float-x": "-4px",
+                    "--vip-float-y": "-10px",
+                  } as CSSProperties}
+                >
+                  <div
+                    className="w-full rounded-lg bg-red-500/[0.05] ring-1 ring-red-400/[0.12] backdrop-blur-md p-3"
+                    style={{
+                      transform: "rotateX(3deg) rotateY(-5deg) skewY(-1deg) translateZ(20px)",
+                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)"
+                    } as CSSProperties}
+                  >
+                    <div className="mb-1.5 flex items-center gap-2">
+                      <svg className="size-4 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                        <path d="M12 9v4m0 0v4m0-4h4m-4 0H8" />
+                        <circle cx="12" cy="12" r="10" />
+                      </svg>
+                      <span className="text-xs font-medium text-white/40">Stop Loss Active</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-2xl font-semibold text-red-400">-5.2%</span>
+                      <span className="text-xs text-white/30">trigger</span>
+                    </div>
+                    <div className="mt-2 text-xs text-white/25">BTC: -3.8% · ETH: -6.5%</div>
+                  </div>
+                </div>
+
+                {/* Floating Card 2 - Win Rate (Left) */}
+                <div
+                  className="vip-float-layer pointer-events-none absolute top-20 z-20 hidden md:block md:w-52 md:-left-28 lg:-left-40"
+                  style={{
+                    animation: "9.2s ease-in-out -4.1s infinite normal none running vip-float",
+                    willChange: "transform",
+                    "--vip-float-x": "6px",
+                    "--vip-float-y": "8px",
+                  } as CSSProperties}
+                >
+                  <div
+                    className="w-full rounded-lg bg-primary/[0.05] ring-1 ring-primary/[0.12] backdrop-blur-md p-3"
+                    style={{
+                      transform: "rotateX(2deg) rotateY(4deg) skewY(0.5deg) translateZ(15px)",
+                      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)"
+                    } as CSSProperties}
+                  >
+                    <div className="mb-1.5 flex items-center gap-2">
+                      <svg className="size-4 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                        <polyline points="22 4 12 14.01 9 11.01" />
+                      </svg>
+                      <span className="text-xs font-medium text-white/40">Win Rate</span>
+                    </div>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-2xl font-semibold text-primary">68.4%</span>
+                      <span className="text-xs text-white/30">success</span>
+                    </div>
+                    <div className="mt-2 flex gap-2 text-xs">
+                      <span className="text-white/25">32 wins</span>
+                      <span className="text-white/15">·</span>
+                      <span className="text-white/25">15 losses</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Gradient Overlay */}
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background to-transparent" />
+              </div>
+            </div>
+          </div>
+
           {/* Section Header */}
           <div className="max-w-2xl mb-12">
             <p className="text-white font-medium">
@@ -865,6 +1043,14 @@ const VIPDashboard = () => {
                 </div>
               </div>
             </div>
+
+            {/* Bottom Fade Layer */}
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0 h-72 z-10"
+              style={{
+                background: "linear-gradient(to top, var(--background) 0%, color-mix(in srgb, var(--background) 85%, transparent 15%) 25%, color-mix(in srgb, var(--background) 50%, transparent 50%) 50%, transparent 100%)"
+              } as CSSProperties}
+            />
           </div>
         </div>
       </div>

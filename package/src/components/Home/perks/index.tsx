@@ -23,7 +23,7 @@ const perksSectionStyle = {
 
 const Perks = () => {
   return (
-    <section className="relative py-16 md:py-24" style={perksSectionStyle}>
+    <section id="perks" className="relative py-16 md:py-24" style={perksSectionStyle}>
       <div className="container px-4 relative z-2">
         <div className="text-center">
           <div className="flex flex-col gap-4">

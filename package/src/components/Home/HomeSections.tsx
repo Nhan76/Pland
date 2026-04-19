@@ -38,15 +38,15 @@ const HomeSections = () => {
         <Portfolio />
       </LazySection>
 
-      <LazySection minHeight={520}>
+      <LazySection sectionId='alerts' minHeight={520}>
         <RiskManagement />
       </LazySection>
 
-      <LazySection minHeight={680}>
+      <LazySection sectionId='guardrails' minHeight={680}>
         <VIPDashboard />
       </LazySection>
 
-      <LazySection minHeight={620}>
+      <LazySection sectionId='perks' minHeight={620}>
         <Perks />
       </LazySection>
 

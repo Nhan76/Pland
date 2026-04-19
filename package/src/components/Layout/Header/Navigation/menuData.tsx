@@ -1,9 +1,10 @@
 import { HeaderItem } from "@/types/menu";
 
 export const headerData: HeaderItem[] = [
-  { label: "Why PLAND", href: "/#work" },
-  { label: "Workflow", href: "/#development" },
-  { label: "Capabilities", href: "/#portfolio" },
-  { label: "Guardrails", href: "/#upgrade" },
+  { label: "Mission", href: "/#mission" },
+  { label: "AI Platform", href: "/#platform" },
+  { label: "Portfolio", href: "/#portfolio" },
+  { label: "Risk Alerts", href: "/#alerts" },
+  { label: "Guardrails", href: "/#guardrails" },
   { label: "FAQ", href: "/#faq" },
 ];

@@ -3,7 +3,7 @@ import React from "react";
 
 const RiskManagement = () => {
   return (
-    <section className="pt-0 pb-16 md:pt-0 md:pb-24 relative z-1">
+    <section id="alerts" className="pt-0 pb-16 md:pt-0 md:pb-24 relative z-1">
       <div className="container px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="max-w-2xl">
@@ -132,6 +132,11 @@ const RiskManagement = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Section Divider */}
+      <div className="container px-4 sm:px-6 mt-16 md:mt-24">
+        <div className="w-full h-px bg-linear-to-r from-white/8 via-white/4 to-transparent" />
       </div>
     </section>
   );

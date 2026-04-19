@@ -421,6 +421,15 @@ section {
   }
 }
 
+@keyframes vip-float {
+  0%, 100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(var(--vip-float-x, 0), var(--vip-float-y, 0));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
