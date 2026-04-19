@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 
 import { usePageIntro } from "@/components/Layout/PageIntroProvider";
@@ -10,7 +11,7 @@ const LaserFlow = dynamic(() => import("./LaserFlow"), {
 });
 
 const HERO_LASER_FLOW_WRAPPER_CLASS =
-  "absolute left-1/2 -translate-x-1/2 w-full max-w-7xl top-[-18%] h-[136%] opacity-90 mask-[linear-gradient(180deg,black,black_86%,transparent)]";
+  "absolute left-1/2 -translate-x-1/2 w-full max-w-7xl top-[-18%] h-[136%] mask-[linear-gradient(180deg,black,black_86%,transparent)]";
 
 const HERO_LASER_FLOW_PROPS = {
   className: "mix-blend-screen",
@@ -38,9 +39,15 @@ const HeroBackground = () => {
 
   return (
     <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
-      <div className={HERO_LASER_FLOW_WRAPPER_CLASS}>
-        {showLaserFlow ? <LaserFlow {...HERO_LASER_FLOW_PROPS} /> : null}
-      </div>
+      <motion.div
+        className={HERO_LASER_FLOW_WRAPPER_CLASS}
+        initial={false}
+        animate={{ opacity: showLaserFlow ? 0.9 : 0 }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+        style={{ willChange: "opacity" }}
+      >
+        <LaserFlow {...HERO_LASER_FLOW_PROPS} />
+      </motion.div>
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(22,199,132,0.14),transparent_32%),linear-gradient(180deg,rgba(5,16,26,0.08)_0%,rgba(5,16,26,0.4)_58%,var(--background)_100%)]" />
       <div className="absolute left-1/2 top-16 h-44 w-44 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />

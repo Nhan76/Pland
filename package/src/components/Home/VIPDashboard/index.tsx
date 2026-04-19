@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, memo, type CSSProperties, type ReactNode } from "react";
+import React, { memo, type CSSProperties, type ReactNode } from "react";
 import { motion, type Variants } from "framer-motion";
 import {
   AreaChart,
@@ -14,7 +14,11 @@ import {
   Tooltip
 } from "recharts";
 
+import { useMotionProfile } from "@/hooks/useMotionProfile";
+import { useVisibleOnce } from "@/hooks/useVisibleOnce";
 import { cn } from "@/lib/utils";
+
+const CHART_TRIGGER_MARGIN = "0px 0px 35% 0px";
 
 const mockPerformanceData = [
   { time: "7:00 AM", value: 238100 },
@@ -143,11 +147,6 @@ const dashboardTopHighlightStyle: CSSProperties = {
     "radial-gradient(circle at 0% 0%, rgba(22, 199, 132, 0.12) 0%, rgba(22, 199, 132, 0.04) 40%, transparent 70%)",
 };
 
-const dashboardBottomRightFadeStyle: CSSProperties = {
-  background:
-    "radial-gradient(38% 42% at 102% 94%, hsl(222, 20%, 4%) 0%, hsl(222, 20%, 4%) 8%, hsl(222, 20%, 4%, 0.98) 16%, hsl(222, 20%, 4%, 0.92) 26%, hsl(222, 20%, 4%, 0.82) 38%, hsl(222, 20%, 4%, 0.65) 52%, hsl(222, 20%, 4%, 0.38) 68%, hsl(222, 20%, 4%, 0.12) 84%, transparent 100%)",
-};
-
 const floatingCardBaseStyle: CSSProperties = {
   transformStyle: "preserve-3d",
   willChange: "transform",
@@ -207,6 +206,7 @@ type DashboardAreaChartProps = {
   data: ChartPoint[];
   gradientId: string;
   strokeColor: string;
+  isAnimationActive: boolean;
 };
 
 type FloatingDashboardCardProps = {
@@ -313,36 +313,11 @@ const DashboardAreaChart = memo(({
   data,
   gradientId,
   strokeColor,
+  isAnimationActive,
 }: DashboardAreaChartProps) => {
-  const [animationInstance, setAnimationInstance] = useState(0);
-  const [isChartReady, setIsChartReady] = useState(false);
-
-  useEffect(() => {
-    setIsChartReady(false);
-
-    let firstFrame = 0;
-    let secondFrame = 0;
-
-    firstFrame = requestAnimationFrame(() => {
-      secondFrame = requestAnimationFrame(() => {
-        setAnimationInstance((current) => current + 1);
-        setIsChartReady(true);
-      });
-    });
-
-    return () => {
-      cancelAnimationFrame(firstFrame);
-      cancelAnimationFrame(secondFrame);
-    };
-  }, [chartKey]);
-
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart
-        key={`${chartKey}-${animationInstance}`}
-        data={data}
-        margin={{ top: 5, right: 0, left: 0, bottom: 10 }}
-      >
+      <AreaChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 10 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={strokeColor} stopOpacity={0.2} />
@@ -361,22 +336,20 @@ const DashboardAreaChart = memo(({
             typeof value === "number" ? `$${value.toLocaleString()}` : String(value)
           }
         />
-        {isChartReady ? (
-          <Area
-            key={`${chartKey}-area-${animationInstance}`}
-            type="monotone"
-            dataKey="value"
-            stroke={strokeColor}
-            strokeWidth={2}
-            fillOpacity={1}
-            fill={`url(#${gradientId})`}
-            activeDot={{ r: 4, strokeWidth: 0, fill: strokeColor }}
-            isAnimationActive
-            animationBegin={0}
-            animationDuration={500}
-            animationEasing="ease-out"
-          />
-        ) : null}
+        <Area
+          key={chartKey}
+          type="monotone"
+          dataKey="value"
+          stroke={strokeColor}
+          strokeWidth={2}
+          fillOpacity={1}
+          fill={`url(#${gradientId})`}
+          activeDot={{ r: 4, strokeWidth: 0, fill: strokeColor }}
+          isAnimationActive={isAnimationActive}
+          animationBegin={0}
+          animationDuration={500}
+          animationEasing="ease-out"
+        />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -384,16 +357,26 @@ const DashboardAreaChart = memo(({
 
 DashboardAreaChart.displayName = 'DashboardAreaChart';
 
-const PortfolioView = memo(() => (
-  <motion.div
-    key="portfolio"
-    variants={containerVariants}
-    initial="hidden"
-    animate="show"
-    exit="exit"
-    className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
-    style={preserve3DStyle}
-  >
+const PortfolioView = memo(() => {
+  const motionProfile = useMotionProfile();
+  const { ref: chartViewportRef, hasEnteredView } = useVisibleOnce<HTMLDivElement>({
+    rootMargin: CHART_TRIGGER_MARGIN,
+    threshold: 0.01,
+  });
+  const shouldAnimateCharts =
+    motionProfile.chartAnimationsEnabled && hasEnteredView;
+  const chartAnimationState = shouldAnimateCharts ? "entered" : "idle";
+
+  return (
+    <motion.div
+      key="portfolio"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="exit"
+      className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
+      style={preserve3DStyle}
+    >
     <motion.div
       variants={itemVariantsLeft}
       className="flex flex-col gap-4"
@@ -501,6 +484,7 @@ const PortfolioView = memo(() => (
     </motion.div>
 
     <motion.div
+      ref={chartViewportRef}
       variants={itemVariantsLeft}
       className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3"
       style={preserve3DStyle}
@@ -521,6 +505,7 @@ const PortfolioView = memo(() => (
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
+                key={`allocation-${chartAnimationState}`}
                 data={allocationData}
                 innerRadius={60}
                 outerRadius={80}
@@ -528,6 +513,7 @@ const PortfolioView = memo(() => (
                 dataKey="value"
                 stroke="none"
                 cornerRadius={2}
+                isAnimationActive={shouldAnimateCharts}
               >
                 {allocationData.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />
@@ -588,25 +574,37 @@ const PortfolioView = memo(() => (
             data={mockPerformanceData}
             gradientId="portfolioGradientPerf"
             strokeColor="#16c784"
+            isAnimationActive={shouldAnimateCharts}
           />
         </div>
       </FloatingDashboardCard>
     </motion.div>
   </motion.div>
-));
+  );
+});
 
 PortfolioView.displayName = 'PortfolioView';
 
-const RiskView = memo(() => (
-  <motion.div
-    key="risk"
-    variants={containerVariants}
-    initial="hidden"
-    animate="show"
-    exit="exit"
-    className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
-    style={preserve3DStyle}
-  >
+const RiskView = memo(() => {
+  const motionProfile = useMotionProfile();
+  const { ref: chartViewportRef, hasEnteredView } = useVisibleOnce<HTMLDivElement>({
+    rootMargin: CHART_TRIGGER_MARGIN,
+    threshold: 0.01,
+  });
+  const shouldAnimateCharts =
+    motionProfile.chartAnimationsEnabled && hasEnteredView;
+  const chartAnimationState = shouldAnimateCharts ? "entered" : "idle";
+
+  return (
+    <motion.div
+      key="risk"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      exit="exit"
+      className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
+      style={preserve3DStyle}
+    >
     <motion.div
       variants={itemVariantsRight}
       className="flex flex-col gap-4"
@@ -708,6 +706,7 @@ const RiskView = memo(() => (
     </motion.div>
 
     <motion.div
+      ref={chartViewportRef}
       variants={itemVariantsRight}
       className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3"
       style={preserve3DStyle}
@@ -728,6 +727,7 @@ const RiskView = memo(() => (
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
+                key={`risk-allocation-${chartAnimationState}`}
                 data={riskAllocationData}
                 innerRadius={60}
                 outerRadius={80}
@@ -735,6 +735,7 @@ const RiskView = memo(() => (
                 dataKey="value"
                 stroke="none"
                 cornerRadius={2}
+                isAnimationActive={shouldAnimateCharts}
               >
                 {riskAllocationData.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />
@@ -802,16 +803,27 @@ const RiskView = memo(() => (
             data={mockRiskData}
             gradientId="portfolioGradientRisk"
             strokeColor="#ea3943"
+            isAnimationActive={shouldAnimateCharts}
           />
         </div>
       </FloatingDashboardCard>
     </motion.div>
   </motion.div>
-));
+  );
+});
 
 RiskView.displayName = 'RiskView';
 
 const VIPDashboard = () => {
+  const motionProfile = useMotionProfile();
+  const { ref: distributionViewportRef, hasEnteredView: hasEnteredDistribution } =
+    useVisibleOnce<HTMLDivElement>({
+      rootMargin: CHART_TRIGGER_MARGIN,
+      threshold: 0.01,
+    });
+  const shouldAnimateDistribution =
+    motionProfile.chartAnimationsEnabled && hasEnteredDistribution;
+  const distributionAnimationState = shouldAnimateDistribution ? "entered" : "idle";
 
   return (
     <section
@@ -866,10 +878,11 @@ const VIPDashboard = () => {
                   {/* Card Content - Pie Chart */}
                   <div className="relative p-5">
                     <div className="flex items-center justify-center">
-                      <div className="w-full max-w-[240px]">
+                      <div ref={distributionViewportRef} className="w-full max-w-[240px]">
                         <ResponsiveContainer width="100%" height={240}>
                           <PieChart>
                             <Pie
+                              key={`vip-allocation-${distributionAnimationState}`}
                               data={allocationData}
                               cx="50%"
                               cy="50%"
@@ -879,6 +892,7 @@ const VIPDashboard = () => {
                               cornerRadius={8}
                               dataKey="value"
                               stroke="none"
+                              isAnimationActive={shouldAnimateDistribution}
                             >
                               {allocationData.map((entry, index) => (
                                 <Cell key={`cell-${index}`} fill={entry.color} opacity={0.9} stroke="none" />

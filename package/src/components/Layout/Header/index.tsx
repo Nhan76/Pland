@@ -1,5 +1,4 @@
 "use client";
-"use client";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -12,7 +11,7 @@ import { cn } from "@/lib/utils";
 import HeaderLink from "../Header/Navigation/HeaderLink";
 import MobileHeaderLink from "../Header/Navigation/MobileHeaderLink";
 import { headerData } from "../Header/Navigation/menuData";
-import { usePageIntro } from "../PageIntroProvider";
+import { usePageIntroHeader } from "../PageIntroProvider";
 import Logo from "./Logo";
 import { useHeaderBehavior } from "./useHeaderBehavior";
 
@@ -34,7 +33,7 @@ const Header: React.FC = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const { isScrolled, isVisible } = useHeaderBehavior(navbarOpen);
-  const { showHeader, isComplete } = usePageIntro();
+  const { showHeader, isComplete } = usePageIntroHeader();
 
   useEffect(() => {
     const handleHashChange = () => {

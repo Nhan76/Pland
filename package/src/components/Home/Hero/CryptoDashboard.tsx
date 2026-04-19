@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, memo } from "react";
+import React, { memo } from "react";
 import { motion, Variants } from "framer-motion";
 import {
   AreaChart,
@@ -12,6 +12,8 @@ import {
   Cell,
   Tooltip
 } from "recharts";
+
+import { useMotionProfile } from "@/hooks/useMotionProfile";
 
 const mockPerformanceData = [
   { time: "7:00 AM", value: 238100 },
@@ -85,6 +87,7 @@ type DashboardAreaChartProps = {
   data: ChartPoint[];
   gradientId: string;
   strokeColor: string;
+  isAnimationActive: boolean;
 };
 
 const containerVariants: Variants = {
@@ -108,36 +111,11 @@ const DashboardAreaChart = memo(({
   data,
   gradientId,
   strokeColor,
+  isAnimationActive,
 }: DashboardAreaChartProps) => {
-  const [animationInstance, setAnimationInstance] = useState(0);
-  const [isChartReady, setIsChartReady] = useState(false);
-
-  useEffect(() => {
-    setIsChartReady(false);
-
-    let firstFrame = 0;
-    let secondFrame = 0;
-
-    firstFrame = requestAnimationFrame(() => {
-      secondFrame = requestAnimationFrame(() => {
-        setAnimationInstance((current) => current + 1);
-        setIsChartReady(true);
-      });
-    });
-
-    return () => {
-      cancelAnimationFrame(firstFrame);
-      cancelAnimationFrame(secondFrame);
-    };
-  }, [chartKey]);
-
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <AreaChart
-        key={`${chartKey}-${animationInstance}`}
-        data={data}
-        margin={{ top: 5, right: 0, left: 0, bottom: 10 }}
-      >
+      <AreaChart data={data} margin={{ top: 5, right: 0, left: 0, bottom: 10 }}>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={strokeColor} stopOpacity={0.2} />
@@ -156,22 +134,20 @@ const DashboardAreaChart = memo(({
             typeof value === "number" ? `$${value.toLocaleString()}` : String(value)
           }
         />
-        {isChartReady ? (
-          <Area
-            key={`${chartKey}-area-${animationInstance}`}
-            type="monotone"
-            dataKey="value"
-            stroke={strokeColor}
-            strokeWidth={2}
-            fillOpacity={1}
-            fill={`url(#${gradientId})`}
-            activeDot={{ r: 4, strokeWidth: 0, fill: strokeColor }}
-            isAnimationActive
-            animationBegin={0}
-            animationDuration={500}
-            animationEasing="ease-out"
-          />
-        ) : null}
+        <Area
+          key={chartKey}
+          type="monotone"
+          dataKey="value"
+          stroke={strokeColor}
+          strokeWidth={2}
+          fillOpacity={1}
+          fill={`url(#${gradientId})`}
+          activeDot={{ r: 4, strokeWidth: 0, fill: strokeColor }}
+          isAnimationActive={isAnimationActive}
+          animationBegin={0}
+          animationDuration={500}
+          animationEasing="ease-out"
+        />
       </AreaChart>
     </ResponsiveContainer>
   );
@@ -179,13 +155,17 @@ const DashboardAreaChart = memo(({
 
 DashboardAreaChart.displayName = 'DashboardAreaChart';
 
-const PortfolioView = memo(() => (
-  <motion.div
-    variants={containerVariants}
-    initial="hidden"
-    animate="show"
-    className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
-  >
+const PortfolioView = memo(() => {
+  const motionProfile = useMotionProfile();
+  const shouldAnimateCharts = motionProfile.chartAnimationsEnabled;
+
+  return (
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+      className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
+    >
     {/* Total Value & Metrics Row */}
     <motion.div variants={itemVariantsLeft} className="flex flex-col gap-4">
       <div className="flex flex-col">
@@ -278,6 +258,7 @@ const PortfolioView = memo(() => (
                 dataKey="value"
                 stroke="none"
                 cornerRadius={2}
+                isAnimationActive={shouldAnimateCharts}
               >
                 {allocationData.map((entry, index) => (
                   <Cell key={index} fill={entry.color} />
@@ -332,13 +313,15 @@ const PortfolioView = memo(() => (
             data={mockPerformanceData}
             gradientId="cmcGradientPerf"
             strokeColor="#16c784"
+            isAnimationActive={shouldAnimateCharts}
           />
         </div>
       </div>
       
     </motion.div>
   </motion.div>
-));
+  );
+});
 
 PortfolioView.displayName = 'PortfolioView';
 

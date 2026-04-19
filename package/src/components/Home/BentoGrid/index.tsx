@@ -12,20 +12,15 @@ import {
   Tooltip
 } from "recharts";
 import { SpotlightCard } from "@/components/ui/spotlight-card";
+import { useMotionProfile } from "@/hooks/useMotionProfile";
+import { useVisibleOnce } from "@/hooks/useVisibleOnce";
 
-// Grid 1: AI Analytics Grid
+const CHART_TRIGGER_MARGIN = "0px 0px 35% 0px";
+
 const AIAnalysisGrid = () => {
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    // Phase 0: Start (wait 1500)
-    // Phase 1: Cursor clicks CTA (wait 400)
-    // Phase 2: Slide up and fade out (wait 600)
-    // Phase 3: Step 0 appears (wait 2000)
-    // Phase 4: Step 1 appears (wait 2000)
-    // Phase 5: Step 2 appears (wait 2000)
-    // Phase 6: Summary appears (wait 5000)
-    // Phase 7: Reset to 0 (wait 500)
     const delays = [1500, 400, 600, 2000, 2000, 2000, 5000, 500];
     const timer = setTimeout(() => {
       setPhase((p) => (p + 1) % 8);
@@ -51,8 +46,6 @@ const AIAnalysisGrid = () => {
       </div>
 
       <div className="relative flex flex-col w-full grow mt-6 z-10 justify-start">
-
-        {/* Fake Cursor & CTA Group */}
         <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none z-20 pb-[25%] lg:pb-16">
           <div className="relative flex justify-center">
             <motion.div
@@ -67,7 +60,6 @@ const AIAnalysisGrid = () => {
                Analyze
             </motion.div>
 
-            {/* Simulated Cursor */}
             <motion.div
                initial={{ x: 60, y: 60, opacity: 0 }}
                animate={{
@@ -87,10 +79,9 @@ const AIAnalysisGrid = () => {
           </div>
         </div>
 
-        {/* Analytics Steps Setup */}
         <div className="flex flex-col space-y-3 relative w-full pt-4">
           {steps.map((text, index) => {
-            const stepIndex = index + 3; // Steps start at phase 3
+            const stepIndex = index + 3;
             const isCompleted = phase > stepIndex;
             const isVisible = phase >= stepIndex;
 
@@ -100,13 +91,13 @@ const AIAnalysisGrid = () => {
                 layout
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 10 }} 
-                className={`flex items-start space-x-3 pointer-events-none`}    
+                className="flex items-start space-x-3 pointer-events-none"
               >
                 <div className="mt-0.5">
                   {isCompleted && phase !== 7 ? (
                     <Check className="h-4.5 w-4.5 shrink-0 text-primary" />
                   ) : (
-                    <Loader2 className={`h-4.5 w-4.5 shrink-0 ${isVisible && !isCompleted ? 'text-primary animate-spin' : 'text-transparent'}`} />
+                    <Loader2 className={`h-4.5 w-4.5 shrink-0 ${isVisible && !isCompleted ? "text-primary animate-spin" : "text-transparent"}`} />
                   )}
                 </div>
                 <span
@@ -124,7 +115,6 @@ const AIAnalysisGrid = () => {
             );
           })}
 
-          {/* Final summary */}
           <motion.div
              layout
              initial={{ opacity: 0, y: 10 }}
@@ -132,8 +122,8 @@ const AIAnalysisGrid = () => {
              transition={{ delay: 0.2 }}
              className="relative mt-4 wrap-break-word pointer-events-none"
           >
-             <p className={`text-sm leading-relaxed ${phase === 6 ? 'text-white/80' : 'text-transparent'}`}>
-               Portfolio is optimally diversified. <br className="hidden sm:block" /><span className={`${phase === 6 ? 'text-primary' : 'text-transparent'} font-medium`}>0 critical risk rules violated.</span> BTC dominance holds stable at 45%.
+             <p className={`text-sm leading-relaxed ${phase === 6 ? "text-white/80" : "text-transparent"}`}>
+               Portfolio is optimally diversified. <br className="hidden sm:block" /><span className={`${phase === 6 ? "text-primary" : "text-transparent"} font-medium`}>0 critical risk rules violated.</span> BTC dominance holds stable at 45%.
              </p>
           </motion.div>
         </div>
@@ -142,7 +132,6 @@ const AIAnalysisGrid = () => {
   );
 };
 
-// Grid 2: Risk Violation Alert Grid
 const INITIAL_ALERTS = [
   { id: 1, text: "Unusual outbound transfer detected", type: "warning" },
   { id: 2, text: "Smart contract upgrade on holdings", type: "warning" },
@@ -166,7 +155,7 @@ const RiskAlertGrid = () => {
       };
 
       setAlerts((prev) => [...prev.slice(1), newAlert]); 
-    }, 3000); // 3s interval for active scrolling effect
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -185,7 +174,7 @@ const RiskAlertGrid = () => {
       <div className="relative flex grow flex-col justify-center space-y-3 mt-4 pb-2 pt-2 overflow-hidden mask-[linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)]">
         <AnimatePresence mode="popLayout">
           {alerts.map((alert, index) => {
-            const centerIndex = 2; // Middle index for 5 items
+            const centerIndex = 2;
             const dist = Math.abs(centerIndex - index);
 
             return (
@@ -228,7 +217,6 @@ const RiskAlertGrid = () => {
   );
 };
 
-// Grid 3: AI Prediction
 const mockPredictionData = [
   { time: "Nov", value: 38000 },
   { time: "Dec", value: 42000 },
@@ -245,6 +233,15 @@ const mockPredictionData = [
 ];
 
 const AIPredictionGrid = () => {
+  const motionProfile = useMotionProfile();
+  const { ref: chartViewportRef, hasEnteredView } = useVisibleOnce<HTMLDivElement>({
+    rootMargin: CHART_TRIGGER_MARGIN,
+    threshold: 0.01,
+  });
+  const shouldAnimateChart =
+    motionProfile.chartAnimationsEnabled && hasEnteredView;
+  const chartAnimationState = shouldAnimateChart ? "entered" : "idle";
+
   return (
     <SpotlightCard className="flex flex-col justify-between p-8 sm:p-10 md:col-span-3">
       <div className="z-10 mb-6 flex flex-col sm:flex-row justify-between items-start gap-4">
@@ -272,7 +269,10 @@ const AIPredictionGrid = () => {
         </div>
       </div>
 
-      <div className="relative mt-4 h-80 w-full grow overflow-hidden">
+      <div
+        ref={chartViewportRef}
+        className="relative mt-4 h-80 w-full grow overflow-hidden"
+      >
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={mockPredictionData} margin={{ top: 10, right: 10, left: 0, bottom: 20 }}>
             <defs>
@@ -318,6 +318,7 @@ const AIPredictionGrid = () => {
               width={65}
             />
             <Area
+              key={`historical-${chartAnimationState}`}
               type="monotone"
               dataKey="value"
               name="Historical"
@@ -326,8 +327,10 @@ const AIPredictionGrid = () => {
               fillOpacity={1}
               fill="url(#colorValue)"
               activeDot={{ r: 5, strokeWidth: 0, fill: "#22c55e" }}
+              isAnimationActive={shouldAnimateChart}
             />
             <Area
+              key={`prediction-${chartAnimationState}`}
               type="monotone"
               dataKey="predict"
               name="AI Prediction"
@@ -337,6 +340,7 @@ const AIPredictionGrid = () => {
               fillOpacity={1}
               fill="url(#colorPredict)"
               activeDot={{ r: 5, strokeWidth: 0, fill: "#3b82f6" }}
+              isAnimationActive={shouldAnimateChart}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -349,11 +353,8 @@ export default function BentoGrid() {
   return (
     <div className="mt-8 sm:mt-12 relative z-20">
       <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-        {/* Row 1: AI Analytics (Left, spans 2) + Risk Alert (Right, spans 1) */}
         <AIAnalysisGrid />
         <RiskAlertGrid />
-        
-        {/* Row 2: Prediction Grid (Bottom, spans full width 3 cols) */}
         <AIPredictionGrid />
       </div>
     </div>
