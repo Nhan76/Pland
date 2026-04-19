@@ -10,12 +10,13 @@ const perksSectionStyle = {
   background: `linear-gradient(
     to bottom,
     var(--perks-previous-surface) 0%,
-    color-mix(
-      in srgb,
-      var(--perks-previous-surface) 42%,
-      var(--perks-current-surface) 58%
-    )
-      34%,
+    color-mix(in srgb, var(--perks-previous-surface) 92%, var(--perks-current-surface) 8%) 15%,
+    color-mix(in srgb, var(--perks-previous-surface) 82%, var(--perks-current-surface) 18%) 25%,
+    color-mix(in srgb, var(--perks-previous-surface) 70%, var(--perks-current-surface) 30%) 35%,
+    color-mix(in srgb, var(--perks-previous-surface) 55%, var(--perks-current-surface) 45%) 48%,
+    color-mix(in srgb, var(--perks-previous-surface) 38%, var(--perks-current-surface) 62%) 62%,
+    color-mix(in srgb, var(--perks-previous-surface) 22%, var(--perks-current-surface) 78%) 76%,
+    color-mix(in srgb, var(--perks-previous-surface) 8%, var(--perks-current-surface) 92%) 88%,
     var(--perks-current-surface) 100%
   )`,
 } as CSSProperties;
