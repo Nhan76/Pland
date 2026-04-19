@@ -34,7 +34,15 @@ const Perks = () => {
               Support the investor, not the impulse
             </h2>
           </div>
-          <div className="mt-16 border border-border grid lg:grid-cols-3 sm:grid-cols-2 py-16 gap-10 px-20 rounded-3xl sm:bg-perk bg-dark_grey/35 lg:bg-bottom bg-center bg-no-repeat">
+          <div
+            className="mt-16 border border-border grid lg:grid-cols-3 sm:grid-cols-2 py-16 gap-10 px-20 rounded-3xl sm:bg-perk bg-dark_grey/35 lg:bg-bottom bg-center bg-no-repeat"
+            style={{
+              maskImage:
+                "radial-gradient(120% 100% at 50% 50%, black 40%, rgba(0, 0, 0, 0.85) 65%, transparent 90%)",
+              WebkitMaskImage:
+                "radial-gradient(120% 100% at 50% 50%, black 40%, rgba(0, 0, 0, 0.85) 65%, transparent 90%)",
+            }}
+          >
             {perksData.map((item, index) => (
               <Card
                 key={index}
