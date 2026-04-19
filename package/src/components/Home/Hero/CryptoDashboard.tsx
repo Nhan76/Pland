@@ -242,12 +242,12 @@ const PortfolioView = memo(() => {
     <motion.div variants={itemVariantsLeft} className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3">
       
       {/* Allocation Card */}
-      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-1 justify-between">
+      <div className="bg-white/[0.02] rounded-lg p-4 flex flex-col ring-1 ring-white/[0.05] lg:col-span-1 justify-between overflow-visible">
         <div className="mb-2">
           <div className="text-white/90 font-bold text-sm tracking-wide">Allocation</div>
         </div>
-        
-        <div className="w-full relative h-[140px] md:h-[180px] my-auto">
+
+        <div className="w-full relative h-40 md:h-[180px] my-auto">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -334,22 +334,9 @@ const CryptoDashboard = () => {
 
       {/* The Dashboard Container with Skew */}
       <div className="relative">
-        {/* Outer border with subtle highlight */}
-        <div
-          className="relative rounded-2xl border border-white/[0.08] hidden md:block"
-          style={{
-            transform: "rotateX(12deg) rotateY(-2deg) scale(0.98)",
-            transformOrigin: "center top",
-            maskImage:
-              "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
-            WebkitMaskImage:
-              "radial-gradient(120% 100% at 20% 20%, black 54%, rgba(0, 0, 0, 0.88) 76%, transparent 92%)",
-          }}
-        />
-
         {/* Main dashboard */}
         <div
-          className="relative overflow-hidden rounded-2xl p-px md:[transform:rotateX(12deg)_rotateY(-2deg)_scale(0.98)] md:[transform-origin:center_top]"
+          className="relative overflow-hidden rounded-2xl border-t-2 border-t-[#16c784]/60 p-px md:[transform:rotateX(12deg)_rotateY(-2deg)_scale(0.98)] md:[transform-origin:center_top]"
           style={{
             background:
               "linear-gradient(145deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 10%, rgba(255, 255, 255, 0.03) 30%, transparent 55%)",

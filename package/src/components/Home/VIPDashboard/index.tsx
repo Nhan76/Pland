@@ -940,7 +940,7 @@ const VIPDashboard = () => {
 
                 {/* Floating Card 1 - Stop Loss (Right) */}
                 <div
-                  className="vip-float-layer pointer-events-none absolute -top-4 -right-4 z-20 hidden md:block md:w-52 md:-right-28 lg:-right-40"
+                  className="vip-float-layer pointer-events-none absolute -top-4 -right-8 z-20 w-36 md:w-52 md:-right-28 lg:-right-40"
                   style={{
                     animation: "8.4s ease-in-out -1.8s infinite normal none running vip-float",
                     willChange: "transform",
@@ -949,30 +949,30 @@ const VIPDashboard = () => {
                   } as CSSProperties}
                 >
                   <div
-                    className="w-full rounded-lg bg-red-500/[0.05] ring-1 ring-red-400/[0.12] backdrop-blur-md p-3"
+                    className="w-full rounded-lg bg-red-500/[0.05] ring-1 ring-red-400/[0.12] backdrop-blur-md p-2 md:p-3"
                     style={{
                       transform: "rotateX(3deg) rotateY(-5deg) skewY(-1deg) translateZ(20px)",
                       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)"
                     } as CSSProperties}
                   >
-                    <div className="mb-1.5 flex items-center gap-2">
-                      <svg className="size-4 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                    <div className="mb-1 md:mb-1.5 flex items-center gap-1.5 md:gap-2">
+                      <svg className="size-3 md:size-4 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                         <path d="M12 9v4m0 0v4m0-4h4m-4 0H8" />
                         <circle cx="12" cy="12" r="10" />
                       </svg>
-                      <span className="text-xs font-medium text-white/40">Stop Loss Active</span>
+                      <span className="text-[10px] md:text-xs font-medium text-white/40">Stop Loss Active</span>
                     </div>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-2xl font-semibold text-red-400">-5.2%</span>
-                      <span className="text-xs text-white/30">trigger</span>
+                    <div className="flex items-baseline gap-1 md:gap-1.5">
+                      <span className="text-lg md:text-2xl font-semibold text-red-400">-5.2%</span>
+                      <span className="text-[10px] md:text-xs text-white/30">trigger</span>
                     </div>
-                    <div className="mt-2 text-xs text-white/25">BTC: -3.8% · ETH: -6.5%</div>
+                    <div className="mt-1.5 md:mt-2 text-[10px] md:text-xs text-white/25">BTC: -3.8% · ETH: -6.5%</div>
                   </div>
                 </div>
 
                 {/* Floating Card 2 - Win Rate (Left) */}
                 <div
-                  className="vip-float-layer pointer-events-none absolute top-20 z-20 hidden md:block md:w-52 md:-left-28 lg:-left-40"
+                  className="vip-float-layer pointer-events-none absolute top-20 -left-8 z-20 w-36 md:w-52 md:-left-28 lg:-left-40"
                   style={{
                     animation: "9.2s ease-in-out -4.1s infinite normal none running vip-float",
                     willChange: "transform",
@@ -981,24 +981,24 @@ const VIPDashboard = () => {
                   } as CSSProperties}
                 >
                   <div
-                    className="w-full rounded-lg bg-primary/[0.05] ring-1 ring-primary/[0.12] backdrop-blur-md p-3"
+                    className="w-full rounded-lg bg-primary/[0.05] ring-1 ring-primary/[0.12] backdrop-blur-md p-2 md:p-3"
                     style={{
                       transform: "rotateX(2deg) rotateY(4deg) skewY(0.5deg) translateZ(15px)",
                       boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)"
                     } as CSSProperties}
                   >
-                    <div className="mb-1.5 flex items-center gap-2">
-                      <svg className="size-4 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                    <div className="mb-1 md:mb-1.5 flex items-center gap-1.5 md:gap-2">
+                      <svg className="size-3 md:size-4 text-white/30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                         <polyline points="22 4 12 14.01 9 11.01" />
                       </svg>
-                      <span className="text-xs font-medium text-white/40">Win Rate</span>
+                      <span className="text-[10px] md:text-xs font-medium text-white/40">Win Rate</span>
                     </div>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-2xl font-semibold text-primary">68.4%</span>
-                      <span className="text-xs text-white/30">success</span>
+                    <div className="flex items-baseline gap-1 md:gap-1.5">
+                      <span className="text-lg md:text-2xl font-semibold text-primary">68.4%</span>
+                      <span className="text-[10px] md:text-xs text-white/30">success</span>
                     </div>
-                    <div className="mt-2 flex gap-2 text-xs">
+                    <div className="mt-1.5 md:mt-2 flex gap-1.5 md:gap-2 text-[10px] md:text-xs">
                       <span className="text-white/25">32 wins</span>
                       <span className="text-white/15">·</span>
                       <span className="text-white/25">15 losses</span>

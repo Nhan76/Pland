@@ -67,7 +67,7 @@ const HeroCopy = memo(
         variants={HERO_REVEAL_VARIANTS}
         initial={introInitialState}
         animate={showTitle ? "visible" : "hidden"}
-        className="font-medium xl:text-[72px] md:text-6xl sm:text-5xl text-4xl text-white"
+        className="font-medium xl:text-[72px] md:text-6xl sm:text-5xl text-3xl text-white"
       >
         <span className="block sm:whitespace-nowrap">AI-Powered Trading</span>
         <span className="block sm:whitespace-nowrap">
@@ -151,7 +151,7 @@ const Hero = () => {
 
   return (
     <section
-      className="relative z-1 overflow-hidden py-24 pt-48 isolate"
+      className="relative z-1 overflow-hidden py-24 pt-36 md:pt-48 isolate"
       id="main-banner"
     >
       <HeroBackground />
