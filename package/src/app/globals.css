@@ -274,37 +274,37 @@
 
 @keyframes dramatic-float {
   0%, 100% {
-    transform: translateZ(0px) translateY(0px) rotateY(0deg);
+    transform: translateZ(0px) translateY(0px) rotateY(0deg) rotateX(0deg);
   }
   33% {
-    transform: translateZ(20px) translateY(-8px) rotateY(2deg);
+    transform: translateZ(80px) translateY(-28px) rotateY(4deg) rotateX(-1deg);
   }
   66% {
-    transform: translateZ(10px) translateY(-4px) rotateY(-1deg);
+    transform: translateZ(40px) translateY(-14px) rotateY(-2deg) rotateX(0.5deg);
   }
 }
 
 @keyframes panel-float-a {
   0%, 100% {
-    transform: translateZ(0px) translateY(0px) rotateY(0deg);
+    transform: translateZ(0px) translateY(0px) rotateY(0deg) rotateX(0deg);
   }
   28% {
-    transform: translateZ(26px) translateY(-10px) rotateY(1.2deg);
+    transform: translateZ(90px) translateY(-32px) rotateY(3deg) rotateX(-1.2deg);
   }
   62% {
-    transform: translateZ(14px) translateY(-6px) rotateY(-0.8deg);
+    transform: translateZ(48px) translateY(-16px) rotateY(-1.8deg) rotateX(0.6deg);
   }
 }
 
 @keyframes panel-float-b {
   0%, 100% {
-    transform: translateZ(0px) translateY(0px) rotateY(0deg);
+    transform: translateZ(0px) translateY(0px) rotateY(0deg) rotateX(0deg);
   }
   36% {
-    transform: translateZ(30px) translateY(-12px) rotateY(-1.4deg);
+    transform: translateZ(100px) translateY(-36px) rotateY(-3.5deg) rotateX(-1.4deg);
   }
   72% {
-    transform: translateZ(16px) translateY(-7px) rotateY(0.9deg);
+    transform: translateZ(54px) translateY(-18px) rotateY(2deg) rotateX(0.7deg);
   }
 }
 

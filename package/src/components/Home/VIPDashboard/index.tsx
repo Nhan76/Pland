@@ -101,8 +101,8 @@ const DEFENDER_TILT = {
   rotateZ: -16,
   perspective: 1800,
   scale: 1,
-  floatingCardDepth: 144,
-  floatingCardDepthStep: 18,
+  floatingCardDepth: 180,
+  floatingCardDepthStep: 24,
 } as const;
 
 const dashboardThemeStyle = {
@@ -253,8 +253,8 @@ const floating3DVariants: Variants = {
     opacity: 0,
     x: -10,
     z: 0,
-    rotateY: -4,
-    rotateX: -2
+    rotateY: -6,
+    rotateX: -3
   },
   show: (custom: number) => ({
     opacity: 1,
@@ -262,8 +262,8 @@ const floating3DVariants: Variants = {
     z:
       DEFENDER_TILT.floatingCardDepth +
       (custom % 3) * DEFENDER_TILT.floatingCardDepthStep,
-    rotateY: custom * 1.25,
-    rotateX: custom % 2 === 0 ? -1.5 : -0.5,
+    rotateY: custom * 1.8,
+    rotateX: custom % 2 === 0 ? -2.5 : -1.2,
     transition: {
       duration: 0.5,
       ease: [0.25, 0.1, 0.25, 1],

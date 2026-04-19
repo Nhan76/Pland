@@ -96,7 +96,7 @@ const Hero = () => {
             className="flex w-full flex-col items-center justify-center gap-3 px-4 sm:w-auto sm:flex-row sm:gap-4 sm:px-0"
           >
             <Button
-              render={<Link href="/#work" />}
+              render={<Link href="https://hackathon-pland.vercel.app/" target="_blank" rel="noopener noreferrer" />}
               className="flex h-12 w-full items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-6 text-sm font-semibold whitespace-nowrap text-background hover:bg-primary/80 sm:w-55 sm:px-7 sm:text-base"
             >
               Go to app

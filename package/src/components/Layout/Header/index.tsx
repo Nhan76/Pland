@@ -89,18 +89,10 @@ const Header: React.FC = () => {
             <div className="hidden h-11 gap-4 lg:flex">
               <Button
                 size="lg"
-                variant="outline"
-                render={<Link href="/#portfolio" />}
-                className="h-full rounded-full border border-primary! bg-transparent px-5 py-2 text-primary transition-all duration-300 hover:bg-primary! hover:text-primary-foreground"
-              >
-                View Capabilities
-              </Button>
-              <Button
-                size="lg"
-                render={<Link href="/#upgrade" />}
+                render={<Link href="https://hackathon-pland.vercel.app/" target="_blank" rel="noopener noreferrer" />}
                 className="h-full rounded-full border border-primary bg-primary px-5 py-2 font-medium text-primary-foreground transition-all duration-300 hover:bg-transparent hover:text-primary"
               >
-                See Guardrails
+                Open App
               </Button>
             </div>
 
@@ -143,22 +135,12 @@ const Header: React.FC = () => {
 
                   <div className="mt-4 flex w-full flex-col gap-4">
                     <Button
-                      variant="outline"
                       size="lg"
-                      render={<Link href="/#portfolio" />}
-                      onClick={() => setNavbarOpen(false)}
-                      className="w-full rounded-full border border-primary! bg-transparent text-primary hover:bg-primary! hover:text-primary-foreground"
-                    >
-                      View Capabilities
-                    </Button>
-
-                    <Button
-                      size="lg"
-                      render={<Link href="/#upgrade" />}
+                      render={<Link href="https://hackathon-pland.vercel.app/" target="_blank" rel="noopener noreferrer" />}
                       onClick={() => setNavbarOpen(false)}
                       className="w-full rounded-full border border-primary bg-primary font-medium text-primary-foreground hover:bg-transparent hover:text-primary"
                     >
-                      See Guardrails
+                      Open App
                     </Button>
                   </div>
                 </nav>
