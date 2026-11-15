@@ -36,6 +36,14 @@ corepack pnpm lint
 corepack pnpm build
 ```
 
+## Performance Conventions
+
+- Animate only `transform` and `opacity` in looping CSS keyframes so they run on the compositor (no per-frame layout/paint).
+- Below-the-fold sections go through `LazySection`: their chunks are prefetched on idle after the hero intro, rendered with a deferred (interruptible) update, and their CSS animations are paused via `data-offscreen` while scrolled out of view. JS-driven loops should pause off screen too (`useInView`).
+- Pointer-driven effects write CSS custom properties directly (see `SpotlightCard`) instead of React state, so hovering never re-renders charts.
+- The hero `LaserFlow` WebGL canvas renders at ≤1x pixel ratio, caps at ~60 fps, stops entirely when off screen or the tab is hidden, and only steps its resolution down if the GPU can't keep up.
+- Static illustrations (including animated SVGs) live in `public/` and are rendered with `next/image` and explicit dimensions to avoid layout shift and keep them out of the JS bundle.
+
 ## Notes
 
 - App package name: `pland`

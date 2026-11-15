@@ -1,5 +1,56 @@
+import type { CSSProperties } from "react";
 
-import React from "react";
+type RiskAlertCard = {
+  title: string;
+  description: string;
+  time: string;
+  dotClassName: string;
+  animationDelay: string;
+};
+
+/** The three cards share one 9s loop, offset by a third of the cycle each. */
+const RISK_ALERT_CARDS: RiskAlertCard[] = [
+  {
+    title: "Unusual outbound transfer detected",
+    description: "10,000 USDT moved from KuCoin exchange account",
+    time: "2m ago",
+    dotClassName: "bg-emerald-400",
+    animationDelay: "0s",
+  },
+  {
+    title: "High volatility detected",
+    description: "ETH dropping more than 5% in the last 1 hour",
+    time: "15m ago",
+    dotClassName: "bg-orange-400",
+    animationDelay: "-3s",
+  },
+  {
+    title: "Drawdown threshold breached",
+    description: "BTC position size exceeded -15% drawdown guardrail",
+    time: "1h ago",
+    dotClassName: "bg-red-500",
+    animationDelay: "-6s",
+  },
+];
+
+const cardStackMask =
+  "radial-gradient(130% 130% at 15% 20%, black 35%, transparent 65%)";
+
+const cardStackStyle: CSSProperties = {
+  maskImage: cardStackMask,
+  WebkitMaskImage: cardStackMask,
+};
+
+const cardFrameStyle: CSSProperties = {
+  background:
+    "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
+  filter: "drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4))",
+};
+
+const cardSurfaceStyle: CSSProperties = {
+  background: "#2a2a2a",
+  boxShadow: "0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)",
+};
 
 const RiskManagement = () => {
   return (
@@ -17,117 +68,36 @@ const RiskManagement = () => {
               PLAND triggers actionable alerts based on custom risk guardrails to protect your portfolio from compounding losses.
             </p>
           </div>
-          
+
           <div className="flex justify-center lg:justify-end">
-            <div
-              className="relative mt-8 h-72 w-full max-w-md"
-              style={{
-                maskImage:
-                  "radial-gradient(130% 130% at 15% 20%, black 35%, transparent 65%)",
-                WebkitMaskImage:
-                  "radial-gradient(130% 130% at 15% 20%, black 35%, transparent 65%)",
-              }}
-            >
-              {/* Card 1 */}
-              <div
-                className="animate-risk-card-slide absolute rounded-xl p-px"
-                style={{
-                  transform: "skewY(-8deg) skewX(-2deg)",
-                  animationDelay: "0s",
-                  background:
-                    "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
-                  filter: "drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4))",
-                }}
-              >
-                <div
-                  className="rounded-[11px] px-5 py-4"
-                  style={{
-                    background: "#2a2a2a",
-                    boxShadow:
-                      "0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="size-2 shrink-0 rounded-full bg-emerald-400"></span>
-                    <span className="text-[14px] font-semibold text-white/80">
-                      Unusual outbound transfer detected
-                    </span>
+            <div className="relative mt-8 h-72 w-full max-w-md" style={cardStackStyle}>
+              {/*
+                preserve-3d lets the cards be depth-sorted by the translateZ in
+                their (compositor-only) keyframes instead of animating z-index.
+              */}
+              <div className="absolute inset-0 transform-3d">
+                {RISK_ALERT_CARDS.map((card) => (
+                  <div
+                    key={card.title}
+                    className="animate-risk-card-slide absolute top-0 left-0 w-[calc(100%-80px)] rounded-xl p-px"
+                    style={{ ...cardFrameStyle, animationDelay: card.animationDelay }}
+                  >
+                    <div className="rounded-[11px] px-5 py-4" style={cardSurfaceStyle}>
+                      <div className="flex items-center gap-2.5">
+                        <span className={`size-2 shrink-0 rounded-full ${card.dotClassName}`} />
+                        <span className="text-[14px] font-semibold text-white/80">
+                          {card.title}
+                        </span>
+                      </div>
+                      <p className="mt-2 text-[12px] leading-relaxed text-white/35">
+                        {card.description}
+                      </p>
+                      <span className="pt-2.5 text-[12px] text-white/20 block">
+                        {card.time}
+                      </span>
+                    </div>
                   </div>
-                  <p className="mt-2 text-[12px] leading-relaxed text-white/35">
-                    10,000 USDT moved from KuCoin exchange account
-                  </p>
-                  <span className="pt-2.5 text-[12px] text-white/20 block">
-                    2m ago
-                  </span>
-                </div>
-              </div>
-
-              {/* Card 2 */}
-              <div
-                className="animate-risk-card-slide absolute rounded-xl p-px"
-                style={{
-                  transform: "skewY(-8deg) skewX(-2deg)",
-                  animationDelay: "-3s",
-                  background:
-                    "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
-                  filter: "drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4))",
-                }}
-              >
-                <div
-                  className="rounded-[11px] px-5 py-4"
-                  style={{
-                    background: "#2a2a2a",
-                    boxShadow:
-                      "0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="size-2 shrink-0 rounded-full bg-orange-400"></span>
-                    <span className="text-[14px] font-semibold text-white/80">
-                      High volatility detected
-                    </span>
-                  </div>
-                  <p className="mt-2 text-[12px] leading-relaxed text-white/35">
-                    ETH dropping more than 5% in the last 1 hour
-                  </p>
-                  <span className="pt-2.5 text-[12px] text-white/20 block">
-                    15m ago
-                  </span>
-                </div>
-              </div>
-
-              {/* Card 3 */}
-              <div
-                className="animate-risk-card-slide absolute rounded-xl p-px"
-                style={{
-                  transform: "skewY(-8deg) skewX(-2deg)",
-                  animationDelay: "-6s",
-                  background:
-                    "linear-gradient(145deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 40%, transparent 70%)",
-                  filter: "drop-shadow(0 8px 32px rgba(0, 0, 0, 0.4))",
-                }}
-              >
-                <div
-                  className="rounded-[11px] px-5 py-4"
-                  style={{
-                    background: "#2a2a2a",
-                    boxShadow:
-                      "0 4px 24px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05)",
-                  }}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="size-2 shrink-0 rounded-full bg-red-500"></span>
-                    <span className="text-[14px] font-semibold text-white/80">
-                      Drawdown threshold breached
-                    </span>
-                  </div>
-                  <p className="mt-2 text-[12px] leading-relaxed text-white/35">
-                    BTC position size exceeded -15% drawdown guardrail
-                  </p>
-                  <span className="pt-2.5 text-[12px] text-white/20 block">
-                    1h ago
-                  </span>
-                </div>
+                ))}
               </div>
             </div>
           </div>

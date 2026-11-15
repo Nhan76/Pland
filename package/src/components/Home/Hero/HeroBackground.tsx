@@ -1,10 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
 
-import { usePageIntro } from "@/components/Layout/PageIntroProvider";
+import { usePageIntroHero } from "@/components/Layout/PageIntroProvider";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const LaserFlow = dynamic(() => import("./LaserFlow"), {
   loading: () => null,
@@ -24,8 +24,6 @@ const HERO_LASER_FLOW_BASE_PROPS = {
   fogScale: 0.15,
   horizontalBeamOffset: 0,
   horizontalSizing: 1.3,
-  mouseSmoothTime: 0.18,
-  mouseTiltStrength: 0.035,
   verticalBeamOffset: 0.11,
   wispDensity: 0.8,
   wispIntensity: 5.6,
@@ -35,23 +33,9 @@ const HERO_LASER_FLOW_BASE_PROPS = {
 } as const;
 
 const HeroBackground = () => {
-  const { showLaserFlow } = usePageIntro();
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  const laserFlowProps = {
-    ...HERO_LASER_FLOW_BASE_PROPS,
-    verticalSizing: isMobile ? 0.6 : 0.8,
-  };
+  const { showLaserFlow } = usePageIntroHero();
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const prefersReducedMotion = Boolean(useReducedMotion());
 
   return (
     <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -60,9 +44,12 @@ const HeroBackground = () => {
         initial={false}
         animate={{ opacity: showLaserFlow ? 0.9 : 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        style={{ willChange: "opacity" }}
       >
-        <LaserFlow {...laserFlowProps} />
+        <LaserFlow
+          {...HERO_LASER_FLOW_BASE_PROPS}
+          animate={!prefersReducedMotion}
+          verticalSizing={isMobile ? 0.6 : 0.8}
+        />
       </motion.div>
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(22,199,132,0.14),transparent_32%),linear-gradient(180deg,rgba(5,16,26,0.08)_0%,rgba(5,16,26,0.4)_58%,var(--background)_100%)]" />

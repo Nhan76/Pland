@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { ShieldAlert, TrendingDown, Check, Loader2, MousePointer2 } from "lucide-react";
 import {
   AreaChart,
@@ -17,25 +17,35 @@ import { useVisibleOnce } from "@/hooks/useVisibleOnce";
 
 const CHART_TRIGGER_MARGIN = "0px 0px 35% 0px";
 
+const ANALYSIS_PHASE_DELAYS = [1500, 400, 600, 2000, 2000, 2000, 5000, 500] as const;
+
+const ANALYSIS_STEPS = [
+  "Aggregating exchange balances...",
+  "Analyzing cross-chain token correlations...",
+  "Evaluating against defined risk guardrails...",
+] as const;
+
+const ALERT_INTERVAL_MS = 3000;
+
 const AIAnalysisGrid = () => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  // The demo loop only advances while the card is on screen.
+  const isInView = useInView(cardRef);
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    const delays = [1500, 400, 600, 2000, 2000, 2000, 5000, 500];
-    const timer = setTimeout(() => {
-      setPhase((p) => (p + 1) % 8);
-    }, delays[phase] || 1000);
-    return () => clearTimeout(timer);
-  }, [phase]);
+    if (!isInView) {
+      return;
+    }
 
-  const steps = [
-    "Aggregating exchange balances...",
-    "Analyzing cross-chain token correlations...",
-    "Evaluating against defined risk guardrails..."
-  ];
+    const timer = setTimeout(() => {
+      setPhase((p) => (p + 1) % ANALYSIS_PHASE_DELAYS.length);
+    }, ANALYSIS_PHASE_DELAYS[phase]);
+    return () => clearTimeout(timer);
+  }, [phase, isInView]);
 
   return (
-    <SpotlightCard className="flex h-115 flex-col p-6 sm:p-8 md:col-span-1">
+    <SpotlightCard ref={cardRef} className="flex h-115 flex-col p-6 sm:p-8 md:col-span-1">
       <div className="z-10 max-w-sm">
         <div className="mb-2 flex items-center space-x-2 text-white">
           <span className="text-lg sm:text-xl font-semibold tracking-wider">AI Analytics</span>
@@ -80,7 +90,7 @@ const AIAnalysisGrid = () => {
         </div>
 
         <div className="flex flex-col space-y-3 relative w-full pt-4">
-          {steps.map((text, index) => {
+          {ANALYSIS_STEPS.map((text, index) => {
             const stepIndex = index + 3;
             const isCompleted = phase > stepIndex;
             const isVisible = phase >= stepIndex;
@@ -140,28 +150,32 @@ const INITIAL_ALERTS = [
   { id: 5, text: "Drawdown threshold breached", type: "critical" },
 ];
 
+const createAlert = (id: number) => ({
+  id,
+  text: id % 2 === 0 ? "Drawdown threshold breached" : "High volatility detected",
+  type: id % 2 === 0 ? "critical" : "warning",
+});
+
 const RiskAlertGrid = () => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  // New alerts are only pushed while the card is on screen.
+  const isInView = useInView(cardRef);
   const [alerts, setAlerts] = useState(INITIAL_ALERTS);
 
   useEffect(() => {
-    let count = 5;
-    const interval = setInterval(() => {
-      count++;
-      
-      const newAlert = {
-        id: count,
-        text: count % 2 === 0 ? "Drawdown threshold breached" : "High volatility detected",
-        type: count % 2 === 0 ? "critical" : "warning",
-      };
+    if (!isInView) {
+      return;
+    }
 
-      setAlerts((prev) => [...prev.slice(1), newAlert]); 
-    }, 3000);
+    const interval = setInterval(() => {
+      setAlerts((prev) => [...prev.slice(1), createAlert(prev[prev.length - 1].id + 1)]);
+    }, ALERT_INTERVAL_MS);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isInView]);
 
   return (
-    <SpotlightCard className="flex h-115 flex-col p-6 sm:p-8 md:col-span-2">
+    <SpotlightCard ref={cardRef} className="flex h-115 flex-col p-6 sm:p-8 md:col-span-2">
       <div className="z-10">
         <div className="mb-2 flex items-center space-x-2 text-white">
           <span className="text-lg sm:text-xl font-semibold tracking-wider">Live Alerts</span>

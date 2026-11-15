@@ -30,29 +30,12 @@ const mockPerformanceData = [
   { time: "1:14 AM", value: 243623 },
 ];
 
-const mockRiskData = [
-  { time: "7:00 AM", value: 11000 },
-  { time: "10:00 AM", value: 11500 },
-  { time: "1:00 PM", value: 10500 },
-  { time: "4:00 PM", value: 12200 },
-  { time: "7:00 PM", value: 11800 },
-  { time: "10:00 PM", value: 12400 },
-  { time: "1:14 AM", value: 12980 },
-];
-
 const allocationData = [
   { name: "BTC", value: 73.9, color: "#16c784" },
   { name: "BNB", value: 9.1, color: "#627eea" },
   { name: "ETH", value: 8.4, color: "#f3ba2f" },
   { name: "USDC", value: 4.1, color: "#2775ca" },
   { name: "USDT", value: 3.5, color: "#26a17b" },
-];
-
-const riskAllocationData = [
-  { name: "BTC Risk", value: 52.4, color: "#ea3943" },
-  { name: "Altcoins", value: 28.1, color: "#f3ba2f" },
-  { name: "ETH Risk", value: 15.3, color: "#627eea" },
-  { name: "Stables", value: 4.2, color: "#16c784" },
 ];
 
 const chartTimeRanges = ["24H", "7D", "30D", "90D", "ALL"] as const;
@@ -151,7 +134,6 @@ const floatingCardBaseStyle: CSSProperties = {
   transformStyle: "preserve-3d",
   willChange: "transform",
   backfaceVisibility: "hidden",
-  transition: "box-shadow 0.3s ease-out",
 };
 
 const preserve3DStyle: CSSProperties = {
@@ -238,12 +220,6 @@ const containerVariants: Variants = {
 
 const itemVariantsLeft: Variants = {
   hidden: { opacity: 0, x: -10 },
-  show: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
-};
-
-const itemVariantsRight: Variants = {
-  hidden: { opacity: 0, x: 10 },
   show: { opacity: 1, x: 0, transition: { duration: 0.3, ease: "easeOut" } },
   exit: { opacity: 0, transition: { duration: 0.2 } },
 };
@@ -585,235 +561,6 @@ const PortfolioView = memo(() => {
 
 PortfolioView.displayName = 'PortfolioView';
 
-const RiskView = memo(() => {
-  const motionProfile = useMotionProfile();
-  const { ref: chartViewportRef, hasEnteredView } = useVisibleOnce<HTMLDivElement>({
-    rootMargin: CHART_TRIGGER_MARGIN,
-    threshold: 0.01,
-  });
-  const shouldAnimateCharts =
-    motionProfile.chartAnimationsEnabled && hasEnteredView;
-  const chartAnimationState = shouldAnimateCharts ? "entered" : "idle";
-
-  return (
-    <motion.div
-      key="risk"
-      variants={containerVariants}
-      initial="hidden"
-      animate="show"
-      exit="exit"
-      className="flex flex-col gap-4 md:gap-6 col-start-1 row-start-1 w-full h-full"
-      style={preserve3DStyle}
-    >
-    <motion.div
-      variants={itemVariantsRight}
-      className="flex flex-col gap-4"
-      style={preserve3DStyle}
-    >
-      <div className="flex flex-col">
-        <span className="text-white/50 text-[9px] font-bold uppercase tracking-widest mb-1">Value at Risk (95% Confidence)</span>
-        <div className="flex items-baseline gap-2">
-          <span className="text-2xl md:text-4xl font-bold text-white tracking-tight">$12,980.00</span>
-          <span className="text-[#ea3943] font-medium text-xs flex items-center">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-0.5">
-              <path d="M12 19V5M5 12l7-7 7 7" />
-            </svg>
-            5.11%
-          </span>
-        </div>
-      </div>
-
-      <div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-2 md:gap-3"
-        style={preserve3DStyle}
-      >
-        <FloatingDashboardCard
-          custom={0}
-          shadow="0 8px 24px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15)"
-          surfaceClassName="p-3 flex flex-col justify-start"
-          floatClassName="animate-dramatic-float"
-          floatStyle={floatingCardFloatStyles.metricA}
-        >
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">30-Day Volatility</span>
-          <span className="text-[#ea3943] font-bold text-sm md:text-base leading-none">42.5%</span>
-          <div className="mt-2 pt-1">
-            <div className="bg-[#ea3943]/15 text-[#ea3943] text-[10px] font-medium px-2 py-0.5 rounded-full w-fit flex items-center">
-              Target &lt; 35%
-            </div>
-          </div>
-        </FloatingDashboardCard>
-        <FloatingDashboardCard
-          custom={1}
-          shadow="0 14px 36px rgba(0, 0, 0, 0.25), 0 8px 18px rgba(0, 0, 0, 0.18)"
-          surfaceClassName="p-3 flex flex-col justify-start"
-          floatClassName="animate-dramatic-float-delayed"
-          floatStyle={floatingCardFloatStyles.metricB}
-        >
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Portfolio Beta</span>
-          <span className="text-white/80 font-bold text-sm md:text-base leading-none">1.15</span>
-        </FloatingDashboardCard>
-        <FloatingDashboardCard
-          custom={2}
-          shadow="0 17px 42px rgba(0, 0, 0, 0.3), 0 10px 21px rgba(0, 0, 0, 0.21)"
-          containerClassName="col-span-2 md:col-span-1"
-          surfaceClassName="p-3 flex flex-col justify-start"
-          floatClassName="animate-dramatic-float-delayed-2"
-          floatStyle={floatingCardFloatStyles.metricC}
-        >
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-2">Stress Test (BTC -20%)</span>
-          <div className="flex flex-col gap-1.5 mt-2 pt-1">
-            <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/40">Est. Impact</span>
-              <span className="text-[#ea3943] font-medium">-$26,500</span>
-            </div>
-            <div className="flex justify-between items-center text-[11px] leading-none">
-              <span className="text-white/40">Liquidation Risk</span>
-              <span className="text-[#16c784] font-medium">Safe</span>
-            </div>
-          </div>
-        </FloatingDashboardCard>
-        <FloatingDashboardCard
-          custom={3}
-          shadow="0 20px 48px rgba(0, 0, 0, 0.35), 0 12px 24px rgba(0, 0, 0, 0.24)"
-          containerClassName="hidden md:flex"
-          surfaceClassName="p-3 flex flex-col justify-start"
-          floatClassName="animate-dramatic-float-delayed-3"
-          floatStyle={floatingCardFloatStyles.metricD}
-        >
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Concentration Risk</span>
-          <span className="text-[#f3ba2f] font-bold text-sm md:text-base leading-none">73.9% BTC</span>
-          <div className="mt-2 pt-1">
-            <span className="bg-[#f3ba2f]/15 text-[#f3ba2f] text-[9px] font-medium uppercase tracking-wider px-1.5 py-0.5 rounded-sm">Warning</span>
-          </div>
-        </FloatingDashboardCard>
-        <FloatingDashboardCard
-          custom={4}
-          shadow="0 23px 54px rgba(0, 0, 0, 0.4), 0 14px 27px rgba(0, 0, 0, 0.27)"
-          containerClassName="hidden md:flex"
-          surfaceClassName="p-3 flex flex-col justify-start"
-          floatClassName="animate-dramatic-float-delayed-4"
-          floatStyle={floatingCardFloatStyles.metricE}
-        >
-          <span className="text-white/50 text-[10px] font-medium uppercase tracking-wider mb-1">Sharpe Ratio</span>
-          <span className="text-[#16c784] font-bold text-sm md:text-base leading-none">4.19</span>
-          <div className="mt-2 pt-1">
-            <span className="bg-[#16c784]/15 text-[#16c784] text-[9px] flex items-center gap-1 font-medium px-1.5 py-0.5 rounded-sm">
-              Excellent
-            </span>
-          </div>
-        </FloatingDashboardCard>
-      </div>
-    </motion.div>
-
-    <motion.div
-      ref={chartViewportRef}
-      variants={itemVariantsRight}
-      className="grid grid-cols-1 lg:grid-cols-4 gap-2 md:gap-3"
-      style={preserve3DStyle}
-    >
-      <FloatingDashboardCard
-        custom={5}
-        shadow="0 26px 60px rgba(0, 0, 0, 0.45), 0 16px 30px rgba(0, 0, 0, 0.3)"
-        containerClassName="lg:col-span-1"
-        surfaceClassName="p-4 flex h-full flex-col justify-between"
-        floatClassName="animate-panel-float-a"
-        floatStyle={floatingCardFloatStyles.panelA}
-      >
-        <div className="mb-2">
-          <div className="text-white/90 font-bold text-sm tracking-wide">Risk Contribution</div>
-        </div>
-
-        <div className="w-full relative h-[140px] md:h-[180px] my-auto">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                key={`risk-allocation-${chartAnimationState}`}
-                data={riskAllocationData}
-                innerRadius={60}
-                outerRadius={80}
-                paddingAngle={3}
-                dataKey="value"
-                stroke="none"
-                cornerRadius={2}
-                isAnimationActive={shouldAnimateCharts}
-              >
-                {riskAllocationData.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{ backgroundColor: '#1A1F26', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }}
-                itemStyle={{ color: '#fff', fontSize: '11px' }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-
-        <div className="flex flex-col gap-2.5 pr-1 mb-2">
-          <div className="flex justify-between items-center text-[11px] font-medium invisible" aria-hidden="true">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full" />
-              <span>spacer</span>
-            </div>
-            <span>0%</span>
-          </div>
-          {riskAllocationData.map((asset, i) => (
-            <div key={i} className="flex justify-between items-center text-[11px] font-medium">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: asset.color }} />
-                <span className="text-white/90">{asset.name}</span>
-              </div>
-              <span className="text-white/60">{asset.value}%</span>
-            </div>
-          ))}
-        </div>
-      </FloatingDashboardCard>
-
-      <FloatingDashboardCard
-        custom={6}
-        shadow="0 29px 66px rgba(0, 0, 0, 0.5), 0 18px 33px rgba(0, 0, 0, 0.33)"
-        containerClassName="lg:col-span-3"
-        surfaceClassName="p-4 flex h-full flex-col"
-        floatClassName="animate-panel-float-b"
-        floatStyle={floatingCardFloatStyles.panelB}
-      >
-        <div className="flex flex-col sm:flex-row justify-between items-start mb-4 gap-3">
-          <div>
-            <div className="text-white/90 font-bold text-xs sm:text-sm mb-0.5 tracking-wide">Risk Exposure (VaR)</div>
-          </div>
-          <div className="flex bg-white/[0.03] rounded-md p-1 ring-1 ring-white/[0.04]">
-            {chartTimeRanges.map((span) => (
-              <button
-                key={span}
-                className={`text-[10px] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md font-semibold transition-all ${
-                  span === "24H"
-                    ? "bg-white/10 text-white shadow-sm"
-                    : "text-white/40 hover:text-white/80 hover:bg-white/5"
-                }`}
-              >
-                {span}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="flex-1 w-full relative min-h-[180px] md:min-h-[260px]">
-          <DashboardAreaChart
-            chartKey="risk-exposure"
-            data={mockRiskData}
-            gradientId="portfolioGradientRisk"
-            strokeColor="#ea3943"
-            isAnimationActive={shouldAnimateCharts}
-          />
-        </div>
-      </FloatingDashboardCard>
-    </motion.div>
-  </motion.div>
-  );
-});
-
-RiskView.displayName = 'RiskView';
-
 const VIPDashboard = () => {
   const motionProfile = useMotionProfile();
   const { ref: distributionViewportRef, hasEnteredView: hasEnteredDistribution } =
@@ -855,7 +602,7 @@ const VIPDashboard = () => {
 
                 {/* Main VIP Card */}
                 <div
-                  className="relative overflow-hidden rounded-xl bg-white/[0.03] backdrop-blur-sm md:[transform:rotateX(4deg)_rotateY(-2deg)]"
+                  className="relative overflow-hidden rounded-xl bg-white/[0.03] md:[transform:rotateX(4deg)_rotateY(-2deg)]"
                   style={{ boxShadow: "rgba(0, 0, 0, 0.3) 0px 8px 30px" } as CSSProperties}
                 >
                   {/* Gradient Background */}
