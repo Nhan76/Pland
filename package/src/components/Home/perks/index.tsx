@@ -3,22 +3,36 @@ import { perksData } from "@/app/api/data";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 
+/** Share (in %) of the green-tinted surface at each point of the section. */
+const PERKS_SURFACE_STOPS: ReadonlyArray<readonly [tint: number, position: number]> = [
+  [0, 0],
+  [8, 5],
+  [22, 10],
+  [45, 16],
+  [70, 22],
+  [90, 28],
+  [100, 34],
+  [92, 42],
+  [80, 50],
+  [64, 59],
+  [46, 68],
+  [30, 77],
+  [16, 86],
+  [6, 94],
+  [0, 100],
+];
+
+/*
+  The section fades in from the plain page background, peaks behind the
+  heading and fades back out, so neither edge shows a hard color change.
+*/
 const perksSectionStyle = {
-  "--perks-previous-surface":
+  "--perks-tinted-surface":
     "color-mix(in srgb, var(--background) 82%, var(--primary) 18%)",
-  "--perks-current-surface": "var(--background)",
-  background: `linear-gradient(
-    to bottom,
-    var(--perks-previous-surface) 0%,
-    color-mix(in srgb, var(--perks-previous-surface) 92%, var(--perks-current-surface) 8%) 15%,
-    color-mix(in srgb, var(--perks-previous-surface) 82%, var(--perks-current-surface) 18%) 25%,
-    color-mix(in srgb, var(--perks-previous-surface) 70%, var(--perks-current-surface) 30%) 35%,
-    color-mix(in srgb, var(--perks-previous-surface) 55%, var(--perks-current-surface) 45%) 48%,
-    color-mix(in srgb, var(--perks-previous-surface) 38%, var(--perks-current-surface) 62%) 62%,
-    color-mix(in srgb, var(--perks-previous-surface) 22%, var(--perks-current-surface) 78%) 76%,
-    color-mix(in srgb, var(--perks-previous-surface) 8%, var(--perks-current-surface) 92%) 88%,
-    var(--perks-current-surface) 100%
-  )`,
+  background: `linear-gradient(to bottom, ${PERKS_SURFACE_STOPS.map(
+    ([tint, position]) =>
+      `color-mix(in srgb, var(--perks-tinted-surface) ${tint}%, var(--background)) ${position}%`,
+  ).join(", ")})`,
 } as CSSProperties;
 
 const Perks = () => {
@@ -71,7 +85,12 @@ const Perks = () => {
           </div>
         </div>
       </div>
-      <div className="bg-linear-to-br from-tealGreen to-charcoalGray sm:w-50 w-96 z-0 sm:h-50 h-96 rounded-full sm:-bottom-80 bottom-0 blur-400 absolute sm:-left-48 opacity-60"></div>
+      {/*
+        Ambient glow. Its blur reaches above the section, so it shares the
+        previous section's layer (z-1, later in the DOM) instead of being cut
+        off by that section's opaque background.
+      */}
+      <div className="pointer-events-none bg-linear-to-br from-tealGreen to-charcoalGray sm:w-50 w-96 z-1 sm:h-50 h-96 rounded-full sm:-bottom-80 bottom-0 blur-400 absolute sm:-left-48 opacity-60"></div>
     </section>
   );
 };
