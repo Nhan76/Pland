@@ -1,4 +1,4 @@
-const crossModuleIntelligenceSvg = String.raw`<svg width="700" height="550" viewBox="0 0 700 550" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="700" height="550" viewBox="0 0 700 550" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_1713_97)">
 <path d="M350 595C526.731 595 670 451.731 670 275C670 98.2689 526.731 -45 350 -45C173.269 -45 30 98.2689 30 275C30 451.731 173.269 595 350 595Z" fill="url(#paint0_radial_1713_97)"/>
 <path d="M280.718 -65L973.542 335ZM211.435 -25L904.259 375ZM142.153 15L834.977 415ZM72.8704 55L765.694 455ZM3.58801 95L696.412 495ZM-65.6944 135L627.13 535ZM-134.977 175L557.847 575ZM-204.259 215L488.565 615ZM-273.542 255L419.282 655ZM419.282 -65L-273.542 335ZM488.565 -25L-204.259 375ZM557.847 15L-134.977 415ZM627.13 55L-65.6944 455ZM696.412 95L3.58801 495ZM765.694 135L72.8704 535ZM834.977 175L142.153 575ZM904.259 215L211.435 615ZM973.542 255L280.718 655Z" fill="black"/>
@@ -191,6 +191,12 @@ const crossModuleIntelligenceSvg = String.raw`<svg width="700" height="550" view
 .flow-path-long { animation: flowLong 5.8s linear infinite; }
 .flow-path-short { animation: flowShort 4.6s linear infinite; }
 .orbit-path { animation: orbitFlow 2.8s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-path-long,
+  .flow-path-short,
+  .orbit-path { animation: none; }
+}
 
 @keyframes flowLong {
   to {
@@ -440,17 +446,4 @@ const crossModuleIntelligenceSvg = String.raw`<svg width="700" height="550" view
 <rect width="700" height="550" fill="white"/>
 </clipPath>
 </defs>
-</svg>`;
-
-const CrossModuleIntelligenceIllustration = () => {
-  return (
-    <div
-      role="img"
-      aria-label="Cross-module intelligence illustration"
-      className="w-full max-w-160 [&>svg]:h-auto [&>svg]:w-full"
-      dangerouslySetInnerHTML={{ __html: crossModuleIntelligenceSvg }}
-    />
-  );
-};
-
-export default CrossModuleIntelligenceIllustration;
+</svg>

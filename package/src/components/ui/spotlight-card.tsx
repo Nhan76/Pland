@@ -1,50 +1,67 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import {
+  useRef,
+  type ComponentProps,
+  type CSSProperties,
+  type PointerEvent,
+} from "react";
+
 import { cn } from "@/lib/utils";
 
-interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
+type SpotlightCardProps = ComponentProps<"div"> & {
   spotlightColor?: string;
-}
+};
 
-export const SpotlightCard = React.forwardRef<HTMLDivElement, SpotlightCardProps>(
-  ({ children, className, spotlightColor = "color-mix(in srgb, var(--primary) 15%, transparent)", ...props }, forwardedRef) => {
-    const defaultRef = useRef<HTMLDivElement>(null);
-    const divRef = (forwardedRef as React.MutableRefObject<HTMLDivElement>) || defaultRef;
-    
-    const [position, setPosition] = useState({ x: 0, y: 0 });
-    const [opacity, setOpacity] = useState(0);
+/**
+ * Card with a radial highlight that follows the pointer.
+ *
+ * The pointer position is written as CSS custom properties on the highlight
+ * layer itself (a leaf node) instead of React state, so moving the mouse never
+ * re-renders the card or restyles its content (e.g. charts) — only the
+ * highlight layer is repainted.
+ */
+export const SpotlightCard = ({
+  children,
+  className,
+  spotlightColor = "color-mix(in srgb, var(--primary) 15%, transparent)",
+  onPointerMove,
+  ...props
+}: SpotlightCardProps) => {
+  const spotlightRef = useRef<HTMLDivElement>(null);
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!divRef.current) return;
-      const rect = divRef.current.getBoundingClientRect();
-      setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-    };
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    const spotlight = spotlightRef.current;
 
-    return (
+    if (spotlight) {
+      const rect = event.currentTarget.getBoundingClientRect();
+      spotlight.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
+      spotlight.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
+    }
+
+    onPointerMove?.(event);
+  };
+
+  const spotlightStyle: CSSProperties = {
+    background: `radial-gradient(200px circle at var(--spotlight-x, 0px) var(--spotlight-y, 0px), ${spotlightColor}, transparent 100%)`,
+  };
+
+  return (
+    <div
+      onPointerMove={handlePointerMove}
+      className={cn(
+        "group/spotlight relative overflow-hidden rounded-2xl border border-white/10 bg-bento-card",
+        className,
+      )}
+      {...props}
+    >
       <div
-        ref={divRef}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setOpacity(1)}
-        onMouseLeave={() => setOpacity(0)}
-        className={cn(
-          "relative overflow-hidden rounded-2xl border border-white/10 bg-bento-card backdrop-blur-sm",
-          className
-        )}
-        {...props}
-      >
-        <div
-          className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 z-0"
-          style={{
-            opacity,
-            background: `radial-gradient(200px circle at ${position.x}px ${position.y}px, ${spotlightColor}, transparent 100%)`,
-          }}
-        />
-        {children}
-      </div>
-    );
-  }
-);
-
-SpotlightCard.displayName = "SpotlightCard";
+        ref={spotlightRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute -inset-px z-0 opacity-0 transition-opacity duration-300 group-hover/spotlight:opacity-100"
+        style={spotlightStyle}
+      />
+      {children}
+    </div>
+  );
+};

@@ -310,65 +310,56 @@
   }
 }
 
+/*
+  Transform/opacity only, so the loop runs on the compositor (no layout or
+  paint per frame). translateZ only drives depth sorting inside the
+  preserve-3d stack; without perspective it has no visual effect.
+*/
 @keyframes risk-card-slide {
   0% {
-    top: 0px;
-    left: 0px;
-    right: 16px;
     opacity: 0.2;
-    z-index: 20;
-    transform: translateY(0px) scale(0.95);
+    transform: translate3d(0px, 0px, 20px) scale(0.95);
   }
 
   33.33% {
-    top: 48px;
-    left: 40px;
-    right: 8px;
     opacity: 0.6;
-    z-index: 40;
-    transform: translateY(-4px) scale(0.98);
+    transform: translate3d(40px, 44px, 40px) scale(0.98);
   }
 
   66.66% {
-    top: 96px;
-    left: 80px;
-    right: 0px;
     opacity: 1;
-    z-index: 60;
-    transform: translateY(-8px) scale(1);
+    transform: translate3d(80px, 88px, 60px) scale(1);
   }
 
   95% {
-    top: 144px;
-    left: 120px;
-    right: -8px;
     opacity: 0;
-    z-index: 60;
-    transform: translateY(-10px) scale(1.02);
+    transform: translate3d(120px, 134px, 60px) scale(1.02);
   }
 
   95.1% {
-    top: -48px;
-    left: -40px;
-    right: 24px;
     opacity: 0;
-    z-index: 20;
-    transform: translateY(0px) scale(0.95);
+    transform: translate3d(-40px, -48px, 20px) scale(0.95);
   }
 
   100% {
-    top: 0px;
-    left: 0px;
-    right: 16px;
     opacity: 0.2;
-    z-index: 20;
-    transform: translateY(0px) scale(0.95);
+    transform: translate3d(0px, 0px, 20px) scale(0.95);
   }
 }
 
 
 html {
   scroll-behavior: smooth;
+}
+
+/*
+  LazySection flags sections that are mounted but scrolled out of view.
+  Their decorative loops are paused there and resume where they left off.
+*/
+[data-offscreen] *,
+[data-offscreen] *::before,
+[data-offscreen] *::after {
+  animation-play-state: paused !important;
 }
 
 section {

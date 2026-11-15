@@ -1,16 +1,73 @@
 'use client'
 
-import dynamic from 'next/dynamic'
+import { lazy, useEffect } from 'react'
+
+import { usePageIntroHero } from '@/components/Layout/PageIntroProvider'
 
 import LazySection from './LazySection'
 
-const Mission = dynamic(() => import('@/components/Home/Mission'))
-const Platform = dynamic(() => import('@/components/Home/platform'))
-const Portfolio = dynamic(() => import('@/components/Home/portfolio'))
-const RiskManagement = dynamic(() => import('@/components/Home/RiskManagement'))
-const VIPDashboard = dynamic(() => import('@/components/Home/VIPDashboard'))
-const Perks = dynamic(() => import('@/components/Home/perks'))
-const Faq = dynamic(() => import('@/components/Home/Faq'))
+/** Single source of truth for the below-the-fold section chunks. */
+const sectionModules = {
+  mission: () => import('@/components/Home/Mission'),
+  platform: () => import('@/components/Home/platform'),
+  portfolio: () => import('@/components/Home/portfolio'),
+  riskManagement: () => import('@/components/Home/RiskManagement'),
+  vipDashboard: () => import('@/components/Home/VIPDashboard'),
+  perks: () => import('@/components/Home/perks'),
+  faq: () => import('@/components/Home/Faq'),
+}
+
+const Mission = lazy(sectionModules.mission)
+const Platform = lazy(sectionModules.platform)
+const Portfolio = lazy(sectionModules.portfolio)
+const RiskManagement = lazy(sectionModules.riskManagement)
+const VIPDashboard = lazy(sectionModules.vipDashboard)
+const Perks = lazy(sectionModules.perks)
+const Faq = lazy(sectionModules.faq)
+
+const whenIdle = () =>
+  new Promise<void>((resolve) => {
+    if ('requestIdleCallback' in window) {
+      window.requestIdleCallback(() => resolve(), { timeout: 2000 })
+    } else {
+      setTimeout(resolve, 200)
+    }
+  })
+
+/**
+ * Once the hero intro has finished, download and evaluate the section chunks
+ * one by one during idle time, so scrolling only has to render them — never
+ * fetch or parse code mid-scroll.
+ */
+const usePrefetchSections = () => {
+  const { isComplete: isIntroComplete } = usePageIntroHero()
+
+  useEffect(() => {
+    if (!isIntroComplete) {
+      return
+    }
+
+    let isCancelled = false
+
+    const prefetch = async () => {
+      for (const load of Object.values(sectionModules)) {
+        await whenIdle()
+
+        if (isCancelled) {
+          return
+        }
+
+        await load().catch(() => undefined)
+      }
+    }
+
+    void prefetch()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [isIntroComplete])
+}
 
 const SectionDivider = () => {
   return (
@@ -23,6 +80,8 @@ const SectionDivider = () => {
 }
 
 const HomeSections = () => {
+  usePrefetchSections()
+
   return (
     <>
       <LazySection sectionId='mission' minHeight={920} rootMargin='160px 0px'>

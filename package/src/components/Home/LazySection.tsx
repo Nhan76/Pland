@@ -1,12 +1,23 @@
 'use client'
 
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useInView } from 'framer-motion'
+import {
+  Suspense,
+  useDeferredValue,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react'
+
+import { cn } from '@/lib/utils'
 
 type LazySectionProps = {
   children: ReactNode
   sectionId?: string
   minHeight?: number
-  rootMargin?: string
+  /** How far ahead of the viewport the section starts rendering. */
+  rootMargin?: `${number}px ${number}px`
   className?: string
 }
 
@@ -26,6 +37,39 @@ const SectionPlaceholder = ({ minHeight }: { minHeight: number }) => {
   )
 }
 
+const useIsHashTarget = (sectionId?: string) => {
+  const [isTarget, setIsTarget] = useState(false)
+
+  useEffect(() => {
+    if (!sectionId) {
+      return
+    }
+
+    const syncHash = () => {
+      if (window.location.hash === `#${sectionId}`) {
+        setIsTarget(true)
+      }
+    }
+
+    syncHash()
+    window.addEventListener('hashchange', syncHash)
+
+    return () => window.removeEventListener('hashchange', syncHash)
+  }, [sectionId])
+
+  return isTarget
+}
+
+/**
+ * Renders its children only once they approach the viewport (or are the URL
+ * hash target), then keeps them mounted.
+ *
+ * - The first render is deferred (`useDeferredValue`), so React renders the
+ *   section in the background and yields to scrolling and input instead of
+ *   blocking the main thread with one long task.
+ * - While mounted but scrolled out of view the wrapper carries
+ *   `data-offscreen`, which pauses the section's CSS animations (globals.css).
+ */
 const LazySection = ({
   children,
   sectionId,
@@ -34,63 +78,19 @@ const LazySection = ({
   className,
 }: LazySectionProps) => {
   const ref = useRef<HTMLDivElement | null>(null)
-  const [shouldRender, setShouldRender] = useState(false)
-
-  useEffect(() => {
-    const matchesHash = () => {
-      if (!sectionId) {
-        return false
-      }
-
-      return window.location.hash.replace(/^#/, '') === sectionId
-    }
-
-    if (matchesHash()) {
-      setShouldRender(true)
-      return
-    }
-
-    const node = ref.current
-
-    if (!node || !(window as Window & typeof globalThis).IntersectionObserver) {
-      setShouldRender(true)
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldRender(true)
-          observer.disconnect()
-        }
-      },
-      {
-        rootMargin,
-        threshold: 0.01,
-      },
-    )
-
-    const handleHashChange = () => {
-      if (matchesHash()) {
-        setShouldRender(true)
-      }
-    }
-
-    observer.observe(node)
-    window.addEventListener('hashchange', handleHashChange)
-
-    return () => {
-      observer.disconnect()
-      window.removeEventListener('hashchange', handleHashChange)
-    }
-  }, [rootMargin, sectionId])
+  const isNearViewport = useInView(ref, { once: true, margin: rootMargin })
+  const isOnScreen = useInView(ref)
+  const isHashTarget = useIsHashTarget(sectionId)
+  const shouldRender = useDeferredValue(isNearViewport || isHashTarget)
+  const placeholder = <SectionPlaceholder minHeight={minHeight} />
 
   return (
     <div
       id={sectionId}
       ref={ref}
-      className={['scroll-mt-24', className].filter(Boolean).join(' ')}>
-      {shouldRender ? children : <SectionPlaceholder minHeight={minHeight} />}
+      data-offscreen={shouldRender && !isOnScreen ? '' : undefined}
+      className={cn('scroll-mt-24', className)}>
+      {shouldRender ? <Suspense fallback={placeholder}>{children}</Suspense> : placeholder}
     </div>
   )
 }

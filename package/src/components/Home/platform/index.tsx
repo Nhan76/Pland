@@ -1,14 +1,4 @@
-import dynamic from 'next/dynamic';
-
-const CrossModuleIntelligenceIllustration = dynamic(
-  () => import('./CrossModuleIntelligenceIllustration'),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-[700px] h-[550px] bg-background/5 rounded-lg animate-pulse" />
-    ),
-  }
-);
+import Image from 'next/image';
 
 const Platform = () => {
   return (
@@ -28,7 +18,18 @@ const Platform = () => {
             </p>
           </div>
           <div className="flex justify-center lg:justify-end">
-            <CrossModuleIntelligenceIllustration />
+            {/*
+              Served as a static, cacheable SVG (its flow animations live in the
+              file). As an image it stays out of the JS bundle, reserves its
+              space via width/height, and is not animated while off screen.
+            */}
+            <Image
+              src="/images/platform/cross-module-intelligence.svg"
+              alt="Cross-module intelligence illustration"
+              width={700}
+              height={550}
+              className="h-auto w-full max-w-160"
+            />
           </div>
         </div>
       </div>
