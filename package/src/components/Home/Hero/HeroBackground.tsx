@@ -47,6 +47,7 @@ const HeroBackground = () => {
       >
         <LaserFlow
           {...HERO_LASER_FLOW_BASE_PROPS}
+          active={showLaserFlow}
           animate={!prefersReducedMotion}
           verticalSizing={isMobile ? 0.6 : 0.8}
         />

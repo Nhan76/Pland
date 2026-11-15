@@ -13,6 +13,7 @@ import {
   Tooltip
 } from "recharts";
 
+import { useSignalHeroDashboardReady } from "@/components/Layout/PageIntroProvider";
 import { useMotionProfile } from "@/hooks/useMotionProfile";
 
 const mockPerformanceData = [
@@ -326,6 +327,9 @@ const PortfolioView = memo(() => {
 PortfolioView.displayName = 'PortfolioView';
 
 const CryptoDashboard = () => {
+  // The intro holds the hero laser beam back until this dashboard is on screen.
+  useSignalHeroDashboardReady();
+
   return (
     <div className="relative z-20 w-full max-w-6xl mx-auto mt-8 md:mt-24 mb-16 px-3 md:px-4">
       {/* Laser glow overlay from flow hitting top of dashboard */}

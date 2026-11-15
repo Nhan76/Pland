@@ -25,6 +25,11 @@ import {
 type LaserFlowProps = {
   className?: string;
   style?: CSSProperties;
+  /**
+   * While false nothing is drawn and no frames are requested (the shader is
+   * still compiled ahead of time). Switching it on starts the fade-in.
+   */
+  active?: boolean;
   /** When false a single still frame is rendered (e.g. reduced motion). */
   animate?: boolean;
   /**
@@ -92,6 +97,7 @@ const FULLSCREEN_TRIANGLE = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
 const LaserFlow = ({
   className,
   style,
+  active = true,
   animate = true,
   maxPixelRatio = 1,
   wispDensity = 1,
@@ -113,6 +119,8 @@ const LaserFlow = ({
   const mountRef = useRef<HTMLDivElement | null>(null);
   const uniformsRef = useRef<LaserFlowUniforms | null>(null);
   const requestRenderRef = useRef<() => void>(() => {});
+  const syncLoopRef = useRef<() => void>(() => {});
+  const activeRef = useRef(active);
 
   useEffect(() => {
     const mountElement = mountRef.current;
@@ -192,7 +200,7 @@ const LaserFlow = ({
     let perfWindowFrames = 0;
 
     const draw = () => {
-      if (isReady && !isContextLost) {
+      if (activeRef.current && isReady && !isContextLost) {
         renderer.render(scene, camera);
       }
     };
@@ -264,7 +272,12 @@ const LaserFlow = ({
     // the shader is compiled; otherwise no frames are requested at all.
     const syncLoop = () => {
       const shouldRun =
-        animate && isReady && isInView && !isContextLost && !document.hidden;
+        animate &&
+        activeRef.current &&
+        isReady &&
+        isInView &&
+        !isContextLost &&
+        !document.hidden;
 
       if (!shouldRun) {
         stopLoop();
@@ -285,6 +298,7 @@ const LaserFlow = ({
         draw();
       }
     };
+    syncLoopRef.current = syncLoop;
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(mountElement);
@@ -333,6 +347,7 @@ const LaserFlow = ({
       isDisposed = true;
       stopLoop();
       requestRenderRef.current = () => {};
+      syncLoopRef.current = () => {};
       uniformsRef.current = null;
 
       resizeObserver.disconnect();
@@ -348,6 +363,12 @@ const LaserFlow = ({
       canvas.remove();
     };
   }, [animate, maxPixelRatio]);
+
+  useEffect(() => {
+    activeRef.current = active;
+    syncLoopRef.current();
+    requestRenderRef.current();
+  }, [active]);
 
   useEffect(() => {
     const uniforms = uniformsRef.current;
