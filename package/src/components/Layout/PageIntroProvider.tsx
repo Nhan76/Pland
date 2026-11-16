@@ -22,18 +22,20 @@ type HeroIntroSignals = {
 };
 
 /**
- * Safety nets so the beam is never held back for good: once the dashboard has
- * been revealed we wait at most this long for its content, and overall at most
- * `LASER_MAX_WAIT_MS` after hydration.
+ * Safety nets for when the dashboard never renders (e.g. its chunk fails to
+ * load): once the dashboard wrapper has been revealed we wait at most this long
+ * for its content, and overall at most `LASER_MAX_WAIT_MS` after hydration.
+ * They are deliberately generous so that a merely slow network (cold CDN cache,
+ * weak mobile connection) still gets the beam *after* the dashboard.
  */
-const DASHBOARD_RENDER_TIMEOUT_MS = 2500;
+const DASHBOARD_RENDER_TIMEOUT_MS = 10_000;
 /**
  * When the dashboard content arrives late (slow network), give it a beat on
  * screen before the beam. On a normal load it has rendered long before its
  * reveal, so this adds nothing.
  */
 const DASHBOARD_SETTLE_MS = 250;
-const LASER_MAX_WAIT_MS = 6000;
+const LASER_MAX_WAIT_MS = 15_000;
 
 const noop = () => {};
 
