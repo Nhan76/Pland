@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { motion, type Variants } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -11,29 +10,15 @@ import { cn } from "@/lib/utils";
 import HeaderLink from "../Header/Navigation/HeaderLink";
 import MobileHeaderLink from "../Header/Navigation/MobileHeaderLink";
 import { headerData } from "../Header/Navigation/menuData";
-import { usePageIntroHeader } from "../PageIntroProvider";
+import { introAnimation } from "../introTimeline";
 import Logo from "./Logo";
 import { useHeaderBehavior } from "./useHeaderBehavior";
-
-const INTRO_EASE = [0.22, 1, 0.36, 1] as const;
-
-const HEADER_INTRO_VARIANTS: Variants = {
-  hidden: { opacity: 0, y: -28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.55,
-      ease: INTRO_EASE,
-    },
-  },
-};
 
 const Header: React.FC = () => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [activeHash, setActiveHash] = useState("");
   const { isScrolled, isVisible } = useHeaderBehavior(navbarOpen);
-  const { showHeader, isComplete } = usePageIntroHeader();
+  const intro = introAnimation("header");
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -49,12 +34,8 @@ const Header: React.FC = () => {
   }, []);
 
   return (
-    <motion.div
-      className="fixed inset-x-0 top-0 z-40"
-      variants={HEADER_INTRO_VARIANTS}
-      initial={isComplete ? "visible" : "hidden"}
-      animate={showHeader ? "visible" : "hidden"}
-    >
+    // The header lives in the root layout, so its intro only plays on first load.
+    <div className={cn("fixed inset-x-0 top-0 z-40", intro.className)} style={intro.style}>
       <header
         className={cn(
           "transition-transform duration-300 ease-out",
@@ -148,7 +129,7 @@ const Header: React.FC = () => {
           </div>
         </div>
       </header>
-    </motion.div>
+    </div>
   );
 };
 
