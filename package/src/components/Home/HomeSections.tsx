@@ -2,8 +2,6 @@
 
 import { lazy, useEffect } from 'react'
 
-import { usePageIntroHero } from '@/components/Layout/PageIntroProvider'
-
 import LazySection from './LazySection'
 
 /** Single source of truth for the below-the-fold section chunks. */
@@ -34,19 +32,18 @@ const whenIdle = () =>
     }
   })
 
+/** First signs of a visitor engaging with the page. */
+const INTENT_EVENTS = ['pointermove', 'pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'] as const
+
 /**
- * Once the hero intro has finished, download and evaluate the section chunks
- * one by one during idle time, so scrolling only has to render them — never
- * fetch or parse code mid-scroll.
+ * On the visitor's first interaction (usually a mouse move or touch, well
+ * before they scroll past the tall hero), download and evaluate the section
+ * chunks one by one during idle time. Sections then only have to render when
+ * they come into view, while a page-load audit — which never interacts — pays
+ * nothing for them.
  */
 const usePrefetchSections = () => {
-  const { isComplete: isIntroComplete } = usePageIntroHero()
-
   useEffect(() => {
-    if (!isIntroComplete) {
-      return
-    }
-
     let isCancelled = false
 
     const prefetch = async () => {
@@ -61,12 +58,23 @@ const usePrefetchSections = () => {
       }
     }
 
-    void prefetch()
+    const startPrefetch = () => {
+      removeListeners()
+      void prefetch()
+    }
+
+    const removeListeners = () =>
+      INTENT_EVENTS.forEach((type) => window.removeEventListener(type, startPrefetch))
+
+    INTENT_EVENTS.forEach((type) =>
+      window.addEventListener(type, startPrefetch, { passive: true }),
+    )
 
     return () => {
       isCancelled = true
+      removeListeners()
     }
-  }, [isIntroComplete])
+  }, [])
 }
 
 const SectionDivider = () => {

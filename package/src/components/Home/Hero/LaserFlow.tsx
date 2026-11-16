@@ -33,6 +33,12 @@ type LaserFlowProps = {
   /** When false a single still frame is rendered (e.g. reduced motion). */
   animate?: boolean;
   /**
+   * Called when the GPU cannot run the effect: the context cannot be created,
+   * or the frame rate stays unusable even at the lowest render scale. The
+   * component stops rendering; the caller should show a fallback.
+   */
+  onUnsupported?: () => void;
+  /**
    * Upper bound for the canvas pixel ratio. The effect is a soft glow, so it
    * does not need the full device pixel ratio to look crisp.
    */
@@ -91,6 +97,8 @@ const PERF_WINDOW_MS = 2000;
 const LOW_FPS_THRESHOLD = 45;
 const PIXEL_RATIO_STEP = 0.75;
 const MIN_PIXEL_RATIO = 0.5;
+/** Below this, even at the lowest render scale, the effect gives up. */
+const UNUSABLE_FPS = 20;
 
 const FULLSCREEN_TRIANGLE = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
 
@@ -99,6 +107,7 @@ const LaserFlow = ({
   style,
   active = true,
   animate = true,
+  onUnsupported,
   maxPixelRatio = 1,
   wispDensity = 1,
   horizontalBeamOffset = 0.1,
@@ -121,6 +130,11 @@ const LaserFlow = ({
   const requestRenderRef = useRef<() => void>(() => {});
   const syncLoopRef = useRef<() => void>(() => {});
   const activeRef = useRef(active);
+  const onUnsupportedRef = useRef(onUnsupported);
+
+  useEffect(() => {
+    onUnsupportedRef.current = onUnsupported;
+  }, [onUnsupported]);
 
   useEffect(() => {
     const mountElement = mountRef.current;
@@ -129,15 +143,24 @@ const LaserFlow = ({
       return;
     }
 
-    const renderer = new WebGLRenderer({
-      antialias: false,
-      alpha: true,
-      depth: false,
-      stencil: false,
-      powerPreference: "high-performance",
-      premultipliedAlpha: false,
-      preserveDrawingBuffer: false,
-    });
+    let renderer: WebGLRenderer;
+
+    try {
+      renderer = new WebGLRenderer({
+        antialias: false,
+        alpha: true,
+        depth: false,
+        stencil: false,
+        powerPreference: "high-performance",
+        premultipliedAlpha: false,
+        preserveDrawingBuffer: false,
+        failIfMajorPerformanceCaveat: true,
+      });
+    } catch {
+      onUnsupportedRef.current?.();
+      return;
+    }
+
     renderer.outputColorSpace = SRGBColorSpace;
     renderer.setClearColor(0x000000, 0);
 
@@ -193,6 +216,7 @@ const LaserFlow = ({
     let isReady = false;
     let isInView = false;
     let isContextLost = false;
+    let isUnsupported = false;
     let frameId = 0;
     let frameSlotAt = 0;
     let lastFrameAt = 0;
@@ -231,9 +255,17 @@ const LaserFlow = ({
       const fps = (perfWindowFrames * 1000) / elapsed;
       resetPerfWindow(now);
 
-      if (fps < LOW_FPS_THRESHOLD && pixelRatio > MIN_PIXEL_RATIO) {
+      if (fps >= LOW_FPS_THRESHOLD) {
+        return;
+      }
+
+      if (pixelRatio > MIN_PIXEL_RATIO) {
         pixelRatio = Math.max(MIN_PIXEL_RATIO, pixelRatio * PIXEL_RATIO_STEP);
         resize();
+      } else if (fps < UNUSABLE_FPS) {
+        isUnsupported = true;
+        syncLoop();
+        onUnsupportedRef.current?.();
       }
     };
 
@@ -273,6 +305,7 @@ const LaserFlow = ({
     const syncLoop = () => {
       const shouldRun =
         animate &&
+        !isUnsupported &&
         activeRef.current &&
         isReady &&
         isInView &&

@@ -2,9 +2,13 @@
 
 import { motion, useReducedMotion } from "framer-motion";
 import dynamic from "next/dynamic";
+import { useState, useSyncExternalStore } from "react";
 
 import { usePageIntroHero } from "@/components/Layout/PageIntroProvider";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { hasHardwareWebGL } from "@/lib/webgl";
+
+import LaserFlowFallback from "./LaserFlowFallback";
 
 const LaserFlow = dynamic(() => import("./LaserFlow"), {
   loading: () => null,
@@ -32,10 +36,22 @@ const HERO_LASER_FLOW_BASE_PROPS = {
   falloffStart: 1.15,
 } as const;
 
+const subscribeToNothing = () => () => {};
+
+/**
+ * `null` until hydrated, then whether the shader can run on a real GPU. The
+ * three.js chunk is only requested when it can.
+ */
+const useCanRenderShader = () =>
+  useSyncExternalStore<boolean | null>(subscribeToNothing, hasHardwareWebGL, () => null);
+
 const HeroBackground = () => {
   const { showLaserFlow } = usePageIntroHero();
   const isMobile = useMediaQuery("(max-width: 767px)");
   const prefersReducedMotion = Boolean(useReducedMotion());
+  const canRenderShader = useCanRenderShader();
+  const [hasShaderFailed, setHasShaderFailed] = useState(false);
+  const showFallback = canRenderShader === false || hasShaderFailed;
 
   return (
     <div aria-hidden="true" className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -45,12 +61,19 @@ const HeroBackground = () => {
         animate={{ opacity: showLaserFlow ? 0.9 : 0 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       >
-        <LaserFlow
-          {...HERO_LASER_FLOW_BASE_PROPS}
-          active={showLaserFlow}
-          animate={!prefersReducedMotion}
-          verticalSizing={isMobile ? 0.6 : 0.8}
-        />
+        {showFallback ? (
+          <LaserFlowFallback className="mix-blend-screen" />
+        ) : (
+          canRenderShader && (
+            <LaserFlow
+              {...HERO_LASER_FLOW_BASE_PROPS}
+              active={showLaserFlow}
+              animate={!prefersReducedMotion}
+              verticalSizing={isMobile ? 0.6 : 0.8}
+              onUnsupported={() => setHasShaderFailed(true)}
+            />
+          )
+        )}
       </motion.div>
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(22,199,132,0.14),transparent_32%),linear-gradient(180deg,rgba(5,16,26,0.08)_0%,rgba(5,16,26,0.4)_58%,var(--background)_100%)]" />

@@ -2,7 +2,6 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -11,158 +10,90 @@ import {
 } from "react";
 import { useReducedMotion } from "framer-motion";
 
-type HeaderIntroState = {
-  showHeader: boolean;
-  isComplete: boolean;
-};
-
 type HeroIntroState = {
   showLaserFlow: boolean;
-  showTitle: boolean;
-  showDescription: boolean;
-  showCta: boolean;
-  showDashboard: boolean;
-  isComplete: boolean;
+};
+
+type HeroIntroSignals = {
+  /** The hero dashboard has mounted (its chunk is loaded and rendered). */
+  markDashboardRendered: () => void;
+  /** The hero dashboard's intro reveal has finished playing. */
+  markDashboardRevealed: () => void;
 };
 
 /**
- * Intro sequence: the hero content reveals first (title → description → CTA →
- * dashboard) and the laser beam only lights up once the dashboard is on
- * screen, so the beam always lands on an already visible dashboard.
+ * Safety nets so the beam is never held back for good: once the dashboard has
+ * been revealed we wait at most this long for its content, and overall at most
+ * `LASER_MAX_WAIT_MS` after hydration.
  */
-enum IntroStage {
-  Idle = -1,
-  Title,
-  Description,
-  Cta,
-  Dashboard,
-  LaserFlow,
-  Complete,
-}
-
-const HEADER_REVEAL_DELAY_MS = 40;
-
-/** Content stages, as delays from mount. */
-const CONTENT_STAGE_DELAYS: ReadonlyArray<readonly [IntroStage, number]> = [
-  [IntroStage.Title, 620],
-  [IntroStage.Description, 780],
-  [IntroStage.Cta, 940],
-  [IntroStage.Dashboard, 1100],
-];
-
-/** Let the dashboard reveal (0.65s) mostly settle before the beam appears. */
-const LASER_DELAY_AFTER_DASHBOARD_MS = 550;
-/** Never hold the beam back indefinitely if the dashboard chunk is slow. */
-const DASHBOARD_READY_TIMEOUT_MS = 2500;
-/** Matches the laser wrapper fade-in in HeroBackground. */
-const LASER_REVEAL_MS = 700;
-
-const COMPLETE_HEADER_STATE: HeaderIntroState = {
-  showHeader: true,
-  isComplete: true,
-};
-
-const getHeroState = (stage: IntroStage): HeroIntroState => ({
-  showTitle: stage >= IntroStage.Title,
-  showDescription: stage >= IntroStage.Description,
-  showCta: stage >= IntroStage.Cta,
-  showDashboard: stage >= IntroStage.Dashboard,
-  showLaserFlow: stage >= IntroStage.LaserFlow,
-  isComplete: stage >= IntroStage.Complete,
-});
-
-const COMPLETE_HERO_STATE = getHeroState(IntroStage.Complete);
+const DASHBOARD_RENDER_TIMEOUT_MS = 2500;
+const LASER_MAX_WAIT_MS = 6000;
 
 const noop = () => {};
 
-const HeaderIntroContext = createContext<HeaderIntroState>(COMPLETE_HEADER_STATE);
-const HeroIntroContext = createContext<HeroIntroState>(COMPLETE_HERO_STATE);
-const HeroDashboardReadyContext = createContext<() => void>(noop);
+const HeroIntroContext = createContext<HeroIntroState>({ showLaserFlow: true });
+const HeroIntroSignalsContext = createContext<HeroIntroSignals>({
+  markDashboardRendered: noop,
+  markDashboardRevealed: noop,
+});
 
+/**
+ * Sequences the hero laser beam after the CSS intro (see introTimeline.ts):
+ * the beam only lights up once the dashboard has both rendered and finished
+ * its reveal, so it always lands on a visible dashboard — however fast or slow
+ * the device and network are.
+ */
 export const PageIntroProvider = ({ children }: PropsWithChildren) => {
   const prefersReducedMotion = Boolean(useReducedMotion());
-  const [isHeaderShown, setIsHeaderShown] = useState(prefersReducedMotion);
-  const [stage, setStage] = useState<IntroStage>(
-    prefersReducedMotion ? IntroStage.Complete : IntroStage.Idle,
-  );
-  const [isDashboardReady, setIsDashboardReady] = useState(false);
-  const markDashboardReady = useCallback(() => setIsDashboardReady(true), []);
+  const [isDashboardRendered, setIsDashboardRendered] = useState(false);
+  const [isDashboardRevealed, setIsDashboardRevealed] = useState(false);
+  const [hasTimedOut, setHasTimedOut] = useState(false);
 
-  // Header and hero content: a fixed timeline from mount.
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      setIsHeaderShown(true);
-      setStage(IntroStage.Complete);
-      return;
-    }
-
-    setIsHeaderShown(false);
-    setStage(IntroStage.Idle);
-
-    const timeouts = [
-      window.setTimeout(() => setIsHeaderShown(true), HEADER_REVEAL_DELAY_MS),
-      ...CONTENT_STAGE_DELAYS.map(([contentStage, delay]) =>
-        window.setTimeout(() => setStage(contentStage), delay),
-      ),
-    ];
-
-    return () => timeouts.forEach((timeoutId) => window.clearTimeout(timeoutId));
-  }, [prefersReducedMotion]);
-
-  // Laser beam: waits for the dashboard to be revealed *and* rendered.
-  useEffect(() => {
-    if (stage !== IntroStage.Dashboard) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(
-      () => setStage(IntroStage.LaserFlow),
-      isDashboardReady ? LASER_DELAY_AFTER_DASHBOARD_MS : DASHBOARD_READY_TIMEOUT_MS,
-    );
-
-    return () => window.clearTimeout(timeoutId);
-  }, [stage, isDashboardReady]);
-
-  useEffect(() => {
-    if (stage !== IntroStage.LaserFlow) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => setStage(IntroStage.Complete), LASER_REVEAL_MS);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [stage]);
-
-  const headerValue = useMemo<HeaderIntroState>(
+  const signals = useMemo<HeroIntroSignals>(
     () => ({
-      showHeader: isHeaderShown || stage >= IntroStage.Complete,
-      isComplete: stage >= IntroStage.Complete,
+      markDashboardRendered: () => setIsDashboardRendered(true),
+      markDashboardRevealed: () => setIsDashboardRevealed(true),
     }),
-    [isHeaderShown, stage],
+    [],
   );
 
-  const heroValue = useMemo(() => getHeroState(stage), [stage]);
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => setHasTimedOut(true), LASER_MAX_WAIT_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    if (!isDashboardRevealed || isDashboardRendered) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => setHasTimedOut(true), DASHBOARD_RENDER_TIMEOUT_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isDashboardRevealed, isDashboardRendered]);
+
+  const showLaserFlow =
+    prefersReducedMotion || hasTimedOut || (isDashboardRevealed && isDashboardRendered);
+
+  const heroValue = useMemo(() => ({ showLaserFlow }), [showLaserFlow]);
 
   return (
-    <HeaderIntroContext.Provider value={headerValue}>
-      <HeroIntroContext.Provider value={heroValue}>
-        <HeroDashboardReadyContext.Provider value={markDashboardReady}>
-          {children}
-        </HeroDashboardReadyContext.Provider>
-      </HeroIntroContext.Provider>
-    </HeaderIntroContext.Provider>
+    <HeroIntroContext.Provider value={heroValue}>
+      <HeroIntroSignalsContext.Provider value={signals}>{children}</HeroIntroSignalsContext.Provider>
+    </HeroIntroContext.Provider>
   );
 };
 
-export const usePageIntroHeader = () => useContext(HeaderIntroContext);
-
 export const usePageIntroHero = () => useContext(HeroIntroContext);
 
+export const useHeroIntroSignals = () => useContext(HeroIntroSignalsContext);
+
 /** Call from the hero dashboard so the intro knows it has rendered. */
-export const useSignalHeroDashboardReady = () => {
-  const markDashboardReady = useContext(HeroDashboardReadyContext);
+export const useSignalHeroDashboardRendered = () => {
+  const { markDashboardRendered } = useHeroIntroSignals();
 
   useEffect(() => {
-    markDashboardReady();
-  }, [markDashboardReady]);
+    markDashboardRendered();
+  }, [markDashboardRendered]);
 };
