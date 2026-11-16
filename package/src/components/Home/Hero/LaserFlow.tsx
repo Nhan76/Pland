@@ -86,7 +86,8 @@ const TARGET_FRAME_MS = 1000 / 60;
 const FRAME_SLACK_MS = 1;
 const MIN_STEP_S = 0.001;
 const MAX_STEP_S = 0.033;
-const FADE_IN_S = 1;
+/** Matches the wrapper fade in HeroBackground so the beam lights up in one go. */
+const FADE_IN_S = 0.5;
 
 /**
  * Adaptive quality: when the GPU cannot sustain the target frame rate, lower
