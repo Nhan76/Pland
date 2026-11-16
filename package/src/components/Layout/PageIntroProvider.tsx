@@ -17,7 +17,7 @@ type HeroIntroState = {
 type HeroIntroSignals = {
   /** The hero dashboard has mounted (its chunk is loaded and rendered). */
   markDashboardRendered: () => void;
-  /** The hero dashboard's intro reveal has finished playing. */
+  /** The hero dashboard's intro reveal has (mostly) played. */
   markDashboardRevealed: () => void;
 };
 
@@ -27,6 +27,12 @@ type HeroIntroSignals = {
  * `LASER_MAX_WAIT_MS` after hydration.
  */
 const DASHBOARD_RENDER_TIMEOUT_MS = 2500;
+/**
+ * When the dashboard content arrives late (slow network), give it a beat on
+ * screen before the beam. On a normal load it has rendered long before its
+ * reveal, so this adds nothing.
+ */
+const DASHBOARD_SETTLE_MS = 250;
 const LASER_MAX_WAIT_MS = 6000;
 
 const noop = () => {};
@@ -39,13 +45,14 @@ const HeroIntroSignalsContext = createContext<HeroIntroSignals>({
 
 /**
  * Sequences the hero laser beam after the CSS intro (see introTimeline.ts):
- * the beam only lights up once the dashboard has both rendered and finished
- * its reveal, so it always lands on a visible dashboard — however fast or slow
- * the device and network are.
+ * the beam only lights up once the dashboard has rendered and its reveal is
+ * mostly done, so it always lands on a visible dashboard — however fast or
+ * slow the device and network are.
  */
 export const PageIntroProvider = ({ children }: PropsWithChildren) => {
   const prefersReducedMotion = Boolean(useReducedMotion());
   const [isDashboardRendered, setIsDashboardRendered] = useState(false);
+  const [isDashboardSettled, setIsDashboardSettled] = useState(false);
   const [isDashboardRevealed, setIsDashboardRevealed] = useState(false);
   const [hasTimedOut, setHasTimedOut] = useState(false);
 
@@ -64,6 +71,16 @@ export const PageIntroProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   useEffect(() => {
+    if (!isDashboardRendered) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => setIsDashboardSettled(true), DASHBOARD_SETTLE_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isDashboardRendered]);
+
+  useEffect(() => {
     if (!isDashboardRevealed || isDashboardRendered) {
       return;
     }
@@ -74,7 +91,7 @@ export const PageIntroProvider = ({ children }: PropsWithChildren) => {
   }, [isDashboardRevealed, isDashboardRendered]);
 
   const showLaserFlow =
-    prefersReducedMotion || hasTimedOut || (isDashboardRevealed && isDashboardRendered);
+    prefersReducedMotion || hasTimedOut || (isDashboardRevealed && isDashboardSettled);
 
   const heroValue = useMemo(() => ({ showLaserFlow }), [showLaserFlow]);
 

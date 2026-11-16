@@ -6,8 +6,12 @@ import dynamic from "next/dynamic";
 
 import { Button } from "@/components/ui/button";
 import { useHeroIntroSignals } from "@/components/Layout/PageIntroProvider";
-import { introAnimation, type IntroStepName } from "@/components/Layout/introTimeline";
-import { useAnimationsFinished } from "@/hooks/useAnimationsFinished";
+import {
+  LASER_AFTER_DASHBOARD_PROGRESS,
+  introAnimation,
+  type IntroStepName,
+} from "@/components/Layout/introTimeline";
+import { useAnimationProgress } from "@/hooks/useAnimationProgress";
 import { cn } from "@/lib/utils";
 
 import CardSlider from "./slider";
@@ -47,8 +51,8 @@ const Hero = () => {
   const { markDashboardRevealed } = useHeroIntroSignals();
   const dashboardRef = useRef<HTMLDivElement>(null);
 
-  // The laser beam waits for the dashboard reveal to finish.
-  useAnimationsFinished(dashboardRef, markDashboardRevealed);
+  // The laser beam lights up as the dashboard settles into place.
+  useAnimationProgress(dashboardRef, LASER_AFTER_DASHBOARD_PROGRESS, markDashboardRevealed);
 
   const title = introFor("title");
   const description = introFor("description");
